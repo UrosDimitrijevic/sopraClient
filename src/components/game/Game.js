@@ -61,7 +61,7 @@ class Game extends React.Component {
 
   logout() {
     localStorage.removeItem("token");
-    fetch(`${getDomain()}/logout/`+localStorage.getItem("id"), {
+    fetch(`${getDomain()}/users/`+localStorage.getItem("id")+`/logout`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"

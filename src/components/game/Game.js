@@ -69,7 +69,7 @@ class Game extends React.Component {
     })
         .then(response =>{
           if(response.status === 404){
-            alert ("bugabga");
+            //alert ("bugabga");
             //throw new Error(ErrorCode(response.status));
           }
         })
@@ -82,7 +82,7 @@ class Game extends React.Component {
   logout() {
     localStorage.removeItem("token");
     fetch(`${getDomain()}/users/`+localStorage.getItem("id")+`/logout`, {
-      method: "GET",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       }
@@ -120,7 +120,7 @@ class Game extends React.Component {
         console.log(err);
         alert("Something went wrong fetching the users: " + err);
       });
-    this.getChallengeStatus()
+    this.getChallengeStatus();
     this.timer = setInterval(()=>this.getChallengeStatus(), 10000);
   }
 

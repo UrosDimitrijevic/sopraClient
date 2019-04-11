@@ -10,7 +10,7 @@ import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler";
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
-  background: black;
+
 `;
 
 const Users = styled.ul`
@@ -36,6 +36,7 @@ const PlContainer = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid #ffffff26;
+  background: darkgrey;
 `;
 
 const PlUserName = styled.div`
@@ -57,6 +58,25 @@ class Game extends React.Component {
     this.state = {
       users: null
     };
+  }
+
+  getChallengeStatus() {
+    fetch(`${getDomain()}/user/challengestatus/`+localStorage.getItem("id"), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+        .then(response =>{
+          if(response.status === 404){
+            alert ("bugabga");
+            //throw new Error(ErrorCode(response.status));
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          alert("Something went wrong catching challenge Status: " + err);
+        });
   }
 
   logout() {
@@ -100,6 +120,8 @@ class Game extends React.Component {
         console.log(err);
         alert("Something went wrong fetching the users: " + err);
       });
+    this.getChallengeStatus()
+    this.timer = setInterval(()=>this.getChallengeStatus(), 10000);
   }
 
   render() {

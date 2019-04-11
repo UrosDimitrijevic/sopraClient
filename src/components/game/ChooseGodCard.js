@@ -5,6 +5,7 @@ import { getDomain } from "../../helpers/getDomain";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 import Apollo from "../../views/design/Apollo.PNG";
+import Artemis from "../../GodCards/Artemis.PNG";
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -67,6 +68,7 @@ class ChooseGodCard extends React.Component {
             dob: null,
             registered: false,
             index: 0,
+            GodCard: Apollo,
         };
         this.today = new Date();
     }
@@ -135,9 +137,21 @@ class ChooseGodCard extends React.Component {
             <BaseContainer>
                 <FormContainer>
 
-                    <img src = {Apollo}
-                         sizes = "50%"
+                    <img src = {this.state.GodCard}
+                         width={250} // should be in ratio 1:1.75
+                         height={437.5}
                          alt="Apollo test"/>
+                         <button
+                         onClick={() => {
+                             this.setState({"GodCard": Artemis});
+                         }}
+
+                         >Previous
+                         </button>
+                    <button
+                        onClick={() => {
+                            this.setState({"GodCard": Apollo});
+                        }}>Next</button>
 
 
                 </FormContainer>

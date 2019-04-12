@@ -16,6 +16,15 @@
     margin-left: 10px;
 }
 
+.home2 b {
+    font-family: 'cabinRegular', arial, sans-serif, verdana;
+    color: #000000;
+    font-size: 18px;
+    text-align: left;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
 .center {
     margin: 0 auto;
     width: 500px;

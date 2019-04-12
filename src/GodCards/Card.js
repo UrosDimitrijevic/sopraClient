@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import "./img_text.css";
 
 const Card = ({property}) => {
-    const {index, picture, text, } = property;
+    const {index, picture, text, title, } = property;
     return (
         <div id={`card-${index}`} className="center">
             <div className="home2">
@@ -15,9 +15,9 @@ const Card = ({property}) => {
                 </div>
             </div>
             <div className="home2">
-            <div className="home2_second">
-                <p>{text}</p>
-            </div>
+
+                <b>{title}</b><p>{text}</p>
+
         </div>
 
 

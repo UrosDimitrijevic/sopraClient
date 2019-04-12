@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
 import { withRouter } from "react-router-dom";
-import Apollo from "../../views/design/Apollo.PNG";
 import "../../GodCards/img_text.css";
 import data from "../../GodCards/data";
 import Card from '../../GodCards/Card';
@@ -28,7 +27,8 @@ class ChooseGodCard extends React.Component {
             dob: null,
             registered: false,
             index: 0,
-            GodCard: Apollo,
+            GodCard1: null,
+            GodCard2: null,
             properties: data.properties,
             property: data.properties[0]
         };
@@ -47,6 +47,34 @@ class ChooseGodCard extends React.Component {
         this.setState({
             property: data.properties[newIndex]
         })
+    };
+
+    chooseGoD = () => {
+        const godIndex = this.state.property.index;
+        if(this.state.GodCard1 === null) {
+            this.setState({
+                GodCard1: godIndex,
+            })
+        }
+        else{
+            this.setState({
+                GodCard2: godIndex,
+            })
+        }
+    };
+    unChooseGoD = () => {
+        const godIndex = this.state.property.index;
+        if (this.state.GodCard1 === godIndex){
+            this.setState({
+                GodCard1 : null
+            })
+        }
+        else if(this.state.GodCard2 === godIndex){
+            this.setState({
+                GodCard2 : null
+            })
+        }
+
     };
 
     choose2GodCards() {             // not implemented yet
@@ -99,8 +127,8 @@ class ChooseGodCard extends React.Component {
     }
 
 
-    componentDidMount() {}
 
+    componentDidMount() {}
 
 
     render() {
@@ -120,8 +148,19 @@ class ChooseGodCard extends React.Component {
                         onClick={() => this.nextProperty()}
                         disabled={property.index === data.properties.length-1}
                     >Next</button>
-
                         </div>
+                    <div>
+                    <button
+                        onClick={() => this.chooseGoD()
+                        }
+                        disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null)}
+                    >God1 {this.state.GodCard1} Choose</button>
+                        <button
+                            onClick={() => this.unChooseGoD()}
+                            disabled={property.index !== this.state.GodCard1 && property.index !== this.state.GodCard2}
+                        >God2 {this.state.GodCard2} Unchoose</button>
+
+                    </div>
 
                 </FormContainer>
             </BaseContainer>

@@ -6,6 +6,9 @@ import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 import Apollo from "../../views/design/Apollo.PNG";
 import Artemis from "../../GodCards/Artemis.PNG";
+import "../../GodCards/img_text.css";
+import data from "../../GodCards/data";
+import Card from '../../GodCards/Card';
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -69,10 +72,25 @@ class ChooseGodCard extends React.Component {
             registered: false,
             index: 0,
             GodCard: Apollo,
+            properties: data.properties,
+            property: data.properties[0]
         };
         this.today = new Date();
     }
 
+    nextProperty = () => {
+        const newIndex = this.state.property.index+1;
+        this.setState({
+            property: data.properties[newIndex]
+        })
+    };
+
+    prevProperty = () => {
+        const newIndex = this.state.property.index-1;
+        this.setState({
+            property: data.properties[newIndex]
+        })
+    };
 
     backToLogin() {
         fetch(`${getDomain()}/register`, { //register new user. send request and get response
@@ -133,14 +151,19 @@ class ChooseGodCard extends React.Component {
 
 
     render() {
+        const {property} = this.state;
         return (
+
             <BaseContainer>
                 <FormContainer>
-
+                    <div>
                     <img src = {this.state.GodCard}
                          width={250} // should be in ratio 1:1.75
                          height={437.5}
                          alt="Apollo test"/>
+                         <h1>asdölfjsdaölkfj asdölfsad</h1>
+                    </div>
+                         <div>
                          <button
                          onClick={() => {
                              this.setState({"GodCard": Artemis});
@@ -151,8 +174,35 @@ class ChooseGodCard extends React.Component {
                     <button
                         onClick={() => {
                             this.setState({"GodCard": Apollo});
-                        }}>Next</button>
+                        }}>Next</button></div>
 
+                    <div className="center">
+                        <div className="home2">
+                            <div className="home2_first">
+                                <img src={this.state.GodCard}
+                                     width={250} // should be in ratio 1:1.75
+                                     height={437.5}/>
+
+                            </div>
+                        </div>
+
+                        <div className="home2">
+                            <div className="home2_second">
+                                <p>Lorem Ipsum sadfasdfsdis simply dummy text!</p>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                                    industry's standard dummy text ever since the 1500s</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => this.nextProperty()}
+                        disabled={property.index === data.properties.length-1}
+                    >Next</button>
+                    <button
+                        onClick={() => this.prevProperty()}
+                        disabled={property.index === 0}
+                    >Prev</button>
+                    <Card property={property} />
 
                 </FormContainer>
             </BaseContainer>

@@ -3,9 +3,7 @@ import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
 import { withRouter } from "react-router-dom";
-import { Button } from "../../views/design/Button";
 import Apollo from "../../views/design/Apollo.PNG";
-import Artemis from "../../GodCards/Artemis.PNG";
 import "../../GodCards/img_text.css";
 import data from "../../GodCards/data";
 import Card from '../../GodCards/Card';
@@ -18,47 +16,6 @@ const FormContainer = styled.div`
   min-height: 300px;
   justify-content: center;
 `;
-
-const Form = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 60%;
-  height: 375px;
-  font-size: 16px;
-  font-weight: 300;
-  padding-left: 37px;
-  padding-right: 37px;
-  border-radius: 5px;
-  background: darkgrey;
-`;
-
-const InputField = styled.input`
-  &::placeholder {
-    color: rgba(100, 100, 100, 0.2);
-  }
-  height: 35px;
-  padding-left: 15px;
-  margin-left: -4px;
-  border: none;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  background: rgba(black);
-  color: black;
-`;
-
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-`;
-
 
 class ChooseGodCard extends React.Component {
 
@@ -92,7 +49,7 @@ class ChooseGodCard extends React.Component {
         })
     };
 
-    backToLogin() {
+    choose2GodCards() {             // not implemented yet
         fetch(`${getDomain()}/register`, { //register new user. send request and get response
             method: "POST",
             headers: {
@@ -141,10 +98,6 @@ class ChooseGodCard extends React.Component {
             })
     }
 
-    handleInputChange(key, value) {
-
-        this.setState({ [key]: value });
-    }
 
     componentDidMount() {}
 
@@ -156,53 +109,19 @@ class ChooseGodCard extends React.Component {
 
             <BaseContainer>
                 <FormContainer>
+
+                    <Card property={property} />
                     <div>
-                    <img src = {this.state.GodCard}
-                         width={250} // should be in ratio 1:1.75
-                         height={437.5}
-                         alt="Apollo test"/>
-                         <h1>asdölfjsdaölkfj asdölfsad</h1>
-                    </div>
-                         <div>
-                         <button
-                         onClick={() => {
-                             this.setState({"GodCard": Artemis});
-                         }}
-
-                         >Previous
-                         </button>
-                    <button
-                        onClick={() => {
-                            this.setState({"GodCard": Apollo});
-                        }}>Next</button></div>
-
-                    <div className="center">
-                        <div className="home2">
-                            <div className="home2_first">
-                                <img src={this.state.GodCard}
-                                     width={250} // should be in ratio 1:1.75
-                                     height={437.5}/>
-
-                            </div>
-                        </div>
-
-                        <div className="home2">
-                            <div className="home2_second">
-                                <p>Lorem Ipsum sadfasdfsdis simply dummy text!</p>
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                                    industry's standard dummy text ever since the 1500s</p>
-                            </div>
-                        </div>
-                    </div>
+                        <button
+                            onClick={() => this.prevProperty()}
+                            disabled={property.index === 0}
+                        >Prev</button>
                     <button
                         onClick={() => this.nextProperty()}
                         disabled={property.index === data.properties.length-1}
                     >Next</button>
-                    <button
-                        onClick={() => this.prevProperty()}
-                        disabled={property.index === 0}
-                    >Prev</button>
-                    <Card property={property} />
+
+                        </div>
 
                 </FormContainer>
             </BaseContainer>

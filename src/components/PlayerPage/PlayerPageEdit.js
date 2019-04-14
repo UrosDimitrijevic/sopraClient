@@ -142,7 +142,7 @@ class PlayerPageEdit extends React.Component {
         };
     }
 
-    backTomain(){
+    backDomain(){
         localStorage.removeItem("lookingAtUser");
         this.props.history.push(`/game`);
     }
@@ -299,7 +299,7 @@ class PlayerPageEdit extends React.Component {
                         <Button
                             width="50%"
                             onClick={() => {
-                                this.backTomain();
+                                this.backDomain();
                             }}
                         >
                             Return to main Page

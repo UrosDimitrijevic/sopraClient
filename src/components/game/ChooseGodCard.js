@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import "../../GodCards/img_text.css";
 import data from "../../GodCards/data";
 import Card from '../../GodCards/Card';
+import {Button} from "../../views/design/Button";
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -21,18 +22,16 @@ class ChooseGodCard extends React.Component {
     constructor() {
         super();
         this.state = {
-            password: null,
-            password2: null,
-            username: null,
-            dob: null,
-            registered: false,
+           status: null,
+            myUserId: 1,
+            board: 123,
             index: 0,
+            starting: false,
             GodCard1: null,
             GodCard2: null,
             properties: data.properties,
             property: data.properties[0]
         };
-        this.today = new Date();
     }
 
     nextProperty = () => {
@@ -77,16 +76,16 @@ class ChooseGodCard extends React.Component {
 
     };
 
-    choose2GodCards() {             // not implemented yet
-        fetch(`${getDomain()}/register`, { //register new user. send request and get response
+    choose2GodCards() {             // somewhat implemented
+        fetch(`${getDomain()}//users/MyGame/`+ localStorage.getItem("id"), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                password: this.state.password,
-                username: this.state.username,
-                dob: this.state.dob
+                password: this.state.GodCard1,
+                username: this.state.GodCard2,
+
             })
         })
             .then(response => {
@@ -128,7 +127,19 @@ class ChooseGodCard extends React.Component {
 
 
 
-    componentDidMount() {}
+    componentDidMount() {
+        fetch(`${getDomain()}/game/Board/`+ localStorage.getItem("id"), {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+
+            .then( response => {console.log(response.board);
+
+            })
+    }
 
 
     render() {
@@ -149,19 +160,24 @@ class ChooseGodCard extends React.Component {
                         disabled={property.index === data.properties.length-1}
                     >Next</button>
                         </div>
+                <br/>
+
                     <div>
                     <button
                         onClick={() => this.chooseGoD()
                         }
                         disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null)}
-                    >God1 {this.state.GodCard1} Choose</button>
+                    >Choose</button>
                         <button
                             onClick={() => this.unChooseGoD()}
                             disabled={property.index !== this.state.GodCard1 && property.index !== this.state.GodCard2}
-                        >God2 {this.state.GodCard2} Unchoose</button>
+                        >Unchoose</button>
 
                     </div>
-
+                    <Button
+                    disabled={this.state.GodCard1 === null || this.state.GodCard2 === null}
+                    > Accept</Button>
+                    <p>{this.state.board}</p>
                 </FormContainer>
             </BaseContainer>
         );

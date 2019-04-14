@@ -52,7 +52,7 @@ const data = {
         {
             "index": 6,
             "picture": Hermes,
-            "text": "God of Travel Your Turn: If your Workers do not move up or down, they may each move any number of times (even zero), and then either builds. ",
+            "text": "Your Turn: If your Workers do not move up or down, they may each move any number of times (even zero), and then either builds. ",
             "title": "God of Travel "
         },
         {

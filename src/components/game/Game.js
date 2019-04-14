@@ -56,23 +56,57 @@ class Game extends React.Component {
   constructor() {
     super();
     this.state = {
-      users: null
+      users: null,
+      challenging: null,
+      status: null,
     };
+  }
+  challengeUser(){
+    fetch(`${getDomain()}/users/`+localStorage.getItem("id"), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        challenging: this.state.challenging,
+      })
+    }).then(response => {
+      if( response.status < 200 || response.status >= 300 ) {
+        throw new Error( ErrorCode(response.status) );
+      }
+
+    })
+        .catch(err => {
+          if (err.message.match(/Failed to fetch/)) {
+            alert("The server cannot be reached. Did you start it?");
+          }
+        });
   }
 
   getChallengeStatus() {
-    fetch(`${getDomain()}/user/challengestatus/`+localStorage.getItem("id"), {
+    fetch(`${getDomain()}/game/Board/`+localStorage.getItem("id"), {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
       }
-    })
+    })/*
         .then(response =>{
           if(response.status === 404){
             //alert ("bugabga");
             //throw new Error(ErrorCode(response.status));
           }
+        })*/
+        .then ( response => response.json())
+
+        .then ( response => {
+          if( response.status === "CHOSING_GAME_MODE" ) {
+            this.props.history.push("/test");
+          }
+          //"return response.json() })
+          //".then(returnedUser => {
+
         })
+        
         .catch(err => {
           console.log(err);
           alert("Something went wrong catching challenge Status: " + err);
@@ -102,13 +136,13 @@ class Game extends React.Component {
 
   componentDidMount() {
     fetch(`${getDomain()}/users`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(async users => {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+          .then(response => response.json())
+          .then(async users => {
         // delays continuous execution of an async operation for 0.8 seconds.
         // This is just a fake async call, so that the spinner can be displayed
         // feel free to remove it :)
@@ -121,7 +155,7 @@ class Game extends React.Component {
         alert("Something went wrong fetching the users: " + err);
       });
     this.getChallengeStatus();
-    this.timer = setInterval(()=>this.getChallengeStatus(), 10000);
+    //this.timer = setInterval(()=>this.getChallengeStatus(), 10000);
   }
 
   render() {
@@ -140,7 +174,11 @@ class Game extends React.Component {
                       <PlContainer>
                           <a href="#" onClick={()=>{this.props.history.push('/playerPage' ); localStorage.setItem("atID", user.id);} } >
                             {user.username}
-                          </a>
+                          </a><button
+                      onClick={()=> {this.setState({challenging : user.id});
+                                    this.challengeUser();
+                      }}
+                      disabled={user.id=== localStorage.getItem("id")}>Challenge</button>
                           <PlId>Id: {user.id}</PlId>
                       </PlContainer>
                   </PlayerContainer>

@@ -68,7 +68,7 @@ class Game extends React.Component {
       }
     })
         .then(response =>{
-          if(response.status === 404){
+          if(response.status === 204){
             alert ("bugabga");
             //throw new Error(ErrorCode(response.status));
           }

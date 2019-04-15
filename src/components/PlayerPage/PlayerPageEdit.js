@@ -78,6 +78,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid #ffffff26;
+  background: darkgrey;
 `;
 
 const UserName = styled.div`
@@ -141,7 +142,7 @@ class PlayerPageEdit extends React.Component {
         };
     }
 
-    backTomain(){
+    backDomain(){
         localStorage.removeItem("lookingAtUser");
         this.props.history.push(`/game`);
     }
@@ -239,7 +240,7 @@ class PlayerPageEdit extends React.Component {
             }
             return response.json() })
             .then(async returnedUser => {
-                await new Promise(resolve => setTimeout(resolve, 800));
+                //await new Promise(resolve => setTimeout(resolve, 800));
                 const user = new User(returnedUser);
                 this.setState({"user": user});
                 // store the token into the local storage
@@ -298,7 +299,7 @@ class PlayerPageEdit extends React.Component {
                         <Button
                             width="50%"
                             onClick={() => {
-                                this.backTomain();
+                                this.backDomain();
                             }}
                         >
                             Return to main Page

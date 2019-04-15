@@ -35,25 +35,8 @@ const Form = styled.div`
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
-const InputField = styled.input`
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.2);
-  }
-  height: 35px;
-  padding-left: 15px;
-  margin-left: -4px;
-  border: none;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-`;
 
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-`;
+
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -69,6 +52,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid #ffffff26;
+  background: darkgrey;
 `;
 
 const UserName = styled.div`
@@ -103,23 +87,10 @@ const CreationDate = styled.div`
 
 
 
-/**
- * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
- * You should have a class (instead of a functional component) when:
- * - You need an internal state that cannot be achieved via props from other parent components
- * - You fetch data from the server (e.g., in componentDidMount())
- * - You want to access the DOM via Refs
- * https://reactjs.org/docs/react-component.html
- * @Class
- */
+
 class PlayerPage extends React.Component {
 
-    /**
-     * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
-     * The constructor for a React component is called before it is mounted (rendered).
-     * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
-     * These fields are then handled in the onChange() methods in the resp. InputFields
-     */
+
     constructor() { var us = new User( {
         "username" : "Loading",
         "id": 0,
@@ -189,7 +160,7 @@ class PlayerPage extends React.Component {
             }
             return response.json() })
             .then(async returnedUser => {
-                await new Promise(resolve => setTimeout(resolve, 100));
+                //await new Promise(resolve => setTimeout(resolve, 100));
                 const user = new User(returnedUser);
                 this.setState({"user": user});
                 // store the token into the local storage
@@ -199,13 +170,7 @@ class PlayerPage extends React.Component {
                 alert("Something went wrong fetching the users: " + err);
             });
     }
-    /**
-     * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
-     * Initialization that requires DOM nodes should go here.
-     * If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-     * You may call setState() immediately in componentDidMount().
-     * It will trigger an extra rendering, but it will happen before the browser updates the screen.
-     */
+
 
     render() {
 
@@ -258,15 +223,5 @@ class PlayerPage extends React.Component {
     }
 }
 
-/**
- * You can get access to the history object's properties via the withRouter.
- * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
- */
-export default withRouter(PlayerPage);
-/**
- <Player user ={ this.state.user} />
- <Player user ={ this.state.user} />
- <UserName>User: {this.state.user.username}</UserName>
- <Id>Id: {this.state.user.id}</Id>
 
- */
+export default withRouter(PlayerPage);

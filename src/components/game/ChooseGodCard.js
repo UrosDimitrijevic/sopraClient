@@ -8,6 +8,7 @@ import data from "../../GodCards/data";
 import Card from '../../GodCards/Card';
 import {Button} from "../../views/design/Button";
 
+
 const FormContainer = styled.div`
   margin-top: 2em;
   display: flex;
@@ -176,6 +177,8 @@ class ChooseGodCard extends React.Component {
                     </div>
                     <Button
                     disabled={this.state.GodCard1 === null || this.state.GodCard2 === null}
+
+
                     > Accept</Button>
                     <p>{this.state.board}</p>
                 </FormContainer>

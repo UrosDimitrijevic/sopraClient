@@ -103,6 +103,7 @@ class Registration extends React.Component {
         return response.json() })
       .then(returnedUser => {
         const user = new User(returnedUser);
+        console.log(user);
         // user registration worked -> put him/her back to the login page<
         this.props.history.push(`/login`);
       } )

@@ -8,7 +8,7 @@ import Registration from "../../registration/Registration"
 import PlayerPage from  "../../PlayerPage/PlayerPage"
 import PlayerPageEdit from "../../PlayerPage/PlayerPageEdit"
 import ChooseGodCard from "../../game/ChooseGodCard";
-import GameStatus from "../../game/GameStatus";
+import GameStatus from "../../game/declineChallenge";
 
 /**
  * Main router of your application.
@@ -71,13 +71,6 @@ class AppRouter extends React.Component {
 
                           <ChooseGodCard />
 
-                  )}
-              />
-              <Route
-                  path="/gamestatus"
-                  exact
-                  render={() => (
-                      <GameStatus />
                   )}
               />
             <Route path="/" exact render={() => <Redirect to={"/login"} />} />

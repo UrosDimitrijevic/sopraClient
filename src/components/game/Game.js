@@ -6,6 +6,8 @@ import { Spinner } from "../../views/design/Spinner";
 import { Button } from "../../views/design/Button";
 import { withRouter } from "react-router-dom";
 import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler";
+import {declineChallenge} from "./declineChallenge";
+
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -58,10 +60,33 @@ class Game extends React.Component {
     super();
     this.state = {
       users: null,
+      user: null,
       challenging: null,
+      challengingPUT: null,
+      gettingChallengedBy: null,
       status: null,
     };
   }
+  ChallengeStatus() {
+    fetch(`${getDomain()}/users/`+ localStorage.getItem("id"), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+        .then(response => response.json())
+
+        .then( response => {
+          this.setState({
+            user : response,
+            challenging : response.challenging,
+            gettingChallengedBy : response.gettingChallengedBy
+          });
+
+        });}
+
+
+
   challengeUser(){
     fetch(`${getDomain()}/users/`+localStorage.getItem("id"), {
       method: "PUT",
@@ -69,7 +94,7 @@ class Game extends React.Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        challenging: this.state.challenging,
+        challenging: this.state.challengingPUT,
       })
     }).then(response => {
       if( response.status < 200 || response.status >= 300 ) {
@@ -84,7 +109,7 @@ class Game extends React.Component {
         });
   }
 
-  getChallengeStatus() {
+  getGameStatus() {
     let resStatus = 0;
     fetch(`${getDomain()}/game/Board/`+localStorage.getItem("id"), {
       method: "GET",
@@ -94,7 +119,7 @@ class Game extends React.Component {
     })
         .then (res => {
           resStatus = res.status;
-          if (resStatus === 204 || resStatus === 400){console.log(res)}
+          if (resStatus === 404 || resStatus === 400){console.log(res)}
           else{
           return  res.json();}
         })
@@ -103,10 +128,14 @@ class Game extends React.Component {
             case 200:
               this.setState({status : res.status});
               console.log(this.state.status);
-              break;
+              return this.props.history.push("/test");
+
             case 500:
               console.log('server error, try again');
-              break
+              break;
+            default:
+              console.log("default case");
+                  break;
 
           }
         })
@@ -166,14 +195,21 @@ class Game extends React.Component {
         alert("Something went wrong fetching the users: " + err);
       });
 
-    this.getChallengeStatus();
-    this.timer = setInterval(()=>this.getChallengeStatus(), 10000);
+    if(this.state.challenging === this.state.gettingChallengedBy && (!this.state.gettingChallengedBy) && (!this.state.challenging)){
+      this.getGameStatus();
+      this.timer = setInterval(()=>this.getGameStatus(), 10000);
+    }
+    else{
+      this.ChallengeStatus();
+      this.timer = setInterval(()=> this.ChallengeStatus(), 10000);
+    }
   }
   componentWillUnmount() {
     this.timer = null;
   }
 
   render() {
+    let user = null;
     return (
       <Container>
         <h2>Happy Coding! </h2>
@@ -190,8 +226,10 @@ class Game extends React.Component {
                           <a href="#" onClick={()=>{this.props.history.push('/playerPage' ); localStorage.setItem("atID", user.id);} } >
                             {user.username}
                           </a><button
-                      onClick={()=> {this.setState({challenging : user.id});
+                      onClick={()=> {this.setState({challengingPUT : user.id});
                                     this.challengeUser();
+                                    this.ChallengeStatus();
+                                    console.log(this.state.gettingChallengedBy)
                       }}
                       disabled={user.id.toString(  )=== localStorage.getItem("id")}>Challenge</button>
                           <PlId>Id: {user.id}</PlId>
@@ -200,10 +238,16 @@ class Game extends React.Component {
                 );
               })}
             </Users>
+            <button
+                onClick={declineChallenge}
+            >Decline </button>
             <Button
               width="100%"
               onClick={() => {
+
                 this.logout();
+
+
               }}
             >
               Logout

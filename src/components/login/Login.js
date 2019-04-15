@@ -120,39 +120,6 @@ class Login extends React.Component {
       });
   }
 
-  /**
-   * Testfunction i wrote to play arround with GET
-   */
-  login_test() {
-    alert( '${getDomain()}/login' );
-    fetch(`${getDomain()}/login?d`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: 'd'
-      })
-    })
-        .then(response => response.json())
-        .then(returnedUser => {
-          alert(returnedUser.name);
-          this.props.history.push(`/game`);
-        })
-        .catch(err => {
-          if (err.message.match(/Failed to fetch/)) {
-            alert("The server cannot be reached. Did you start it?");
-          } else {
-            alert(`Something went wrong during the login: ${err.message}`);
-          }
-        });
-  }
-
-
-
-  /**
-   * function that leads to the registration-page, I made myself *
-   */
 
    registration() {
      this.props.history.push(`/registration`);

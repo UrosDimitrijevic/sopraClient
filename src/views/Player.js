@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import {Button} from "./design/Button";
-import { withRouter } from "react-router-dom";
+//import {Button} from "./design/Button";
+//import { withRouter } from "react-router-dom";
 
 
 
@@ -20,11 +20,11 @@ const UserName = styled.div`
   margin-left: 5px;
 `;
 
-const Name = styled.div`
+/*const Name = styled.div`
   font-weight: bold;
   color: #06c4ff;
 `;
-
+*/
 const Id = styled.div`
   margin-left: auto;
   margin-right: 10px;

@@ -6,10 +6,10 @@ import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler"
-import Player from "../../views/Player";
+//import Player from "../../views/Player";
 
 function formatDate(date) {
-    var d = new Date(date),
+    let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
@@ -58,12 +58,12 @@ const InputField = styled.input`
   color: white;
 `;
 
-const Label = styled.label`
+/*const Label = styled.label`
   color: white;
   margin-bottom: 10px;
   text-transform: uppercase;
 `;
-
+*/
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -148,8 +148,8 @@ class PlayerPageEdit extends React.Component {
     }
 
     edit(){
-        var change;
-        var bdy;
+
+        let bdy;
 
         if( this.state.birthday == null){
             bdy = JSON.stringify({
@@ -172,8 +172,8 @@ class PlayerPageEdit extends React.Component {
             });
         }
         else{
-            var date  = new Date(this.state.birthday);
-            var strDate = "";
+            let date  = new Date(this.state.birthday);
+            let strDate = "";
             if(isNaN(date.getTime() )){
                 alert("invalid Date format, please use YYYY-MM-DD");
                 return;
@@ -228,7 +228,7 @@ class PlayerPageEdit extends React.Component {
 
 
     componentWillMount() {
-        var id = localStorage.getItem("atID");
+        let id = localStorage.getItem("atID");
         fetch(`${getDomain()}/users/`+id, {
             method: "GET",
             headers: {
@@ -259,13 +259,6 @@ class PlayerPageEdit extends React.Component {
      */
 
     render() {
-
-        var us = new User( {
-            "username" : "hans",
-            "id": -1,
-            "status": "OFFLINE"
-        } );
-
         return (
             <BaseContainer>
                 <FormContainer>

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
-import User from "../shared/models/User";
+//import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler"
@@ -99,13 +99,8 @@ class Registration extends React.Component {
       .then(response => {
         if( response.status < 200 ||response.status >=300 ) {
           throw new Error( ErrorCode(response.status) );
-        }
-        response.json() })
-      .then(returnedUser => {
-        const user = new User(returnedUser);
-        // user registration worked -> put him/her back to the login page<
-        this.props.history.push(`/login`);
-      } )
+        }}
+         )
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
           alert("The server cannot be reached. Did you start it?");

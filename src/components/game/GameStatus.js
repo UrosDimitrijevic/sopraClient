@@ -4,9 +4,7 @@ import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
 import { withRouter } from "react-router-dom";
 import "../../GodCards/img_text.css";
-import data from "../../GodCards/data";
-import Card from '../../GodCards/Card';
-import {Button} from "../../views/design/Button";
+
 
 const FormContainer = styled.div`
   margin-top: 2em;

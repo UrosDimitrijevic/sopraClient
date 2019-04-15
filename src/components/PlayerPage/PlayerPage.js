@@ -6,7 +6,7 @@ import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler"
-import Player from "../../views/Player";
+//import Player from "../../views/Player";
 
 
 
@@ -173,15 +173,8 @@ class PlayerPage extends React.Component {
 
 
     render() {
-
-        var us = new User( {
-            "username" : "hans",
-            "id": -1,
-            "status": "OFFLINE"
-        } );
-
         let button;
-        if(localStorage.getItem("atID") == localStorage.getItem("id")){
+        if(localStorage.getItem("atID") === localStorage.getItem("id")){
             button =
                 <Button
                     width="50%"

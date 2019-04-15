@@ -39,10 +39,11 @@ const PlContainer = styled.div`
   background: darkgrey;
 `;
 
-const PlUserName = styled.div`
+/*const PlUserName = styled.div`
   font-weight: lighter;
   margin-left: 5px;
 `;
+*/
 
 
 const PlId = styled.div`
@@ -102,6 +103,7 @@ class Game extends React.Component {
               console.log(this.state.status);
               break;
             case 404:
+              this.setState({status : null});
               break;
             case 500:
               console.log('server error, try again');
@@ -182,7 +184,7 @@ class Game extends React.Component {
                       onClick={()=> {this.setState({challenging : user.id});
                                     this.challengeUser();
                       }}
-                      disabled={user.id=== localStorage.getItem("id")}>Challenge</button>
+                      disabled={user.id.toString(  )=== localStorage.getItem("id")}>Challenge</button>
                           <PlId>Id: {user.id}</PlId>
                       </PlContainer>
                   </PlayerContainer>

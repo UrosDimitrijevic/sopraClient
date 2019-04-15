@@ -9,6 +9,7 @@ const Card = ({property}) => {
             <div className="home2">
                 <div className="home2_first">
                     <img src={picture}
+                         alt={`s`}
                          width={250} // should be in ratio 1:1.75
                          height={437.5}/>
 

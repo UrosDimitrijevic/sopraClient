@@ -94,16 +94,15 @@ class Game extends React.Component {
     })
         .then (res => {
           resStatus = res.status;
-          return  res.json();
+          if (resStatus === 204 || resStatus === 400){console.log(res)}
+          else{
+          return  res.json();}
         })
         .then (res => {
           switch (resStatus){
             case 200:
               this.setState({status : res.status});
               console.log(this.state.status);
-              break;
-            case 404:
-              this.setState({status : null});
               break;
             case 500:
               console.log('server error, try again');
@@ -125,7 +124,11 @@ class Game extends React.Component {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem("username"),
+
+      })
     })
         .then(response => {
           if( response.status < 200 || response.status >=300 ) {
@@ -138,6 +141,8 @@ class Game extends React.Component {
         });
     localStorage.removeItem( "id");
     this.props.history.push("/login");
+    localStorage.removeItem("username");
+    clearInterval(this.timer);
   }
 
   componentDidMount() {
@@ -160,8 +165,12 @@ class Game extends React.Component {
         console.log(err);
         alert("Something went wrong fetching the users: " + err);
       });
+
     this.getChallengeStatus();
-    //this.timer = setInterval(()=>this.getChallengeStatus(), 10000);
+    this.timer = setInterval(()=>this.getChallengeStatus(), 10000);
+  }
+  componentWillUnmount() {
+    this.timer = null;
   }
 
   render() {
@@ -202,6 +211,7 @@ class Game extends React.Component {
           </div>
         )}
       </Container>
+
     );
   }
 }

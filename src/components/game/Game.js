@@ -106,7 +106,7 @@ class Game extends React.Component {
           //".then(returnedUser => {
 
         })
-        
+
         .catch(err => {
           console.log(err);
           alert("Something went wrong catching challenge Status: " + err);

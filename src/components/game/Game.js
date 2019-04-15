@@ -195,7 +195,7 @@ class Game extends React.Component {
         alert("Something went wrong fetching the users: " + err);
       });
 
-    if(this.state.challenging === this.state.gettingChallengedBy && (!this.state.gettingChallengedBy) && (!this.state.challenging)){
+    if(this.state.challenging === this.state.gettingChallengedBy && (this.state.gettingChallengedBy) && (this.state.challenging)){
       this.getGameStatus();
       this.timer = setInterval(()=>this.getGameStatus(), 10000);
     }

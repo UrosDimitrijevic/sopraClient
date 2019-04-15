@@ -84,28 +84,32 @@ class Game extends React.Component {
   }
 
   getChallengeStatus() {
+    let resStatus = 0;
     fetch(`${getDomain()}/game/Board/`+localStorage.getItem("id"), {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
       }
-    })/*
-        .then(response =>{
-          if(response.status === 204){
-            alert ("bugabga");
-            //throw new Error(ErrorCode(response.status));
-          }
-        })*/
-        .then ( response => response.json())
-
-        .then ( response => {
-          if( response.status === "CHOSING_GAME_MODE" ) {
-            this.props.history.push("/test");
-          }
-          //"return response.json() })
-          //".then(returnedUser => {
-
+    })
+        .then (res => {
+          resStatus = res.status;
+          return  res.json();
         })
+        .then (res => {
+          switch (resStatus){
+            case 200:
+              this.setState({status : res.status});
+              console.log(this.state.status);
+              break;
+            case 404:
+              break;
+            case 500:
+              console.log('server error, try again');
+              break
+
+          }
+        })
+
 
         .catch(err => {
           console.log(err);
@@ -115,7 +119,7 @@ class Game extends React.Component {
 
   logout() {
     localStorage.removeItem("token");
-    fetch(`${getDomain()}/users/`+localStorage.getItem("id")+`/logout`, {
+    fetch(`${getDomain()}/users/`+localStorage.getItem("id"), {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"

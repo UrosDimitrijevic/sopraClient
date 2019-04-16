@@ -8,7 +8,8 @@ import Registration from "../../registration/Registration"
 import PlayerPage from  "../../PlayerPage/PlayerPage"
 import PlayerPageEdit from "../../PlayerPage/PlayerPageEdit"
 import ChooseGodCard from "../../game/ChooseGodCard";
-import GameStatus from "../../game/declineChallenge";
+import GameBoard from "../../Board/GameBoard";
+
 
 /**
  * Main router of your application.
@@ -64,13 +65,18 @@ class AppRouter extends React.Component {
                   </GameGuard>
                ) }
             />
+            <Route
+                path="/test"
+                exact
+                render={() => (
+                    <ChooseGodCard/>
+                  )}
+            />
               <Route
-                  path="/test"
+                  path="/board"
                   exact
                   render={() => (
-
-                          <ChooseGodCard />
-
+                      <GameBoard/>
                   )}
               />
             <Route path="/" exact render={() => <Redirect to={"/login"} />} />

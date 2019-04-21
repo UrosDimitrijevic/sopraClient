@@ -1,0 +1,161 @@
+{
+    "id": 3,
+    "player1id": 1,
+    "player2id": 2,
+    "status": "MOVING_STARTINGPLAYER",
+    "playWithGodCards": false,
+    "board": {
+        "spaces": [
+            [
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                }
+            ],
+            [
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                }
+            ],
+            [
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                }
+            ],
+            [
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                }
+            ],
+            [
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                },
+                {
+                    "level": 0,
+                    "dome": false
+                }
+            ]
+        ]
+    },
+    "nonStartingPlayer": {
+        "myUserID": 2,
+        "startingplayer": false,
+        "playerNumber": 2,
+        "assignedGod": null,
+        "figurine1": {
+            "figurineNumber": 1,
+            "position": [
+                4,
+                0
+            ]
+        },
+        "figurine2": {
+            "figurineNumber": 2,
+            "position": [
+                4,
+                2
+            ]
+        }
+    },
+    "startingPlayer": {
+        "myUserID": 1,
+        "startingplayer": true,
+        "playerNumber": 1,
+        "assignedGod": null,
+        "figurine1": {
+            "figurineNumber": 1,
+            "position": [
+                0,
+                0
+            ]
+        },
+        "figurine2": {
+            "figurineNumber": 2,
+            "position": [
+                0,
+                2
+            ]
+        }
+    }
+}

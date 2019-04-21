@@ -9,6 +9,7 @@ import PlayerPage from  "../../PlayerPage/PlayerPage"
 import PlayerPageEdit from "../../PlayerPage/PlayerPageEdit"
 import ChooseGodCard from "../../game/ChooseGodCard";
 import GameBoard from "../../Board/GameBoard";
+import NewBoard from "../../Board/newBoard";
 
 
 /**
@@ -77,6 +78,13 @@ class AppRouter extends React.Component {
                   exact
                   render={() => (
                       <GameBoard/>
+                  )}
+              />
+              <Route
+                  path="/newboard"
+                  exact
+                  render={() => (
+                      <NewBoard/>
                   )}
               />
             <Route path="/" exact render={() => <Redirect to={"/login"} />} />

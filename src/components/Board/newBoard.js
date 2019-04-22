@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import {withRouter} from "react-router-dom";
 import * as ReactDOM from "react-dom";
 import {BaseContainer} from "../../helpers/layout";
-
+import Test1 from "./initGameStatus";
+import Test2 from "./test2";
+import actionstest1 from "./actionstest1";
 import './boardindex.css';
 import {getDomain} from "../../helpers/getDomain";
 
 
 class Square extends React.Component {
+    row;
 
     render() {
-        if(this.props.level === 0){
+        if(this.props.row === 0){
         return (
             <button className="square">
                 {this.props.row}, {this.props.column}, {this.props.level}
@@ -18,7 +21,9 @@ class Square extends React.Component {
         );}
         else {
             return(
-                <button className="square2">
+                <button className="square2"
+                        onClick={this.props.onClick}
+                >
                     {this.props.row}, {this.props.column}, {this.props.level}
                 </button>
             );
@@ -27,290 +32,89 @@ class Square extends React.Component {
 }
 
 class Board extends React.Component {
-    constructor(){
-        super();
-        this.state = {
-            "board": {
-                "spaces": [
-                    [
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 11111,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ],
-                    [
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ],
-                    [
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ],
-                    [
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ],
-                    [
-                        {
-                            "level": 1231231,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ]
-                ]
-            },
+    constructor(props) {
+        super(props);
+        this.state={
+            actions: actionstest1
         }
-    }
-    componentDidMount() {
-        this.getGameStatus();
 
     }
-    clickMe (){
-        console.log(this.state.status);
-        console.log(this.state.board.spaces[0][0].level);
-        console.log(this.state.board.spaces[0][1].level);
-        this.setState({board: {
-                "spaces": [
-                    [
-                        {
-                            "level": 123123,
-                            "dome": false
-                        },
-                        {
-                            "level": 11111,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ],
-                    [
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ],
-                    [
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ],
-                    [
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ],
-                    [
-                        {
-                            "level": 1231231,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        },
-                        {
-                            "level": 0,
-                            "dome": false
-                        }
-                    ]
-                ]
-            },})
-
-    }
-    clickme2(){
-        this.getGameStatus();
+    clickme3(){
+        console.log(this.state.actions);
+        console.log(this.state.actions.length)
     }
 
-    createTable = (board) => {
+    createTable = (board, actions) => {
         let table = [];
-
-        // Outer loop to create parent
         for (let i = 0; i < 5; i++) {
             let BoardRow = [];
-            //Inner loop to create children
             for (let j = 0; j < 5; j++) {
-                BoardRow.push(this.renderSquare(i,j, this.state.board.spaces[i][j].level))
+                BoardRow.push(this.renderSquare(i, j, board.spaces[i][j].level, board.spaces[i][j].dome, actions));
             }
-            //Create the parent and add the children
             table.push(<div className="board-row">{BoardRow}</div>)
         }
         return table
     };
 
+    checkAction(actions, row, column){
+        for(let i=0; i<actions.length; i++){
+            if(actions[i].row === row && actions[i].column === column){
+                return actions[i];
+            }
+            else{
+                return null;
+            }
+        }
+    }
 
+    renderSquare(row, column, level, dome, actions) {
+        return <Square action = {this.checkAction(actions, row, column)} row={row} column={column} level={level} onClick={() => {
+            console.log(row, column, level, this.checkAction(actions, row, column));
 
-    renderSquare(row, column, level, dome) {
-        return <Square row={row} column = {column} level = {level}/>;
+        }}/>;
     }
 
     render() {
-        const status = 'Next player: X';
+        const status = this.props.status;
 
         return (
             <div>
                 <div className="status">{status}</div>
+                {this.createTable(this.props.board, this.state.actions)}
+                <button onClick={() => this.clickme3()}>Actions</button>
 
-                {this.createTable(this.state.board)}
+            </div>
+        );
+    }
+
+}
+
+class Game extends React.Component {
+    constructor(){
+    super();
+    this.state =
+        Test1
+    }
+
+    render() {
+        return (
+            <BaseContainer>
                 <button
                     onClick={() => this.clickMe()}
-                >asdf</button>
+                >CustomGameStatus</button>
                 <button
                     onClick={() => this.clickme2()}
-                >asdfqweqwe</button>
+                >getGameStatus</button>
+            <div className="game">
+                <div className="game-board">
+                    <Board status={this.state.status} board = {this.state.board}/>
+                </div>
+                <div className="game-info">
+                    <div>{}</div>
+                    <ol>{/* TODO */}</ol>
+                </div>
             </div>
+        </BaseContainer>
         );
     }
 
@@ -354,26 +158,22 @@ class Board extends React.Component {
                 alert("Something went wrong catching challenge Status: " + err);
             });
     }
-}
+    componentDidMount() {
+        this.getGameStatus();
 
-class Game extends React.Component {
+    }
+    clickMe (){
+        console.log(this.state.status);
+        console.log(this.state.board.spaces[0][0].level);
+        console.log(this.state.board.spaces[0][1].level);
+        this.setState(Test2);
+        this.setState({swag: "asdf"});
+        console.log(this.state.swag);
+        console.log(this.state.board.spaces[0][1].level);
 
-
-    render() {
-        return (
-            <BaseContainer>
-            <div className="game">
-                <div className="game-board">
-                    <Board />
-                </div>
-                <div className="game-info">
-                    <div>{}</div>
-                    <ol>{/* TODO */}</ol>
-                </div>
-
-            </div>
-        </BaseContainer>
-        );
+    }
+    clickme2(){
+        this.getGameStatus();
     }
 
 }

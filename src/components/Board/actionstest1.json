@@ -19,5 +19,40 @@
     "row": 0,
     "column": 1,
     "figurineNumber": 1
+  },
+  {
+    "id": 7,
+    "name": "Moving",
+    "row": 1,
+    "column": 1,
+    "figurineNumber": 2
+  },
+  {
+    "id": 8,
+    "name": "Moving",
+    "row": 1,
+    "column": 2,
+    "figurineNumber": 2
+  },
+  {
+    "id": 9,
+    "name": "Moving",
+    "row": 1,
+    "column": 3,
+    "figurineNumber": 2
+  },
+  {
+    "id": 10,
+    "name": "Moving",
+    "row": 0,
+    "column": 1,
+    "figurineNumber": 2
+  },
+  {
+    "id": 11,
+    "name": "Moving",
+    "row": 0,
+    "column": 3,
+    "figurineNumber": 2
   }
 ]

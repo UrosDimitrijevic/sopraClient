@@ -31,6 +31,11 @@ ol, ul {
     text-align: center;
     width: 75px;
 }
+.square3 img {
+    margin: 0 auto;
+    padding: 0;
+
+}
 .square2 {
     background: blue;
     border: 1px solid #999;

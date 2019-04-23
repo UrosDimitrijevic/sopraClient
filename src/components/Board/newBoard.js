@@ -7,35 +7,92 @@ import Test2 from "./test2";
 import actionstest1 from "./actionstest1";
 import './boardindex.css';
 import {getDomain} from "../../helpers/getDomain";
-import figure from "./figuretest.PNG"
+import White from "./WhiteFigure.png"
+import Black from "./BlackFigure.png"
 
 
 class Square extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            addClass: false,
+            homeLink: "Changed name",
+            bgColor: "green"
+        }
+    }
 
-/*
-<div className="square3">
-<img alt={"qwerwe"} width={50} height={50} src = {figure}/></div>*/
+    emptyfield() {
+        return (
+            <button className="square">
+
+            </button>
+        );
+    }
+
+    level1field() {
+
+    }
+
+    confirmsquareaction() {
+        this.props.confirm();
+    }
+
+    onChangeLink() {
+        this.props.changeLink(this.state.homeLink);
+        console.log("wqerweq");
+    }
+
+    toggle() {
+        this.setState({clickedsquare: !this.state.clickedsquare});
+        localStorage.setItem("clicked", this.props.row);
+        console.log(this.state.clickedsquare);
+
+    }
+    clickAction(){
+        localStorage.setItem("actionID", this.props.action);
+        console.log(localStorage.getItem("actionID"))
+    }
+
+
+    /*<div className="square3">
+    <img alt={"qwerwe"} width={50} height={50} src = {Black}/></div>*/
+
 
     render() {
+        let boxClass = ["square"];
+        if (this.state.clickedsquare) {
+            boxClass.push('green');
+        }
+        if (this.props.column === 2 && this.props.row === 0) {
+            return (
+                <button className={boxClass.join(' ')} onClick={this.toggle.bind(this)}>gh</button>)
+        }
         if (this.props.action === null) {
             return (
-                <button className="square"
-                        onClick={console.log(this.props.actions)}
-                        disabled={this.props.action === null}
+                <button className="squareorange"
+                        onClick={this.clickAction()}
                 >
+                </button>
+            );
+        } else if (this.props.action.name === "PlaceWorker") {
+            return (
+                <button className="square"
+                        onClick={() => {
+                            console.log(this.props.level);
+                            localStorage.setItem("actionID", this.props.action.id);
+                            console.log(localStorage.getItem("actionID"));
+                            this.onChangeLink.bind(this);
+                        }}
 
-                    {this.props.row}, {this.props.column}, {this.props.level}
-
+                >
                 </button>
             );
         } else {
             return (
                 <button className="square2"
-                        onClick={() => {
-                            console.log(this.props.row,  this.props.column, this.props.level, this.props.action)
-                        }}
+                        onClick={this.onChangeLink.bind(this)}
                 >
-                    {this.props.row}, {this.props.column}, {this.props.level}
+                    <div className="squareLevel1"> {this.props.level}</div>
                 </button>
             );
         }
@@ -46,22 +103,84 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            actions: actionstest1
+            actions: actionstest1,
+            homeLink: "home",
+            clicked: null,
         }
+    }
 
+    getActions() {
+        let resStatus = 0;
+        fetch(`${getDomain()}/game/actions/1`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => {
+                resStatus = res.status;
+                if (resStatus === 404 || resStatus === 400) {
+                    console.log(res)
+                } else {
+                    return res.json();
+                }
+            })
+            .then(res => {
+                switch (resStatus) {
+                    case 200:
+                        this.setState({
+                            actions: res
+                        });
+                        break;
+
+                    case 500:
+                        console.log('server error, try again');
+                        break;
+                    default:
+                        console.log("default case");
+                        break;
+
+                }
+
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong catching challenge Status: " + err);
+            });
     }
 
     clickme3() {
-        console.log(this.state.actions);
-        console.log(this.state.actions.length)
+        this.getActions();
     }
 
-    createTable = (board, actions) => {
+    clickme4() {
+        this.setState({actions: actionstest1})
+    }
+
+    clickme5() {
+        this.setState({actions: null})
+    }
+
+    confirm() {
+        console.log(localStorage.getItem("clicked"));
+        localStorage.removeItem("clicked");
+        console.log(this.state.homeLink);
+
+    }
+
+    cancel() {
+        localStorage.removeItem("clicked");
+        this.setState({clicked: false})
+    }
+
+
+    createTable = (board, actions, figurine) => {
         let table = [];
+        figurine = 1;
         for (let i = 0; i < 5; i++) {
             let BoardRow = [];
             for (let j = 0; j < 5; j++) {
-                BoardRow.push(this.renderSquare(i, j, board.spaces[i][j].level, board.spaces[i][j].dome, actions));
+                BoardRow.push(this.renderSquare(i, j, board.spaces[i][j].level, board.spaces[i][j].dome, actions, figurine));
             }
             table.push(<div className="board-row">{BoardRow}</div>)
         }
@@ -77,29 +196,44 @@ class Board extends React.Component {
                 }
             }
             return buttonAciton;
-        }
-        else{
+        } else {
             return null;
         }
     }
 
-    renderSquare(row, column, level, dome, actions) {
-        return <Square action={this.checkAction(actions, row, column)} row={row} column={column} level={level}
-                       />;
+    onChangeLinkName(newName) {
+        this.setState({
+            homeLink: newName,
+        });
+    }
+
+    renderSquare(row, column, level, dome, actions, figurine) {
+        return <Square
+            action={this.checkAction(actions, row, column)}
+            row={row} column={column}
+            level={level}
+            figurine={figurine}
+            changeLink={this.onChangeLinkName.bind(this)}
+            clicked={this.state.clicked}
+        />;
     }
 
     render() {
         const status = this.props.status;
-
         return (
             <div>
                 <div className="status">{status}</div>
                 {this.createTable(this.props.board, this.state.actions)}
                 <button onClick={() => this.clickme3()}>Actions</button>
-
+                <button onClick={() => this.clickme4()}>ActionsCustom</button>
+                <button onClick={() => this.clickme5()}>ActionsNone</button>
+                <button onClick={() => this.confirm()}>Confirm</button>
+                <button onClick={() => this.cancel()}>Cancel</button>
+                <div>{this.state.homeLink}</div>
             </div>
         );
     }
+
 
 }
 
@@ -123,13 +257,32 @@ class Game extends React.Component {
                 </button>
                 <div className="game">
                     <div className="game-board">
-                        <Board status={this.state.status} board={this.state.board}/>
+                        <Board status={this.state.status} board={this.state.board}
+                               chosenfigurine={this.state.chosenfigurine}/>
                     </div>
                     <div className="game-info">
                         <div>{}</div>
                         <ol>{/* TODO */}</ol>
                     </div>
                 </div>
+                <button
+                    className={"square2"}> Worker 1 <img alt={"qwerwe"} width={50} height={30} src={Black}
+                                                         onClick={() => {
+                                                             this.setState({chosenfigurine: 1});
+                                                             console.log(this.state.chosenfigurine)
+                                                         }}
+                />
+                </button>
+                <button className={"square2"}> Worker 2 <img alt={"qwerwe"} width={50} height={30} src={Black}
+                                                             onClick={() => {
+                                                                 this.setState({chosenfigurine: 2});
+                                                                 console.log(this.state.chosenfigurine)
+                                                             }}
+                /></button>
+                <button className={"square2"}> Worker 1 <img alt={"qwerwe"} width={50} height={30} src={White}/>
+                </button>
+                <button className={"square2"}> Worker 2 <img alt={"qwerwe"} width={50} height={30} src={White}/>
+                </button>
             </BaseContainer>
         );
     }

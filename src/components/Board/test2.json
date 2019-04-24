@@ -126,15 +126,15 @@
     "figurine1": {
       "figurineNumber": 1,
       "position": [
-        0,
-        0
+        4,
+        4
       ]
     },
     "figurine2": {
       "figurineNumber": 2,
       "position": [
-        0,
-        0
+        4,
+        3
       ]
     }
   },
@@ -146,15 +146,15 @@
     "figurine1": {
       "figurineNumber": 1,
       "position": [
-        0,
-        0
+        4,
+        2
       ]
     },
     "figurine2": {
       "figurineNumber": 2,
       "position": [
-        0,
-        0
+        4,
+        1
       ]
     }
   }

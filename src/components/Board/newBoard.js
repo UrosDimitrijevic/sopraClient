@@ -9,6 +9,10 @@ import './boardindex.css';
 import {getDomain} from "../../helpers/getDomain";
 import White from "./WhiteFigure.png"
 import Black from "./BlackFigure.png"
+import Black1 from "./Black1.png"
+import Black2 from "./Black2.jpg"
+import White1 from "./White1.png"
+import White2 from "./White2.jpg"
 
 
 class Square extends React.Component {
@@ -21,10 +25,10 @@ class Square extends React.Component {
         }
     }
 
-    fieldNoAction(level, dome) {
+    fieldNoAction(level, dome, Figure) {
         if (level === 0 && dome === false){return (
             <button className="square"
-                    onClick={()=>{console.log(this.props)}}>
+                    onClick={()=>{console.log(this.props)}}>{this.displayFigure(Figure)}
             </button>
         );}
         else if(level === 1){return(
@@ -71,7 +75,23 @@ class Square extends React.Component {
             </button>
         );}
     }
-
+    displayFigure(Figure){
+        if(Figure === "Black1"){return(
+            <img alt={"Blacktest1"} width={44} height={44} src={Black1}/>);
+        }
+        else if(Figure === "Black2"){return(
+            <img alt={"Blacktest2"} width={44} height={44} src={Black2}/>);
+        }
+        else if(Figure === "White1"){return(
+            <img alt={"WhiteTest1"} width={44} height={44} src={White1}/>);
+        }
+        else if(Figure === "White2"){return(
+            <img alt={"WhiteTest2"} width={44} height={44} src={White2}/>);
+        }
+        else{
+            return null;
+        }
+    }
 
     level1field(dome) {
         if(dome === false){
@@ -159,7 +179,7 @@ class Square extends React.Component {
     render() {
 
         if (this.props.action === null) {
-            return (this.fieldNoAction(this.props.level, this.props.dome)
+            return (this.fieldNoAction(this.props.level, this.props.dome, this.props.Figure)
             );
         }
 
@@ -199,8 +219,33 @@ class Board extends React.Component {
             actions: actionstest1,
             homeLink: "home",
             clicked: false,
+            actionsFigurine1: [],
+            actionsFigurine2: [],
         }
     }
+    divideActions(actions){
+            var Figurine1 = [];
+            var Figurine2 =[];
+            if (actions) {
+                for (let i = 0; i < actions.length; i++) {
+                    if (actions[i].figurineNumber === 1 ) {
+                        Figurine1.push(actions[i])
+                    }
+                    else if(actions[i].figurineNumber === 2){
+                        Figurine2.push(actions[i])
+                    }
+                }
+
+            }
+            this.setState({actionsFigurine1: Figurine1, actionsFigurine2: Figurine2})
+    }
+    Figurine1() {
+        this.setState({actions: this.state.actionsFigurine1})
+    }
+    Figurine2() {
+        this.setState({actions: this.state.actionsFigurine2})
+    }
+
 
     getActions() {
         let resStatus = 0;
@@ -250,6 +295,7 @@ class Board extends React.Component {
         this.setState({actions: actionstest1})
     }
 
+
     clickme5() {
         this.setState({actions: null})
     }
@@ -295,6 +341,23 @@ class Board extends React.Component {
             return null;
         }
     }
+    checkFigurine(Player1, Player2, row, column){
+        if (Player1.figurine1.position[0]===row && Player1.figurine1.position[1]===column){
+            return "White1";
+        }
+        if (Player1.figurine2.position[0]===row && Player1.figurine2.position[1]===column){
+            return "White2";
+        }
+        if (Player2.figurine1.position[0]===row && Player2.figurine1.position[1]===column){
+            return "Black1";
+        }
+        if (Player2.figurine2.position[0]===row && Player2.figurine2.position[1]===column){
+            return "Black2";
+        }
+        else{
+            return "No Figure";
+        }
+    }
 
     onChangeLinkName(newName) {
         this.setState({
@@ -312,6 +375,7 @@ class Board extends React.Component {
             dome={dome}
             changeLink={this.onChangeLinkName.bind(this)}
             clicked={this.state.clicked}
+            Figure={this.checkFigurine(this.props.Player1, this.props.Player2, row, column)}
         />;
     }
 
@@ -328,6 +392,9 @@ class Board extends React.Component {
                 disabled={!this.state.clicked}>Confirm</button>
                 <button onClick={() => this.cancel()}
                 disabled={!this.state.clicked}>Cancel</button>
+                <button onClick={() => this.divideActions(this.state.actions)}>DivideActions</button>
+                <button onClick={() => this.Figurine1()}>Figurine1</button>
+                <button onClick={() => this.Figurine2()}>Figurine2</button>
                 <div>{this.state.homeLink}</div>
             </div>
         );
@@ -357,7 +424,7 @@ class Game extends React.Component {
                 <div className="game">
                     <div className="game-board">
                         <Board status={this.state.status} board={this.state.board}
-                               chosenfigurine={this.state.chosenfigurine}/>
+                               chosenfigurine={this.state.chosenfigurine} Player1={this.state.startingPlayer} Player2 ={this.state.nonStartingPlayer}/>
                     </div>
                     <div className="game-info">
                         <div>{}</div>

@@ -21,21 +21,21 @@
         },
         {
           "level": 0,
-          "dome": false
+          "dome": true
         },
         {
-          "level": 0,
-          "dome": false
+          "level": 1,
+          "dome": true
         }
       ],
       [
         {
-          "level": 0,
-          "dome": false
+          "level": 2,
+          "dome": true
         },
         {
-          "level": 0,
-          "dome": false
+          "level": 3,
+          "dome": true
         },
         {
           "level": 0,

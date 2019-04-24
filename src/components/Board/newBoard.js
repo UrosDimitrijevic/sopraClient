@@ -16,21 +16,107 @@ class Square extends React.Component {
         super(props);
         this.state = {
             addClass: false,
-            homeLink: "Changed name",
+            homeLink: [],
             bgColor: "green"
         }
     }
 
-    emptyfield() {
-        return (
-            <button className="square">
-
+    fieldNoAction(level, dome) {
+        if (level === 0 && dome === false){return (
+            <button className="square"
+                    onClick={()=>{console.log(this.props)}}>
             </button>
-        );
+        );}
+        else if(level === 1){return(
+            <button className="square" onClick={()=>console.log(this.props)}>{this.level1field(dome)}
+            </button>);
+        }
+        else if(level === 2){return(
+            <button className="square" onClick={()=>console.log(this.props)}>{this.level2field(dome)}
+            </button>);
+        }
+        else if(level === 3){return(
+            <button className="square" onClick={()=>console.log(this.props)}>{this.level3field(dome)}
+            </button>);
+        }
+
+        else {return (
+            <button className="square"
+            onClick={()=>console.log(level, dome)}>
+            </button>
+        );}
+    }
+    fieldWithAction(level, dome)  {
+        if (level === 0 && dome === false){return (
+            <button className="squareorange"
+                    onClick={()=>{console.log(this.props)}}>
+            </button>
+        );}
+        else if(level === 1){return(
+            <button className="squareorange" onClick={()=>console.log(this.props)}>{this.level1field(dome)}
+            </button>);
+        }
+        else if(level === 2){return(
+            <button className="squareorange" onClick={()=>console.log(this.props)}>{this.level2field(dome)}
+            </button>);
+        }
+        else if(level === 3){return(
+            <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level3field(dome)}
+            </button>);
+        }
+
+        else {return (
+            <button className="squareorange"
+                    onClick={()=>console.log(level, dome)}>
+            </button>
+        );}
     }
 
-    level1field() {
 
+    level1field(dome) {
+        if(dome === false){
+        return (
+            <div className="squareLevel1">
+            </div>
+        );}
+        else if(dome === true){return (<div className="squareLevel1">{this.domeBuild()}
+        </div>)
+
+        }
+    }
+    level2field(dome){
+        if(dome === false){
+            return (
+                <div className="squareLevel1">
+                    <div className="squareLevel2">
+                    </div>
+                </div>
+            );}
+        else if(dome === true){return (<div className="squareLevel1"> <div className="squareLevel2">{this.domeBuild()}
+        </div>
+        </div>);
+        }
+    }
+    level3field(dome){
+        if(dome === false){
+            return (
+                <div className="squareLevel1">
+                    <div className="squareLevel2"><div className="squareLevel3">
+                    </div>
+                    </div>
+                </div>
+            );}
+        else if(dome === true){return (<div className="squareLevel1"> <div className="squareLevel2"><div className="squareLevel3">{this.domeBuild()}
+        </div>
+        </div>
+        </div>);
+        }
+    }
+    domeBuild(dome){
+        return (
+            <div className="dome">
+            </div>
+        );
     }
 
     confirmsquareaction() {
@@ -38,8 +124,10 @@ class Square extends React.Component {
     }
 
     onChangeLink() {
+        localStorage.setItem("actionID", this.props.action.id);
         this.props.changeLink(this.state.homeLink);
         console.log("wqerweq");
+
     }
 
     toggle() {
@@ -55,11 +143,8 @@ class Square extends React.Component {
 
 
     /*<div className="square3">
-    <img alt={"qwerwe"} width={50} height={50} src = {Black}/></div>*/
-
-
-    render() {
-        let boxClass = ["square"];
+    <img alt={"qwerwe"} width={50} height={50} src = {Black}/></div>
+     let boxClass = ["square"];
         if (this.state.clickedsquare) {
             boxClass.push('green');
         }
@@ -67,27 +152,35 @@ class Square extends React.Component {
             return (
                 <button className={boxClass.join(' ')} onClick={this.toggle.bind(this)}>gh</button>)
         }
+
+    */
+
+
+    render() {
+
         if (this.props.action === null) {
+            return (this.fieldNoAction(this.props.level, this.props.dome)
+            );
+        }
+
+        else if (this.props.action.name === "PlaceWorker") {
             return (
                 <button className="squareorange"
-                        onClick={this.clickAction()}
-                >
-                </button>
-            );
-        } else if (this.props.action.name === "PlaceWorker") {
-            return (
-                <button className="square"
                         onClick={() => {
-                            console.log(this.props.level);
                             localStorage.setItem("actionID", this.props.action.id);
                             console.log(localStorage.getItem("actionID"));
-                            this.onChangeLink.bind(this);
+
                         }}
 
                 >
                 </button>
             );
-        } else {
+        }
+        else if (this.props.action !== null) {
+                return (this.fieldWithAction(this.props.level, this.props.dome)
+                );
+            }
+        else {
             return (
                 <button className="square2"
                         onClick={this.onChangeLink.bind(this)}
@@ -105,7 +198,7 @@ class Board extends React.Component {
         this.state = {
             actions: actionstest1,
             homeLink: "home",
-            clicked: null,
+            clicked: false,
         }
     }
 
@@ -165,12 +258,14 @@ class Board extends React.Component {
         console.log(localStorage.getItem("clicked"));
         localStorage.removeItem("clicked");
         console.log(this.state.homeLink);
+        this.setState({clicked: false})
 
     }
 
     cancel() {
         localStorage.removeItem("clicked");
-        this.setState({clicked: false})
+        this.setState({clicked: false, actions: actionstest1});
+
     }
 
 
@@ -203,7 +298,8 @@ class Board extends React.Component {
 
     onChangeLinkName(newName) {
         this.setState({
-            homeLink: newName,
+            actions: newName,
+            clicked: true,
         });
     }
 
@@ -213,6 +309,7 @@ class Board extends React.Component {
             row={row} column={column}
             level={level}
             figurine={figurine}
+            dome={dome}
             changeLink={this.onChangeLinkName.bind(this)}
             clicked={this.state.clicked}
         />;
@@ -227,8 +324,10 @@ class Board extends React.Component {
                 <button onClick={() => this.clickme3()}>Actions</button>
                 <button onClick={() => this.clickme4()}>ActionsCustom</button>
                 <button onClick={() => this.clickme5()}>ActionsNone</button>
-                <button onClick={() => this.confirm()}>Confirm</button>
-                <button onClick={() => this.cancel()}>Cancel</button>
+                <button onClick={() => this.confirm()}
+                disabled={!this.state.clicked}>Confirm</button>
+                <button onClick={() => this.cancel()}
+                disabled={!this.state.clicked}>Cancel</button>
                 <div>{this.state.homeLink}</div>
             </div>
         );
@@ -331,7 +430,7 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
-        this.getGameStatus();
+       // this.getGameStatus();
 
     }
 

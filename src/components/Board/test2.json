@@ -21,7 +21,7 @@
         },
         {
           "level": 0,
-          "dome": true
+          "dome": false
         },
         {
           "level": 1,
@@ -126,14 +126,14 @@
     "figurine1": {
       "figurineNumber": 1,
       "position": [
-        4,
-        4
+        0,
+        2
       ]
     },
     "figurine2": {
       "figurineNumber": 2,
       "position": [
-        4,
+        0,
         3
       ]
     }
@@ -146,14 +146,14 @@
     "figurine1": {
       "figurineNumber": 1,
       "position": [
-        4,
-        2
+        0,
+        0
       ]
     },
     "figurine2": {
       "figurineNumber": 2,
       "position": [
-        4,
+        0,
         1
       ]
     }

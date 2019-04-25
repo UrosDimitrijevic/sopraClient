@@ -13,6 +13,8 @@ import Black1 from "./Black1.png"
 import Black2 from "./Black2.jpg"
 import White1 from "./White1.png"
 import White2 from "./White2.jpg"
+import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler";
+import Apollo from "../../GodCards/Apollo.PNG"
 
 
 class Square extends React.Component {
@@ -32,15 +34,15 @@ class Square extends React.Component {
             </button>
         );}
         else if(level === 1){return(
-            <button className="square" onClick={()=>console.log(this.props)}>{this.level1field(dome)}
+            <button className="square" onClick={()=>console.log(this.props)}>{this.level1field(dome, Figure)}
             </button>);
         }
         else if(level === 2){return(
-            <button className="square" onClick={()=>console.log(this.props)}>{this.level2field(dome)}
+            <button className="square" onClick={()=>console.log(this.props)}>{this.level2field(dome, Figure)}
             </button>);
         }
         else if(level === 3){return(
-            <button className="square" onClick={()=>console.log(this.props)}>{this.level3field(dome)}
+            <button className="square" onClick={()=>console.log(this.props)}>{this.level3field(dome, Figure)}
             </button>);
         }
 
@@ -53,15 +55,15 @@ class Square extends React.Component {
     fieldWithAction(level, dome)  {
         if (level === 0 && dome === false){return (
             <button className="squareorange"
-                    onClick={()=>{console.log(this.props)}}>
+                    onClick={this.onChangeLink.bind(this)}>
             </button>
         );}
         else if(level === 1){return(
-            <button className="squareorange" onClick={()=>console.log(this.props)}>{this.level1field(dome)}
+            <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level1field(dome)}
             </button>);
         }
         else if(level === 2){return(
-            <button className="squareorange" onClick={()=>console.log(this.props)}>{this.level2field(dome)}
+            <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level2field(dome)}
             </button>);
         }
         else if(level === 3){return(
@@ -71,7 +73,7 @@ class Square extends React.Component {
 
         else {return (
             <button className="squareorange"
-                    onClick={()=>console.log(level, dome)}>
+                    onClick={()=>console.log(this.props)}>
             </button>
         );}
     }
@@ -93,22 +95,22 @@ class Square extends React.Component {
         }
     }
 
-    level1field(dome) {
+    level1field(dome, Figure) {
         if(dome === false){
         return (
-            <div className="squareLevel1">
+            <div className="squareLevel1">{this.displayFigure(Figure)}
             </div>
         );}
         else if(dome === true){return (<div className="squareLevel1">{this.domeBuild()}
         </div>)
-
         }
+
     }
-    level2field(dome){
+    level2field(dome, Figure){
         if(dome === false){
             return (
                 <div className="squareLevel1">
-                    <div className="squareLevel2">
+                    <div className="squareLevel2">{this.displayFigure(Figure)}
                     </div>
                 </div>
             );}
@@ -117,11 +119,11 @@ class Square extends React.Component {
         </div>);
         }
     }
-    level3field(dome){
+    level3field(dome, Figure){
         if(dome === false){
             return (
                 <div className="squareLevel1">
-                    <div className="squareLevel2"><div className="squareLevel3">
+                    <div className="squareLevel2"><div className="squareLevel3">{this.displayFigure(Figure)}
                     </div>
                     </div>
                 </div>
@@ -146,7 +148,7 @@ class Square extends React.Component {
     onChangeLink() {
         localStorage.setItem("actionID", this.props.action.id);
         this.props.changeLink(this.state.homeLink);
-        console.log("wqerweq");
+        console.log(localStorage.getItem("actionID"));
 
     }
 
@@ -173,16 +175,6 @@ class Square extends React.Component {
                 <button className={boxClass.join(' ')} onClick={this.toggle.bind(this)}>gh</button>)
         }
 
-    */
-
-
-    render() {
-
-        if (this.props.action === null) {
-            return (this.fieldNoAction(this.props.level, this.props.dome, this.props.Figure)
-            );
-        }
-
         else if (this.props.action.name === "PlaceWorker") {
             return (
                 <button className="squareorange"
@@ -196,6 +188,17 @@ class Square extends React.Component {
                 </button>
             );
         }
+
+    */
+
+
+    render() {
+
+        if (this.props.action === null) {
+            return (this.fieldNoAction(this.props.level, this.props.dome, this.props.Figure)
+            );
+        }
+
         else if (this.props.action !== null) {
                 return (this.fieldWithAction(this.props.level, this.props.dome)
                 );
@@ -216,12 +219,16 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            actions: actionstest1,
+            actions: [],
             homeLink: "home",
             clicked: false,
+            getActions: null,
             actionsFigurine1: [],
             actionsFigurine2: [],
         }
+    }
+    containActions(){
+        this.setState({actions: this.state.getActions})
     }
     divideActions(actions){
             var Figurine1 = [];
@@ -249,7 +256,7 @@ class Board extends React.Component {
 
     getActions() {
         let resStatus = 0;
-        fetch(`${getDomain()}/game/actions/1`, {
+        fetch(`${getDomain()}/game/actions/`+ localStorage.getItem("id"), {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -267,7 +274,7 @@ class Board extends React.Component {
                 switch (resStatus) {
                     case 200:
                         this.setState({
-                            actions: res
+                            getActions: res
                         });
                         break;
 
@@ -289,28 +296,25 @@ class Board extends React.Component {
 
     clickme3() {
         this.getActions();
-    }
-
-    clickme4() {
-        this.setState({actions: actionstest1})
+        this.containActions();
+        this.divideActions(this.state.actions);
     }
 
 
-    clickme5() {
-        this.setState({actions: null})
-    }
 
     confirm() {
+        this.putAction();
         console.log(localStorage.getItem("clicked"));
         localStorage.removeItem("clicked");
+        localStorage.removeItem("actionID");
         console.log(this.state.homeLink);
-        this.setState({clicked: false})
+        this.setState({clicked: false, actions: []})
 
     }
 
     cancel() {
         localStorage.removeItem("clicked");
-        this.setState({clicked: false, actions: actionstest1});
+        this.setState({clicked: false, actions: this.state.getActions});
 
     }
 
@@ -342,18 +346,23 @@ class Board extends React.Component {
         }
     }
     checkFigurine(Player1, Player2, row, column){
+        if(Player1.figurine1.position !== null){
         if (Player1.figurine1.position[0]===row && Player1.figurine1.position[1]===column){
             return "White1";
         }
+        }
+        if(Player1.figurine2.position !== null){
         if (Player1.figurine2.position[0]===row && Player1.figurine2.position[1]===column){
             return "White2";
-        }
+        }}
+        if(Player2.figurine1.position !== null){
         if (Player2.figurine1.position[0]===row && Player2.figurine1.position[1]===column){
             return "Black1";
-        }
+        }}
+        if(Player2.figurine2.position !== null){
         if (Player2.figurine2.position[0]===row && Player2.figurine2.position[1]===column){
             return "Black2";
-        }
+        }}
         else{
             return "No Figure";
         }
@@ -386,19 +395,43 @@ class Board extends React.Component {
                 <div className="status">{status}</div>
                 {this.createTable(this.props.board, this.state.actions)}
                 <button onClick={() => this.clickme3()}>Actions</button>
-                <button onClick={() => this.clickme4()}>ActionsCustom</button>
-                <button onClick={() => this.clickme5()}>ActionsNone</button>
                 <button onClick={() => this.confirm()}
                 disabled={!this.state.clicked}>Confirm</button>
                 <button onClick={() => this.cancel()}
                 disabled={!this.state.clicked}>Cancel</button>
-                <button onClick={() => this.divideActions(this.state.actions)}>DivideActions</button>
                 <button onClick={() => this.Figurine1()}>Figurine1</button>
                 <button onClick={() => this.Figurine2()}>Figurine2</button>
+
                 <div>{this.state.homeLink}</div>
             </div>
         );
     }
+    putAction(){
+        fetch(`${getDomain()}/game/actions/`+ localStorage.getItem("actionID"), {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+        }).then(response => {
+            console.log(response);
+
+        })
+            .catch(err => {
+                if (err.message.match(/Failed to fetch/)) {
+                    alert("The server cannot be reached. Did you start it?");
+                }  else if (err.message.match( /unauthorized/)) {     //wrong password, do as soon as you know how to
+                    alert( 'wrong username or password');
+                    this.props.history.push( '/login' );
+                } else if(err.message.match(/not_found/)){
+                    alert("username already taken or id not-found");
+                } else {
+                    alert(`Something went wrong during the login: ${err.message}`);
+                }
+            });
+    }
+    /*  <button onClick={() => this.divideActions(this.state.actions)}>DivideActions</button>
+              <button onClick={() => this.containAcitons()}>ContainActions</button>*/
 
 
 }
@@ -409,7 +442,7 @@ class Game extends React.Component {
         this.state =
             Test1
     }
-
+//<img src={Apollo} alt = "Player1Pic" width = {100} height={175}/>
     render() {
         return (
             <BaseContainer>
@@ -422,40 +455,24 @@ class Game extends React.Component {
                 >getGameStatus
                 </button>
                 <div className="game">
+
                     <div className="game-board">
                         <Board status={this.state.status} board={this.state.board}
-                               chosenfigurine={this.state.chosenfigurine} Player1={this.state.startingPlayer} Player2 ={this.state.nonStartingPlayer}/>
+                               Player1={this.state.startingPlayer} Player2 ={this.state.nonStartingPlayer}/>
                     </div>
                     <div className="game-info">
                         <div>{}</div>
                         <ol>{/* TODO */}</ol>
                     </div>
                 </div>
-                <button
-                    className={"square2"}> Worker 1 <img alt={"qwerwe"} width={50} height={30} src={Black}
-                                                         onClick={() => {
-                                                             this.setState({chosenfigurine: 1});
-                                                             console.log(this.state.chosenfigurine)
-                                                         }}
-                />
-                </button>
-                <button className={"square2"}> Worker 2 <img alt={"qwerwe"} width={50} height={30} src={Black}
-                                                             onClick={() => {
-                                                                 this.setState({chosenfigurine: 2});
-                                                                 console.log(this.state.chosenfigurine)
-                                                             }}
-                /></button>
-                <button className={"square2"}> Worker 1 <img alt={"qwerwe"} width={50} height={30} src={White}/>
-                </button>
-                <button className={"square2"}> Worker 2 <img alt={"qwerwe"} width={50} height={30} src={White}/>
-                </button>
+
             </BaseContainer>
         );
     }
 
     getGameStatus() {
         let resStatus = 0;
-        fetch(`${getDomain()}/game/Board/1`, {
+        fetch(`${getDomain()}/game/Board/`+ localStorage.getItem("id"), {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -472,10 +489,8 @@ class Game extends React.Component {
             .then(res => {
                 switch (resStatus) {
                     case 200:
-                        this.setState({
-                            status: res.status,
-                            board: res.board
-                        });
+                        this.setState(res
+                        );
                         break;
 
                     case 500:
@@ -526,3 +541,23 @@ ReactDOM.render(
 );
 
 export default withRouter(Game)
+
+/*
+<button
+className={"square2"}> Worker 1 <img alt={"qwerwe"} width={50} height={30} src={Black}
+onClick={() => {
+    this.setState({chosenfigurine: 1});
+    console.log(this.state.chosenfigurine)
+}}
+/>
+</button>
+<button className={"square2"}> Worker 2 <img alt={"qwerwe"} width={50} height={30} src={Black}
+onClick={() => {
+    this.setState({chosenfigurine: 2});
+    console.log(this.state.chosenfigurine)
+}}
+/></button>
+<button className={"square2"}> Worker 1 <img alt={"qwerwe"} width={50} height={30} src={White}/>
+</button>
+<button className={"square2"}> Worker 2 <img alt={"qwerwe"} width={50} height={30} src={White}/>
+</button>*/

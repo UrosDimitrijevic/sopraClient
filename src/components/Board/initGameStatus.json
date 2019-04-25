@@ -127,18 +127,19 @@
     "figurine1": {
       "figurineNumber": 1,
       "position": [
-        4,
-        0
+        null,
+        null
       ]
     },
     "figurine2": {
       "figurineNumber": 2,
       "position": [
-        4,
-        2
+        null,
+        null
       ]
     }
   },
+  "currentPlayer": 1,
   "startingPlayer": {
     "myUserID": 1,
     "startingplayer": true,
@@ -147,15 +148,15 @@
     "figurine1": {
       "figurineNumber": 1,
       "position": [
-        0,
-        0
+        null,
+        null
       ]
     },
     "figurine2": {
       "figurineNumber": 2,
       "position": [
-        0,
-        2
+        null,
+        null
       ]
     }
   }

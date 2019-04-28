@@ -88,7 +88,7 @@ class Square extends React.Component {
             <img alt={"WhiteTest1"} width={44} height={44} src={White1}/>);
         }
         else if(Figure === "White2"){return(
-            <img alt={"WhiteTest2"} width={44} height={44} src={White2}/>);
+            <img alt={"WhiteTest2"} className={"center"} width={44} height={44} src={White2}/>);
         }
         else{
             return null;
@@ -233,6 +233,7 @@ class Board extends React.Component {
     divideActions(actions){
             var Figurine1 = [];
             var Figurine2 =[];
+            var buildingActions = [];
             if (actions) {
                 for (let i = 0; i < actions.length; i++) {
                     if (actions[i].figurineNumber === 1 ) {
@@ -241,10 +242,11 @@ class Board extends React.Component {
                     else if(actions[i].figurineNumber === 2){
                         Figurine2.push(actions[i])
                     }
+                    else{buildingActions.push(actions[i])}
                 }
 
             }
-            this.setState({actionsFigurine1: Figurine1, actionsFigurine2: Figurine2})
+            this.setState({actionsFigurine1: Figurine1, actionsFigurine2: Figurine2, actions: buildingActions})
     }
     Figurine1() {
         this.setState({actions: this.state.actionsFigurine1})
@@ -296,8 +298,8 @@ class Board extends React.Component {
 
     clickme3() {
         this.getActions();
-        this.containActions();
-        this.divideActions(this.state.actions);
+
+        this.divideActions(this.state.getActions);
     }
 
 
@@ -308,7 +310,7 @@ class Board extends React.Component {
         localStorage.removeItem("clicked");
         localStorage.removeItem("actionID");
         console.log(this.state.homeLink);
-        this.setState({clicked: false, actions: []})
+        this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null})
 
     }
 
@@ -391,7 +393,7 @@ class Board extends React.Component {
     render() {
         const status = this.props.status;
         return (
-            <div>
+            <div className={"board"}>
                 <div className="status">{status}</div>
                 {this.createTable(this.props.board, this.state.actions)}
                 <button onClick={() => this.clickme3()}>Actions</button>
@@ -399,8 +401,8 @@ class Board extends React.Component {
                 disabled={!this.state.clicked}>Confirm</button>
                 <button onClick={() => this.cancel()}
                 disabled={!this.state.clicked}>Cancel</button>
-                <button onClick={() => this.Figurine1()}>Figurine1</button>
-                <button onClick={() => this.Figurine2()}>Figurine2</button>
+                <button onClick={() => {this.Figurine1(); console.log(this.state.actionsFigurine1)}} >Figurine1</button>
+                <button onClick={() => {this.Figurine2(); console.log(this.state.actionsFigurine1)}} >Figurine2</button>
 
                 <div>{this.state.homeLink}</div>
             </div>
@@ -439,8 +441,28 @@ class Board extends React.Component {
 class Game extends React.Component {
     constructor() {
         super();
-        this.state =
-            Test1
+        {this.state =
+            Test1}
+        this.showMenu = this.showMenu.bind(this);
+        this.closeMenu = this.closeMenu.bind(this);
+    }
+    showMenu(event) {
+        event.preventDefault();
+
+        this.setState({ showMenu: true }, () => {
+            document.addEventListener('click', this.closeMenu);
+        });
+    }
+
+    closeMenu(event) {
+
+        if (!this.dropdownMenu.contains(event.target)) {
+
+            this.setState({ showMenu: false }, () => {
+                document.removeEventListener('click', this.closeMenu);
+            });
+
+        }
     }
 //<img src={Apollo} alt = "Player1Pic" width = {100} height={175}/>
     render() {
@@ -454,15 +476,61 @@ class Game extends React.Component {
                     onClick={() => this.clickme2()}
                 >getGameStatus
                 </button>
-                <div className="game">
+                <div className="row">
+                    <div className={"column"}> StartingPlayer <img alt={"Player1img"} height={350} width={200} src = {Apollo}/>   <div>
+                        <button onClick={this.showMenu}>
+                            Show menu
+                        </button>
 
-                    <div className="game-board">
+                        {
+                            this.state.showMenu
+                                ? (
+                                    <div
+                                        className="menu"
+                                        ref={(element) => {
+                                            this.dropdownMenu = element;
+                                        }}
+                                    >
+                                        <button> Menu item 1 </button><br/>
+                                        <button> Menu item 2 </button>
+
+                                    </div>
+                                )
+                                : (
+                                    null
+                                )
+                        }
+                    </div></div>
+                    <div className="columnboard">
                         <Board status={this.state.status} board={this.state.board}
                                Player1={this.state.startingPlayer} Player2 ={this.state.nonStartingPlayer}/>
                     </div>
-                    <div className="game-info">
-                        <div>{}</div>
-                        <ol>{/* TODO */}</ol>
+                    <div className="column">
+                        NonStartingPlayer
+                        <img alt={"Player2img"} height={350} width={200} src = {Apollo}/><div>
+                        <button onClick={this.showMenu}>
+                            Show menu
+                        </button>
+
+                        {
+                            this.state.showMenu
+                                ? (
+                                    <div
+                                        className="menu"
+                                        ref={(element) => {
+                                            this.dropdownMenu = element;
+                                        }}
+                                    >
+                                        <button> Menu item 1 </button><br/>
+                                        <button> Menu item 2 </button>
+
+                                    </div>
+                                )
+                                : (
+                                    null
+                                )
+                        }
+                    </div>
                     </div>
                 </div>
 

@@ -68,10 +68,10 @@ class Game extends React.Component {
     };
   }
   confirm123 (){
-    var confirm = window.confirm("User is challenging you");
+    var confirm = window.confirm("UserID: " +localStorage.getItem("gettingChallengedByID")+ " is challenging you");
     if (confirm) {
       console.log("confirm");
-      this.challengeUser();
+      this.accept();
       clearInterval(this.timer);
       this.getGameStatus();
       this.timer = setInterval(()=>this.getGameStatus(), 10000);
@@ -80,6 +80,34 @@ class Game extends React.Component {
       declineChallenge();
       console.log("decline");
     }}
+
+  accept(){
+    let challengingPUT1 = this.state.challengingPUT;
+    var gettingChallengedBy1 = this.state.gettingChallengedBy;
+    console.log(challengingPUT1);
+    console.log(gettingChallengedBy1);
+
+    fetch(`${getDomain()}/users/`+localStorage.getItem("id"), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        challenging: localStorage.getItem("gettingChallengedByID")
+
+      })
+    }).then(response => {
+      if( response.status < 200 || response.status >= 300 ) {
+        throw new Error( ErrorCode(response.status) );
+      }
+
+    })
+        .catch(err => {
+          if (err.message.match(/Failed to fetch/)) {
+            alert("The server cannot be reached. Did you start it?");
+          }
+        });
+  }
 
 
 ChallengeStatus() {
@@ -97,12 +125,14 @@ ChallengeStatus() {
             challenging : response.challenging,
             gettingChallengedBy : response.gettingChallengedBy
           });
-          if (this.state.gettingChallengedBy !== null){
+          localStorage.setItem("gettingChallengedByID", response.gettingChallengedBy);
+
+          if (this.state.gettingChallengedBy !== null && localStorage.getItem("gettingChallengedByID") !== localStorage.getItem("challengeID") && (localStorage.getItem("gettingChallengedByID"))){
 
             this.confirm123();
           }
 
-          if(this.state.challenging === this.state.gettingChallengedBy && (this.state.gettingChallengedBy !== null) && (this.state.challenging !== null)){
+          if(localStorage.getItem("gettingChallengedByID") === localStorage.getItem("challengeID")){
             this.getGameStatus();
             this.timer = setInterval(()=>this.getGameStatus(), 10000);
           }
@@ -245,6 +275,7 @@ ChallengeStatus() {
       <Container>
         <h2>Happy Coding! </h2>
         <p>Get all users from secure end point:</p>
+        <p>User with ID: {this.state.gettingChallengedBy} is challenging you</p>
         {!this.state.users ? (
           <Spinner />
         ) : (
@@ -275,10 +306,6 @@ ChallengeStatus() {
                 );
               })}
             </Users>
-
-            <button
-                onClick={declineChallenge}
-            >Decline </button>
             <Button
               width="100%"
               onClick={() => {

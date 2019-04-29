@@ -24,6 +24,7 @@ class ChooseGodCard extends React.Component {
         super();
         this.state = {
            status: null,
+            actions: [],
             myUserId: 1,
             board: 123,
             index: 0,
@@ -76,18 +77,29 @@ class ChooseGodCard extends React.Component {
         }
 
     };
+    getActionID(){
+        var actions = this.state.actions;
+        var number1 = this.state.GodCard1+1;
+        var number2 = this.state.GodCard2+1;
+
+        if (actions.length>1){
+            for (let i = 0; i<actions.length; i++ ){
+                if ((actions[i].god1.godnumber === number1 || actions[i].god1.godnumber === number2) && (actions[i].god2.godnumber === number1 || actions[i].god2.godnumber === number2)){
+                    localStorage.setItem("actionID", actions[i].id);
+                    console.log(localStorage.getItem("actionID"));
+                    break;
+                }
+            }
+        }
+    }
 
     choose2GodCards() {             // somewhat implemented
-        fetch(`${getDomain()}//users/MyGame/`+ localStorage.getItem("id"), {
-            method: "POST",
+        fetch(`${getDomain()}/game/actions/`+ localStorage.getItem("actionID"), {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                password: this.state.GodCard1,
-                username: this.state.GodCard2,
+            }
 
-            })
         })
             .then(response => {
                 if(!(response.status === 201)) { //201
@@ -99,8 +111,8 @@ class ChooseGodCard extends React.Component {
 
                 else {
 
-                    this.setState({registered: true});
-                    return response;
+                    localStorage.removeItem("actionID");
+                    //push this.props.history("link")
                 }
             })
 
@@ -139,7 +151,8 @@ class ChooseGodCard extends React.Component {
 
             .then( response => {console.log(response.board);
 
-            })
+            });
+        this.getActions();
     }
 
 
@@ -177,13 +190,55 @@ class ChooseGodCard extends React.Component {
                     </div>
                     <Button
                     disabled={this.state.GodCard1 === null || this.state.GodCard2 === null}
-
+                    onClick = { () => {
+                        this.getActionID();
+                        console.log(this.state.GodCard1)
+                    }}
 
                     > Accept</Button>
                     <p>{this.state.board}</p>
                 </FormContainer>
             </BaseContainer>
         );
+    }
+    getActions() {
+        let resStatus = 0;
+        fetch(`${getDomain()}/game/actions/`+ localStorage.getItem("id"), {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => {
+                resStatus = res.status;
+                if (resStatus === 404 || resStatus === 400) {
+                    console.log(res)
+                } else {
+                    return res.json();
+                }
+            })
+            .then(res => {
+                switch (resStatus) {
+                    case 200:
+                        this.setState({
+                            actions: res
+                        });
+                        break;
+
+                    case 500:
+                        console.log('server error, try again');
+                        break;
+                    default:
+                        console.log("default case");
+                        break;
+
+                }
+
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong catching challenge Status: " + err);
+            });
     }
 }
 

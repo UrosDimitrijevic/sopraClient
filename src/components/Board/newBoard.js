@@ -15,6 +15,7 @@ import White1 from "./White1.png"
 import White2 from "./White2.jpg"
 import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler";
 import Apollo from "../../GodCards/Apollo.PNG"
+import { Spinner } from "../../views/design/Spinner";
 
 
 class Square extends React.Component {
@@ -389,6 +390,11 @@ class Board extends React.Component {
             Figure={this.checkFigurine(this.props.Player1, this.props.Player2, row, column)}
         />;
     }
+    waiting(){
+        if (this.props.currentPlayer.toString() !== localStorage.getItem("id")){
+            return <div className={"status"}  ><Spinner/><div className={"status"}>Waiting</div></div>
+        }
+    }
 
     render() {
         const status = this.props.status;
@@ -403,8 +409,7 @@ class Board extends React.Component {
                 disabled={!this.state.clicked}>Cancel</button>
                 <button onClick={() => {this.Figurine1(); console.log(this.state.actionsFigurine1)}} >Figurine1</button>
                 <button onClick={() => {this.Figurine2(); console.log(this.state.actionsFigurine1)}} >Figurine2</button>
-
-                <div>{this.state.homeLink}</div>
+                {this.waiting()}
             </div>
         );
     }
@@ -503,7 +508,7 @@ class Game extends React.Component {
                     </div></div>
                     <div className="columnboard">
                         <Board status={this.state.status} board={this.state.board}
-                               Player1={this.state.startingPlayer} Player2 ={this.state.nonStartingPlayer}/>
+                               Player1={this.state.startingPlayer} Player2 ={this.state.nonStartingPlayer} currentPlayer = {this.state.currentPlayer}/>
                     </div>
                     <div className="column">
                         NonStartingPlayer

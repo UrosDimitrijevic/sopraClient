@@ -20,6 +20,8 @@ ol, ul {
 .status {
     margin-bottom: 10px;
     color: red;
+    text-align: center;
+    margin-left: 20px;
 }
 
 .square {

@@ -8,12 +8,14 @@ export function declineChallenge(){
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
+            challenging: null,
             gettingChallengedBy: null,
         })
     }).then(response => {
         if( response.status < 200 || response.status >= 300 ) {
             throw new Error( ErrorCode(response.status) );
         }
+        else{localStorage.removeItem("gettingChallengedByID")}
 
     })
         .catch(err => {

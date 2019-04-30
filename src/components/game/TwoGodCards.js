@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import "../../GodCards/img_text.css";
 import data from "../../GodCards/data";
 import Card from '../../GodCards/Card';
+import Cardtable from "../../GodCards/Card2"
 import {Button} from "../../views/design/Button";
 
 
@@ -18,40 +19,33 @@ const FormContainer = styled.div`
   justify-content: center;
 `;
 
-class ChooseGodCard extends React.Component {
+class TwoGodCards extends React.Component {
 
     constructor() {
         super();
         this.state = {
-           status: null,
+            status: null,
             actions: [],
             myUserId: 1,
             board: 123,
             index: 0,
             starting: false,
-            GodCard1: null,
-            GodCard2: null,
+            GodCard1: 2,
+            GodCard2: 1,
+            property1: data.properties[2],
+            property2: data.properties[3],
             properties: data.properties,
-            property: data.properties[0]
+            property: data.properties[2]
         };
     }
 
-    nextProperty = () => {
-        const newIndex = this.state.property.index+1;
-        this.setState({
-            property: data.properties[newIndex]
-        })
-    };
 
-    prevProperty = () => {
-        const newIndex = this.state.property.index-1;
-        this.setState({
-            property: data.properties[newIndex]
-        })
-    };
 
     chooseGoD = () => {
         const godIndex = this.state.property.index;
+        console.log(this.state.GodCard1);
+        console.log(this.state.GodCard2);
+        console.log(this.state.actions);
         if(this.state.GodCard1 === null) {
             this.setState({
                 GodCard1: godIndex,
@@ -163,39 +157,34 @@ class ChooseGodCard extends React.Component {
             <BaseContainer>
                 <FormContainer>
 
-                    <Card property={property} />
-                    <div>
-                        <button
-                            onClick={() => this.prevProperty()}
-                            disabled={property.index === 0}
-                        >Prev</button>
-                    <button
-                        onClick={() => this.nextProperty()}
-                        disabled={property.index === data.properties.length-1}
-                    >Next</button>
-                        </div>
-                <br/>
 
-                    <div>
-                    <button
-                        onClick={() => this.chooseGoD()
-                        }
-                        disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null)}
-                    >Choose</button>
-                        <button
-                            onClick={() => this.unChooseGoD()}
-                            disabled={property.index !== this.state.GodCard1 && property.index !== this.state.GodCard2}
-                        >Unchoose</button>
+
+                    <div>{Cardtable(this.state.property1,this.state.property2)}
+
 
                     </div>
-                    <Button
-                    disabled={this.state.GodCard1 === null || this.state.GodCard2 === null}
-                    onClick = { () => {
-                        this.getActionID();
-                        console.log(this.state.GodCard1)
-                    }}
+                    <br/>
+                    <div className={"row2"} >
+                    <div>
+                        <div className={"column2"}> <button
+                            onClick={() => this.chooseGoD()
+                            }
+                            //disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null)}
+                        >Choose</button></div>
+                        <div  className={"column2"}><button
+                            onClick={() => this.unChooseGoD()}
+                            disabled={property.index !== this.state.GodCard1 && property.index !== this.state.GodCard2}
+                        >Unchoose</button></div>
 
-                    > Accept</Button>
+                    </div></div><br/>
+                    <div className={"row3"} ><Button size={100}
+                        disabled={this.state.GodCard1 === null || this.state.GodCard2 === null}
+                        onClick = { () => {
+                            this.getActionID();
+                            console.log(this.state.GodCard1)
+                        }}
+
+                    > Accept</Button></div>
 
                 </FormContainer>
             </BaseContainer>
@@ -220,9 +209,13 @@ class ChooseGodCard extends React.Component {
             .then(res => {
                 switch (resStatus) {
                     case 200:
+                        if (res.length>1){
                         this.setState({
-                            actions: res
-                        });
+                            actions: res,
+                            GodCard1: res[0].myGod.godnumber,
+                            GodCard2: res[1].myGod.godnumber,
+                            property: data.properties[res[0].myGod.godnumber],
+                        })}
                         break;
 
                     case 500:
@@ -246,4 +239,4 @@ class ChooseGodCard extends React.Component {
  * You can get access to the history object's properties via the withRouter.
  * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
  */
-export default withRouter(ChooseGodCard);
+export default withRouter(TwoGodCards);

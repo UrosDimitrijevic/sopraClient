@@ -10,6 +10,7 @@ import PlayerPageEdit from "../../PlayerPage/PlayerPageEdit"
 import ChooseGodCard from "../../game/ChooseGodCard";
 import GameBoard from "../../Board/GameBoard";
 import NewBoard from "../../Board/newBoard";
+import TwoGodCards from "../../game/TwoGodCards";
 
 
 /**
@@ -73,6 +74,13 @@ class AppRouter extends React.Component {
                     <ChooseGodCard/>
                   )}
             />
+              <Route
+                  path="/test2"
+                  exact
+                  render={() => (
+                      <TwoGodCards/>
+                  )}
+              />
               <Route
                   path="/board"
                   exact

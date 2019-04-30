@@ -18,7 +18,6 @@ const Card = ({property}) => {
             <div className="home2">
 
                 <b>{title}</b><p>{text}</p>
-
         </div>
 
 

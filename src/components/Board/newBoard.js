@@ -324,11 +324,13 @@ class Board extends React.Component {
 
     createTable = (board, actions, figurine) => {
         let table = [];
+        let count = 0;
         figurine = 1;
         for (let i = 0; i < 5; i++) {
             let BoardRow = [];
             for (let j = 0; j < 5; j++) {
-                BoardRow.push(this.renderSquare(i, j, board.spaces[i][j].level, board.spaces[i][j].dome, actions, figurine));
+                BoardRow.push(this.renderSquare(i, j, board.spaces[i][j].level, board.spaces[i][j].dome, actions, figurine, count));
+                count++;
             }
             table.push(<div className="board-row">{BoardRow}</div>)
         }
@@ -378,7 +380,7 @@ class Board extends React.Component {
         });
     }
 
-    renderSquare(row, column, level, dome, actions, figurine) {
+    renderSquare(row, column, level, dome, actions, figurine, count) {
         return <Square
             action={this.checkAction(actions, row, column)}
             row={row} column={column}
@@ -388,12 +390,16 @@ class Board extends React.Component {
             changeLink={this.onChangeLinkName.bind(this)}
             clicked={this.state.clicked}
             Figure={this.checkFigurine(this.props.Player1, this.props.Player2, row, column)}
+            count = {count}
         />;
     }
     waiting(){
-        if (this.props.currentPlayer.toString() !== localStorage.getItem("id")){
+        if (!this.checkcurrentplayer()){
             return <div className={"status"}  ><Spinner/><div className={"status"}>Waiting</div></div>
         }
+    }
+    checkcurrentplayer(){
+        return this.props.currentPlayer.toString() === localStorage.getItem("id");
     }
 
     render() {

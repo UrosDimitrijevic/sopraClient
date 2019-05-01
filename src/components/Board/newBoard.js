@@ -636,6 +636,7 @@ class Game extends React.Component {
             .catch(err => {
                 console.log(err);
                 alert("Something went wrong catching challenge Status: " + err);
+                clearInterval(this.timer);
             });
     }
 

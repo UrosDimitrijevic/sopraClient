@@ -9,13 +9,18 @@ import './boardindex.css';
 import {getDomain} from "../../helpers/getDomain";
 import White from "./WhiteFigure.png"
 import Black from "./BlackFigure.png"
-import Black1 from "./Black1.png"
-import Black2 from "./Black2.jpg"
-import White1 from "./White1.png"
-import White2 from "./White2.jpg"
+import Black1 from "./Black1.1.png"
+import Black2 from "./Black2.1.png"
+import White1 from "./White1.1.png"
+import White2 from "./White2.1.png"
+import Default1 from "./Default1.PNG"
+import Default2 from "./Default2.PNG"
+import Worker1 from "./Worker1.png"
+import Worker2 from "./Worker2.png"
 import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler";
 import Apollo from "../../GodCards/Apollo.PNG"
-import { Spinner } from "../../views/design/Spinner";
+import {Spinner} from "../../views/design/Spinner";
+import data from "../../GodCards/data";
 
 
 class Square extends React.Component {
@@ -29,113 +34,131 @@ class Square extends React.Component {
     }
 
     fieldNoAction(level, dome, Figure) {
-        if (level === 0 && dome === false){return (
-            <button className="square"
-                    onClick={()=>{console.log(this.props)}}>{this.displayFigure(Figure)}
-            </button>
-        );}
-        else if(level === 1){return(
-            <button className="square" onClick={()=>console.log(this.props)}>{this.level1field(dome, Figure)}
-            </button>);
+        if (level === 0 && dome === false) {
+            return (
+                <button className="square"
+                        onClick={() => {
+                            console.log(this.props)
+                        }}>{this.displayFigure(Figure)}
+                </button>
+            );
+        } else if (level === 1) {
+            return (
+                <button className="square" onClick={() => console.log(this.props)}>{this.level1field(dome, Figure)}
+                </button>);
+        } else if (level === 2) {
+            return (
+                <button className="square" onClick={() => console.log(this.props)}>{this.level2field(dome, Figure)}
+                </button>);
+        } else if (level === 3) {
+            return (
+                <button className="square" onClick={() => console.log(this.props)}>{this.level3field(dome, Figure)}
+                </button>);
+        } else {
+            return (
+                <button className="square"
+                        onClick={() => console.log(level, dome)}>
+                </button>
+            );
         }
-        else if(level === 2){return(
-            <button className="square" onClick={()=>console.log(this.props)}>{this.level2field(dome, Figure)}
-            </button>);
-        }
-        else if(level === 3){return(
-            <button className="square" onClick={()=>console.log(this.props)}>{this.level3field(dome, Figure)}
-            </button>);
-        }
-
-        else {return (
-            <button className="square"
-            onClick={()=>console.log(level, dome)}>
-            </button>
-        );}
     }
-    fieldWithAction(level, dome)  {
-        if (level === 0 && dome === false){return (
-            <button className="squareorange"
-                    onClick={this.onChangeLink.bind(this)}>
-            </button>
-        );}
-        else if(level === 1){return(
-            <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level1field(dome)}
-            </button>);
-        }
-        else if(level === 2){return(
-            <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level2field(dome)}
-            </button>);
-        }
-        else if(level === 3){return(
-            <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level3field(dome)}
-            </button>);
-        }
 
-        else {return (
-            <button className="squareorange"
-                    onClick={()=>console.log(this.props)}>
-            </button>
-        );}
+    fieldWithAction(level, dome) {
+        if (level === 0 && dome === false) {
+            return (
+                <button className="squareorange"
+                        onClick={this.onChangeLink.bind(this)}>
+                </button>
+            );
+        } else if (level === 1) {
+            return (
+                <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level1field(dome)}
+                </button>);
+        } else if (level === 2) {
+            return (
+                <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level2field(dome)}
+                </button>);
+        } else if (level === 3) {
+            return (
+                <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level3field(dome)}
+                </button>);
+        } else {
+            return (
+                <button className="squareorange"
+                        onClick={() => console.log(this.props)}>
+                </button>
+            );
+        }
     }
-    displayFigure(Figure){
-        if(Figure === "Black1"){return(
-            <img alt={"Blacktest1"} width={44} height={44} src={Black1}/>);
-        }
-        else if(Figure === "Black2"){return(
-            <img alt={"Blacktest2"} width={44} height={44} src={Black2}/>);
-        }
-        else if(Figure === "White1"){return(
-            <img alt={"WhiteTest1"} width={44} height={44} src={White1}/>);
-        }
-        else if(Figure === "White2"){return(
-            <img alt={"WhiteTest2"} className={"center"} width={44} height={44} src={White2}/>);
-        }
-        else{
+
+    displayFigure(Figure) {
+        if (Figure === "Black1") {
+            return (
+                <img alt={"Blacktest1"} className={"center"} src={Black1}/>);
+        } else if (Figure === "Black2") {
+            return (
+                <img alt={"Blacktest2"} className={"center"} src={Black2}/>);
+        } else if (Figure === "White1") {
+            return (
+                <img alt={"WhiteTest1"} className={"center"} src={White1}/>);
+        } else if (Figure === "White2") {
+            return (
+                <img alt={"WhiteTest2"} className={"center"} src={White2}/>);
+        } else {
             return null;
         }
     }
 
     level1field(dome, Figure) {
-        if(dome === false){
-        return (
-            <div className="squareLevel1">{this.displayFigure(Figure)}
-            </div>
-        );}
-        else if(dome === true){return (<div className="squareLevel1">{this.domeBuild()}
-        </div>)
+        if (dome === false) {
+            return (
+                <div className="squareLevel1">{this.displayFigure(Figure)}
+                </div>
+            );
+        } else if (dome === true) {
+            return (<div className="squareLevel1">{this.domeBuild()}
+            </div>)
         }
 
     }
-    level2field(dome, Figure){
-        if(dome === false){
+
+    level2field(dome, Figure) {
+        if (dome === false) {
             return (
                 <div className="squareLevel1">
                     <div className="squareLevel2">{this.displayFigure(Figure)}
                     </div>
                 </div>
-            );}
-        else if(dome === true){return (<div className="squareLevel1"> <div className="squareLevel2">{this.domeBuild()}
-        </div>
-        </div>);
+            );
+        } else if (dome === true) {
+            return (<div className="squareLevel1">
+                <div className="squareLevel2">{this.domeBuild()}
+                </div>
+            </div>);
         }
     }
-    level3field(dome, Figure){
-        if(dome === false){
+
+    level3field(dome, Figure) {
+        if (dome === false) {
             return (
                 <div className="squareLevel1">
-                    <div className="squareLevel2"><div className="squareLevel3">{this.displayFigure(Figure)}
-                    </div>
+                    <div className="squareLevel2">
+                        <div className="squareLevel3">{this.displayFigure(Figure)}
+                        </div>
                     </div>
                 </div>
-            );}
-        else if(dome === true){return (<div className="squareLevel1"> <div className="squareLevel2"><div className="squareLevel3">{this.domeBuild()}
-        </div>
-        </div>
-        </div>);
+            );
+        } else if (dome === true) {
+            return (<div className="squareLevel1">
+                <div className="squareLevel2">
+                    <div className="squareLevel3">{this.domeBuild()}
+                    </div>
+                </div>
+            </div>);
         }
     }
-    domeBuild(dome){
+
+    domeBuild(dome) {
         return (
             <div className="dome">
             </div>
@@ -159,7 +182,8 @@ class Square extends React.Component {
         console.log(this.state.clickedsquare);
 
     }
-    clickAction(){
+
+    clickAction() {
         localStorage.setItem("actionID", this.props.action);
         console.log(localStorage.getItem("actionID"))
     }
@@ -198,13 +222,10 @@ class Square extends React.Component {
         if (this.props.action === null) {
             return (this.fieldNoAction(this.props.level, this.props.dome, this.props.Figure)
             );
-        }
-
-        else if (this.props.action !== null) {
-                return (this.fieldWithAction(this.props.level, this.props.dome)
-                );
-            }
-        else {
+        } else if (this.props.action !== null) {
+            return (this.fieldWithAction(this.props.level, this.props.dome)
+            );
+        } else {
             return (
                 <button className="square2"
                         onClick={this.onChangeLink.bind(this)}
@@ -228,30 +249,34 @@ class Board extends React.Component {
             actionsFigurine2: [],
         }
     }
-    containActions(){
+
+    containActions() {
         this.setState({actions: this.state.getActions})
     }
-    divideActions(actions){
-            var Figurine1 = [];
-            var Figurine2 =[];
-            var buildingActions = [];
-            if (actions) {
-                for (let i = 0; i < actions.length; i++) {
-                    if (actions[i].figurineNumber === 1 ) {
-                        Figurine1.push(actions[i])
-                    }
-                    else if(actions[i].figurineNumber === 2){
-                        Figurine2.push(actions[i])
-                    }
-                    else{buildingActions.push(actions[i])}
-                }
 
+    divideActions(actions) {
+        var Figurine1 = [];
+        var Figurine2 = [];
+        var buildingActions = [];
+        if (actions) {
+            for (let i = 0; i < actions.length; i++) {
+                if (actions[i].figurineNumber === 1) {
+                    Figurine1.push(actions[i])
+                } else if (actions[i].figurineNumber === 2) {
+                    Figurine2.push(actions[i])
+                } else {
+                    buildingActions.push(actions[i])
+                }
             }
-            this.setState({actionsFigurine1: Figurine1, actionsFigurine2: Figurine2, actions: buildingActions})
+
+        }
+        this.setState({actionsFigurine1: Figurine1, actionsFigurine2: Figurine2, actions: buildingActions})
     }
+
     Figurine1() {
         this.setState({actions: this.state.actionsFigurine1})
     }
+
     Figurine2() {
         this.setState({actions: this.state.actionsFigurine2})
     }
@@ -259,7 +284,7 @@ class Board extends React.Component {
 
     getActions() {
         let resStatus = 0;
-        fetch(`${getDomain()}/game/actions/`+ localStorage.getItem("id"), {
+        fetch(`${getDomain()}/game/actions/` + localStorage.getItem("id"), {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -279,6 +304,7 @@ class Board extends React.Component {
                         this.setState({
                             getActions: res
                         });
+                        console.log("zwölf");
                         break;
 
                     case 500:
@@ -294,15 +320,20 @@ class Board extends React.Component {
             .catch(err => {
                 console.log(err);
                 alert("Something went wrong catching challenge Status: " + err);
+                clearInterval(this.timer2);
             });
     }
+    componentWillUnmount() {
+        clearInterval(this.timer2);
+    }
+
 
     clickme3() {
         this.getActions();
-
+        this.timer2 = setInterval(() => this.getActions(), 10000);
         this.divideActions(this.state.getActions);
-    }
 
+    }
 
 
     confirm() {
@@ -336,7 +367,7 @@ class Board extends React.Component {
         }
         return table
     };
-
+    //checks if action is in this button
     checkAction(actions, row, column) {
         let buttonAciton = null;
         if (actions) {
@@ -350,25 +381,29 @@ class Board extends React.Component {
             return null;
         }
     }
-    checkFigurine(Player1, Player2, row, column){
-        if(Player1.figurine1.position !== null){
-        if (Player1.figurine1.position[0]===row && Player1.figurine1.position[1]===column){
-            return "White1";
+
+    // checks if button has figurine
+    checkFigurine(Player1, Player2, row, column) {
+        if (Player1.figurine1.position !== null) {
+            if (Player1.figurine1.position[0] === row && Player1.figurine1.position[1] === column) {
+                return "White1";
+            }
         }
+        if (Player1.figurine2.position !== null) {
+            if (Player1.figurine2.position[0] === row && Player1.figurine2.position[1] === column) {
+                return "White2";
+            }
         }
-        if(Player1.figurine2.position !== null){
-        if (Player1.figurine2.position[0]===row && Player1.figurine2.position[1]===column){
-            return "White2";
-        }}
-        if(Player2.figurine1.position !== null){
-        if (Player2.figurine1.position[0]===row && Player2.figurine1.position[1]===column){
-            return "Black1";
-        }}
-        if(Player2.figurine2.position !== null){
-        if (Player2.figurine2.position[0]===row && Player2.figurine2.position[1]===column){
-            return "Black2";
-        }}
-        else{
+        if (Player2.figurine1.position !== null) {
+            if (Player2.figurine1.position[0] === row && Player2.figurine1.position[1] === column) {
+                return "Black1";
+            }
+        }
+        if (Player2.figurine2.position !== null) {
+            if (Player2.figurine2.position[0] === row && Player2.figurine2.position[1] === column) {
+                return "Black2";
+            }
+        } else {
             return "No Figure";
         }
     }
@@ -390,15 +425,22 @@ class Board extends React.Component {
             changeLink={this.onChangeLinkName.bind(this)}
             clicked={this.state.clicked}
             Figure={this.checkFigurine(this.props.Player1, this.props.Player2, row, column)}
-            count = {count}
+            count={count}
         />;
     }
-    waiting(){
-        if (!this.checkcurrentplayer()){
-            return <div className={"status"}  ><Spinner/><div className={"status"}>Waiting</div></div>
+
+    waiting() {
+        if (!this.checkcurrentplayer()) {
+            return <div className={"status"}><Spinner/>
+                <div className={"status"}>Waiting</div>
+            </div>
+        }
+        else{
+            return(<div className={"status"}>Your Turn!</div>)
         }
     }
-    checkcurrentplayer(){
+
+    checkcurrentplayer() {
         return this.props.currentPlayer.toString() === localStorage.getItem("id");
     }
 
@@ -410,17 +452,28 @@ class Board extends React.Component {
                 {this.createTable(this.props.board, this.state.actions)}
                 <button onClick={() => this.clickme3()}>Actions</button>
                 <button onClick={() => this.confirm()}
-                disabled={!this.state.clicked}>Confirm</button>
+                        disabled={!this.state.clicked}>Confirm
+                </button>
                 <button onClick={() => this.cancel()}
-                disabled={!this.state.clicked}>Cancel</button>
-                <button onClick={() => {this.Figurine1(); console.log(this.state.actionsFigurine1)}} >Figurine1</button>
-                <button onClick={() => {this.Figurine2(); console.log(this.state.actionsFigurine1)}} >Figurine2</button>
+                        disabled={!this.state.clicked}>Cancel
+                </button>
+                <button onClick={() => {
+                    this.Figurine1();
+                    console.log(this.state.actionsFigurine1)
+                }}>Figurine1
+                </button>
+                <button onClick={() => {
+                    this.Figurine2();
+                    console.log(this.state.actionsFigurine1)
+                }}>Figurine2
+                </button>
                 {this.waiting()}
             </div>
         );
     }
-    putAction(){
-        fetch(`${getDomain()}/game/actions/`+ localStorage.getItem("actionID"), {
+
+    putAction() {
+        fetch(`${getDomain()}/game/actions/` + localStorage.getItem("actionID"), {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -433,16 +486,17 @@ class Board extends React.Component {
             .catch(err => {
                 if (err.message.match(/Failed to fetch/)) {
                     alert("The server cannot be reached. Did you start it?");
-                }  else if (err.message.match( /unauthorized/)) {     //wrong password, do as soon as you know how to
-                    alert( 'wrong username or password');
-                    this.props.history.push( '/login' );
-                } else if(err.message.match(/not_found/)){
+                } else if (err.message.match(/unauthorized/)) {     //wrong password, do as soon as you know how to
+                    alert('wrong username or password');
+                    this.props.history.push('/login');
+                } else if (err.message.match(/not_found/)) {
                     alert("username already taken or id not-found");
                 } else {
                     alert(`Something went wrong during the login: ${err.message}`);
                 }
             });
     }
+
     /*  <button onClick={() => this.divideActions(this.state.actions)}>DivideActions</button>
               <button onClick={() => this.containAcitons()}>ContainActions</button>*/
 
@@ -450,17 +504,11 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
-    constructor() {
-        super();
-        {this.state =
-            Test1}
-        this.showMenu = this.showMenu.bind(this);
-        this.closeMenu = this.closeMenu.bind(this);
-    }
+
     showMenu(event) {
         event.preventDefault();
 
-        this.setState({ showMenu: true }, () => {
+        this.setState({showMenu: true}, () => {
             document.addEventListener('click', this.closeMenu);
         });
     }
@@ -469,12 +517,43 @@ class Game extends React.Component {
 
         if (!this.dropdownMenu.contains(event.target)) {
 
-            this.setState({ showMenu: false }, () => {
+            this.setState({showMenu: false}, () => {
                 document.removeEventListener('click', this.closeMenu);
             });
 
         }
     }
+
+    showActionsButton(Player) {
+        if (Player.myUserID.toString() === localStorage.getItem("id")) {
+            return (<div>
+                <button onClick={this.showMenu}>
+                    Actions
+                </button>
+
+                {
+                    this.state.showMenu
+                        ? (
+                            <div
+                                className="menu"
+                                ref={(element) => {
+                                    this.dropdownMenu = element;
+                                }}
+                            >
+                                <button> Default Actions</button>
+                                <br/>
+                                <button> God Actions</button>
+
+                            </div>
+                        )
+                        : (
+                            null
+                        )
+                }
+            </div>)
+        }
+    }
+
 //<img src={Apollo} alt = "Player1Pic" width = {100} height={175}/>
     render() {
         return (
@@ -488,60 +567,20 @@ class Game extends React.Component {
                 >getGameStatus
                 </button>
                 <div className="row">
-                    <div className={"column"}> StartingPlayer <img alt={"Player1img"} height={350} width={200} src = {Apollo}/>   <div>
-                        <button onClick={this.showMenu}>
-                            Show menu
-                        </button>
-
-                        {
-                            this.state.showMenu
-                                ? (
-                                    <div
-                                        className="menu"
-                                        ref={(element) => {
-                                            this.dropdownMenu = element;
-                                        }}
-                                    >
-                                        <button> Menu item 1 </button><br/>
-                                        <button> Menu item 2 </button>
-
-                                    </div>
-                                )
-                                : (
-                                    null
-                                )
-                        }
-                    </div></div>
+                    <div className={"column"}> StartingPlayer
+                        {this.GodPicture(this.state.startingPlayer)}
+                        {this.showActionsButton(this.state.startingPlayer)}</div>
                     <div className="columnboard">
-                        <Board status={this.state.status} board={this.state.board}
-                               Player1={this.state.startingPlayer} Player2 ={this.state.nonStartingPlayer} currentPlayer = {this.state.currentPlayer}/>
+                        <Board status={this.state.status}
+                               board={this.state.board}
+                               Player1={this.state.startingPlayer}
+                               Player2={this.state.nonStartingPlayer}
+                               currentPlayer={this.state.currentPlayer}/>
                     </div>
                     <div className="column">
                         NonStartingPlayer
-                        <img alt={"Player2img"} height={350} width={200} src = {Apollo}/><div>
-                        <button onClick={this.showMenu}>
-                            Show menu
-                        </button>
-
-                        {
-                            this.state.showMenu
-                                ? (
-                                    <div
-                                        className="menu"
-                                        ref={(element) => {
-                                            this.dropdownMenu = element;
-                                        }}
-                                    >
-                                        <button> Menu item 1 </button><br/>
-                                        <button> Menu item 2 </button>
-
-                                    </div>
-                                )
-                                : (
-                                    null
-                                )
-                        }
-                    </div>
+                        {this.GodPicture(this.state.nonStartingPlayer)}
+                        {this.showActionsButton(this.state.nonStartingPlayer)}
                     </div>
                 </div>
 
@@ -551,7 +590,7 @@ class Game extends React.Component {
 
     getGameStatus() {
         let resStatus = 0;
-        fetch(`${getDomain()}/game/Board/`+ localStorage.getItem("id"), {
+        fetch(`${getDomain()}/game/Board/` + localStorage.getItem("id"), {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -568,7 +607,17 @@ class Game extends React.Component {
             .then(res => {
                 switch (resStatus) {
                     case 200:
-                        this.setState(res
+                        this.setState({
+                                id: res.id,
+                                player1id: res.player1id,
+                                player2id: res.player1id,
+                                status: res.status,
+                                playWithGodCards: res.playWithGodCards,
+                                board: res.board,
+                                nonStartingPlayer: res.nonStartingPlayer,
+                                currentPlayer: res.currentPlayer,
+                                startingPlayer: res.startingPlayer,
+                            }
                         );
                         break;
 
@@ -591,7 +640,7 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
-       // this.getGameStatus();
+        // this.getGameStatus();
 
     }
 
@@ -603,11 +652,195 @@ class Game extends React.Component {
         this.setState({swag: "asdf"});
         console.log(this.state.swag);
         console.log(this.state.board.spaces[0][1].level);
-
+        clearInterval(this.timer)
     }
 
     clickme2() {
         this.getGameStatus();
+        this.timer = setInterval(() => this.getGameStatus(), 10000);
+    }
+    GodPicture(Player){
+        if (Player.assignedGod){
+            return(<img alt={Player.assignedGod.name} height={350} width={200} src={data.properties[Player.assignedGod.godnumber-1].picture}/>
+
+            )
+        }
+        else if (Player === this.state.startingPlayer){
+            return(<img alt={"NoGod"+localStorage.getItem("id")} height={330} width={200} src={Default1}/>)
+        }
+        else{
+            return(<img alt={"NoGod"+localStorage.getItem("id")} height={350} width={200} src={Default2}/>)
+        }
+    }
+
+    constructor() {
+        super();
+        this.state = {
+            "id": 3,
+            "player1id": 1,
+            "player2id": 2,
+            "status": "MOVING_STARTINGPLAYER",
+            "playWithGodCards": false,
+            "board": {
+                "spaces": [
+                    [
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        }
+                    ],
+                    [
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        }
+                    ],
+                    [
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        }
+                    ],
+                    [
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        }
+                    ],
+                    [
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        },
+                        {
+                            "level": 0,
+                            "dome": false
+                        }
+                    ]
+                ]
+            },
+            "nonStartingPlayer": {
+                "myUserID": 2,
+                "startingplayer": false,
+                "playerNumber": 2,
+                "assignedGod": null,
+                "figurine1": {
+                    "figurineNumber": 1,
+                    "position": [
+                        null,
+                        null
+                    ]
+                },
+                "figurine2": {
+                    "figurineNumber": 2,
+                    "position": [
+                        null,
+                        null
+                    ]
+                }
+            },
+            "currentPlayer": 1,
+            "startingPlayer": {
+                "myUserID": 1,
+                "startingplayer": true,
+                "playerNumber": 1,
+                "assignedGod": null,
+                "figurine1": {
+                    "figurineNumber": 1,
+                    "position": [
+                        null,
+                        null
+                    ]
+                },
+                "figurine2": {
+                    "figurineNumber": 2,
+                    "position": [
+                        null,
+                        null
+                    ]
+                }
+            },
+            "showMenu1": false
+
+        };
+        this.showMenu = this.showMenu.bind(this);
+        this.closeMenu = this.closeMenu.bind(this);
     }
 
 }

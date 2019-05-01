@@ -10,7 +10,8 @@ ol, ul {
 .board-row:after {
     clear: both;
     content: "";
-    display: table;
+    display: flex;
+    flex-wrap: nowrap;
 
 }
 .board {
@@ -25,6 +26,7 @@ ol, ul {
 }
 
 .square {
+    position: relative;
     background: forestgreen;
     border: 2px solid white;
     float: left;
@@ -76,6 +78,7 @@ ol, ul {
     width: 80px;
 }
 .squareLevel1 {
+    position: relative;
     background: antiquewhite;
     border: 2px solid black;
     float: left;
@@ -83,27 +86,28 @@ ol, ul {
     font-weight: bold;
     line-height: 34px;
     height: 68px;
-
-    margin-left: 4px;
+    margin: 4px;
     padding: 0;
     text-align: center;
     width: 68px;
 }
+
 .squareLevel2 {
+    position: relative;
     background: white;
     border: 2px solid black;
     float: left;
     font-size: 24px;
     font-weight: bold;
-    line-height: 34px;
+
     height: 56px;
-    margin-top: 4px;
-    margin-left: 4px;
-    padding: 0;
+    margin: 4px;
+
     text-align: center;
     width: 56px;
 }
 .squareLevel3 {
+    position: relative;
     background: white;
     border: 2px solid black;
     float: left;
@@ -111,8 +115,7 @@ ol, ul {
     font-weight: bold;
     line-height: 34px;
     height: 44px;
-    margin-top: 4px;
-    margin-left: 4px;
+    margin: 4px;
     padding: 0;
     text-align: center;
     width: 44px;
@@ -144,12 +147,16 @@ ol, ul {
     margin-left: 200px;
 }
 .center {
-    vertical-align: middle;
-    margin-left: auto;
+    display: block;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
 
-
-    width: 50%;
+    transform: translate(-50%, -50%);
 }
+
 
 .column {
     float: left;
@@ -166,8 +173,9 @@ ol, ul {
 
 .row:after {
     content: "";
-    display: table;
+    display: flex;
     clear: both;
+    flex-wrap: nowrap;
 }
 .dropdown {
     position: relative;
@@ -194,3 +202,18 @@ ol, ul {
 .dropdown a:hover {background-color: #ddd;}
 
 .show {display: block;}
+
+.image-container {
+    position: absolute;
+    text-align: center;
+    vertical-align: middle;
+    horiz-align: center;
+    display: table-cell;
+    size: 100vmax;
+}
+
+.image-container img {
+    max-width: 44px;
+    max-height: 44px;
+    position: center;
+}

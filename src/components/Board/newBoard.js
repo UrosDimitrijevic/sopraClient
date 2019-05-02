@@ -29,14 +29,26 @@ class Square extends React.Component {
         this.state = {
             addClass: false,
             homeLink: [],
-            bgColor: "green"
+            bgColor: "square",
+            actionBG: "squareorange"
         }
     }
 
-    fieldNoAction(level, dome, Figure) {
+
+    redSquare(){
+        this.setState({bgColor: "squareRED"})
+    }
+    defaulactionSquare(){
+        this.setState({actionBG: "squareorange"})
+    }
+    defaultSquare(){
+        this.setState({bgColor: "square"})
+    }
+
+    fieldNoAction(level, dome, Figure, squareBG) {
         if (level === 0 && dome === false) {
             return (
-                <button className="square"
+                <button className={squareBG}
                         onClick={() => {
                             console.log(this.props)
                         }}>{this.displayFigure(Figure)}
@@ -44,15 +56,15 @@ class Square extends React.Component {
             );
         } else if (level === 1) {
             return (
-                <button className="square" onClick={() => console.log(this.props)}>{this.level1field(dome, Figure)}
+                <button className={squareBG} onClick={() => console.log(this.props)}>{this.level1field(dome, Figure)}
                 </button>);
         } else if (level === 2) {
             return (
-                <button className="square" onClick={() => console.log(this.props)}>{this.level2field(dome, Figure)}
+                <button className={squareBG} onClick={() => console.log(this.props)}>{this.level2field(dome, Figure)}
                 </button>);
         } else if (level === 3) {
             return (
-                <button className="square" onClick={() => console.log(this.props)}>{this.level3field(dome, Figure)}
+                <button className={squareBG} onClick={() => console.log(this.props)}>{this.level3field(dome, Figure)}
                 </button>);
         } else {
             return (
@@ -63,24 +75,24 @@ class Square extends React.Component {
         }
     }
 
-    fieldWithAction(level, dome) {
+    fieldWithAction(level, dome, squareBG) {
         if (level === 0 && dome === false) {
             return (
-                <button className="squareorange"
+                <button className={squareBG}
                         onClick={this.onChangeLink.bind(this)}>
                 </button>
             );
         } else if (level === 1) {
             return (
-                <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level1field(dome)}
+                <button className={squareBG} onClick={this.onChangeLink.bind(this)}>{this.level1field(dome)}
                 </button>);
         } else if (level === 2) {
             return (
-                <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level2field(dome)}
+                <button className={squareBG} onClick={this.onChangeLink.bind(this)}>{this.level2field(dome)}
                 </button>);
         } else if (level === 3) {
             return (
-                <button className="squareorange" onClick={this.onChangeLink.bind(this)}>{this.level3field(dome)}
+                <button className={squareBG} onClick={this.onChangeLink.bind(this)}>{this.level3field(dome)}
                 </button>);
         } else {
             return (
@@ -170,9 +182,13 @@ class Square extends React.Component {
     }
 
     onChangeLink() {
+        let refID = this.props.row*5+this.props.column;
+        this.redSquare();
+        localStorage.setItem("refID", refID);
         localStorage.setItem("actionID", this.props.action.id);
         this.props.changeLink(this.state.homeLink);
         console.log(localStorage.getItem("actionID"));
+        console.log(localStorage.getItem("refID"));
 
     }
 
@@ -220,10 +236,10 @@ class Square extends React.Component {
     render() {
 
         if (this.props.action === null) {
-            return (this.fieldNoAction(this.props.level, this.props.dome, this.props.Figure)
+            return (this.fieldNoAction(this.props.level, this.props.dome, this.props.Figure, this.state.bgColor)
             );
         } else if (this.props.action !== null) {
-            return (this.fieldWithAction(this.props.level, this.props.dome)
+            return (this.fieldWithAction(this.props.level, this.props.dome, this.state.actionBG)
             );
         } else {
             return (
@@ -249,6 +265,9 @@ class Board extends React.Component {
             actionsFigurine2: [],
         }
     }
+    actionsFromSquare = (number)=>{
+        this.refs[number].defaultSquare();
+    };
 
     containActions() {
         this.setState({actions: this.state.getActions})
@@ -303,8 +322,9 @@ class Board extends React.Component {
                     case 200:
                         this.setState({
                             getActions: res
-                        });
+                        }, ()=>{  this.divideActions(this.state.getActions);});
                         console.log("zwölf");
+
                         break;
 
                     case 500:
@@ -323,6 +343,7 @@ class Board extends React.Component {
                 clearInterval(this.timer2);
             });
     }
+
     componentWillUnmount() {
         clearInterval(this.timer2);
     }
@@ -330,18 +351,23 @@ class Board extends React.Component {
 
     clickme3() {
         this.getActions();
-        this.timer2 = setInterval(() => this.getActions(), 10000);
-        this.divideActions(this.state.getActions);
+        //this.timer2 = setInterval(() => this.getActions(), 1000);
+
+       // this.divideActions(this.state.getActions);
 
     }
 
 
     confirm() {
+        var number = localStorage.getItem("refID");
+
         this.putAction();
         console.log(localStorage.getItem("clicked"));
         localStorage.removeItem("clicked");
         localStorage.removeItem("actionID");
         console.log(this.state.homeLink);
+
+        this.actionsFromSquare("SquareID"+ number);
         this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null})
 
     }
@@ -367,6 +393,7 @@ class Board extends React.Component {
         }
         return table
     };
+
     //checks if action is in this button
     checkAction(actions, row, column) {
         let buttonAciton = null;
@@ -426,7 +453,11 @@ class Board extends React.Component {
             clicked={this.state.clicked}
             Figure={this.checkFigurine(this.props.Player1, this.props.Player2, row, column)}
             count={count}
+            ref = {this.calculateRef(row, column)}
         />;
+    }
+    calculateRef(row, column){
+        return "SquareID" + (row*5+column).toString();
     }
 
     waiting() {
@@ -434,9 +465,8 @@ class Board extends React.Component {
             return <div className={"status"}><Spinner/>
                 <div className={"status"}>Waiting</div>
             </div>
-        }
-        else{
-            return(<div className={"status"}>Your Turn!</div>)
+        } else {
+            return (<div className={"status"}>Your Turn!</div>)
         }
     }
 
@@ -523,35 +553,45 @@ class Game extends React.Component {
 
         }
     }
+    actionsFromBoard = ()=>{
+        this.refs.board.clickme3();
+    };
 
     showActionsButton(Player) {
-        if (Player.myUserID.toString() === localStorage.getItem("id")) {
-            return (<div>
-                <button onClick={this.showMenu}>
-                    Actions
-                </button>
+        if (this.state.playWithGodCards) {
+            if (Player.myUserID.toString() === localStorage.getItem("id")) {
+                return (<div>
+                    <button onClick={this.showMenu}>
+                        Actions
+                    </button>
 
-                {
-                    this.state.showMenu
-                        ? (
-                            <div
-                                className="menu"
-                                ref={(element) => {
-                                    this.dropdownMenu = element;
-                                }}
-                            >
-                                <button> Default Actions</button>
-                                <br/>
-                                <button> God Actions</button>
+                    {
+                        this.state.showMenu
+                            ? (
+                                <div
+                                    className="menu"
+                                    ref={(element) => {
+                                        this.dropdownMenu = element;
+                                    }}
+                                >
+                                    <button> Default Actions</button>
+                                    <br/>
+                                    <button> God Actions</button>
 
-                            </div>
-                        )
-                        : (
-                            null
-                        )
-                }
-            </div>)
+                                </div>
+                            )
+                            : (
+                                null
+                            )
+                    }
+                </div>)
+            }
         }
+        else {if (Player.myUserID.toString() === localStorage.getItem("id")) {
+            return (<div>
+                <button onClick={this.actionsFromBoard}> DefaultActions</button>
+            </div>)
+        }}
     }
 
 //<img src={Apollo} alt = "Player1Pic" width = {100} height={175}/>
@@ -575,7 +615,9 @@ class Game extends React.Component {
                                board={this.state.board}
                                Player1={this.state.startingPlayer}
                                Player2={this.state.nonStartingPlayer}
-                               currentPlayer={this.state.currentPlayer}/>
+                               currentPlayer={this.state.currentPlayer}
+                                ref = "board"
+                        />
                     </div>
                     <div className="column">
                         NonStartingPlayer
@@ -658,19 +700,19 @@ class Game extends React.Component {
 
     clickme2() {
         this.getGameStatus();
-        this.timer = setInterval(() => this.getGameStatus(), 10000);
+        this.timer = setInterval(() => this.getGameStatus(), 100);
     }
-    GodPicture(Player){
-        if (Player.assignedGod){
-            return(<img alt={Player.assignedGod.name} height={350} width={200} src={data.properties[Player.assignedGod.godnumber-1].picture}/>
+
+    GodPicture(Player) {
+        if (Player.assignedGod) {
+            return (<img alt={Player.assignedGod.name} height={350} width={200}
+                         src={data.properties[Player.assignedGod.godnumber - 1].picture}/>
 
             )
-        }
-        else if (Player === this.state.startingPlayer){
-            return(<img alt={"NoGod"+localStorage.getItem("id")} height={330} width={200} src={Default1}/>)
-        }
-        else{
-            return(<img alt={"NoGod"+localStorage.getItem("id")} height={350} width={200} src={Default2}/>)
+        } else if (Player === this.state.startingPlayer) {
+            return (<img alt={"NoGod" + localStorage.getItem("id")} height={330} width={200} src={Default1}/>)
+        } else {
+            return (<img alt={"NoGod" + localStorage.getItem("id")} height={350} width={200} src={Default2}/>)
         }
     }
 

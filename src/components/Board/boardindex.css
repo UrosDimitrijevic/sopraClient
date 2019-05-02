@@ -40,6 +40,21 @@ ol, ul {
     text-align: center;
     width: 80px;
 }
+.squareRED {
+    position: relative;
+    background: red;
+    border: 2px solid white;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 34px;
+    height: 80px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 80px;
+}
 .square.green {
     background-color: red;
 }

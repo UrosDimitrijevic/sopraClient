@@ -267,7 +267,7 @@ ChallengeStatus() {
     }
   }
   componentWillUnmount() {
-    this.timer = null;
+    clearInterval(this.timer);
   }
 
   render() {

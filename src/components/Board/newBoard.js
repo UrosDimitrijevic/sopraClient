@@ -541,6 +541,7 @@ class Game extends React.Component {
         this.setState({showMenu: true}, () => {
             document.addEventListener('click', this.closeMenu);
         });
+        this.actionsFromBoard();
     }
 
     closeMenu(event) {
@@ -574,9 +575,9 @@ class Game extends React.Component {
                                         this.dropdownMenu = element;
                                     }}
                                 >
-                                    <button> Default Actions</button>
+                                    <button onClick={this.actionsFromBoard}> Default Actions</button>
                                     <br/>
-                                    <button> God Actions</button>
+                                    <button onClick={this.actionsFromBoard}> God Actions</button>
 
                                 </div>
                             )
@@ -715,10 +716,25 @@ class Game extends React.Component {
             return (<div className={"defaultPicture"}><img alt={"NoGod" + localStorage.getItem("id")} height={330} width={200} src={Default2}/></div>)
         }
     }
+    switchCardState(){
+        this.setState({showGodCard: !this.state.showGodCard})
+    }
+    GodDescription(Player){
+        if(this.state.showGodCard){
+            return (<div onClick={this.switchCardState}><img  alt={Player.assignedGod.name} height={350} width={200}
+                         src={data.properties[Player.assignedGod.godnumber - 1].picture}/></div>)
+        }
+        else{
+            return(<div onClick={this.switchCardState} className={"GodText"} >
+                <b>{data.properties[Player.assignedGod.assignedGod.godnumber-1].title}</b>
+                <p>{data.properties[Player.assignedGod.assignedGod.godnumber-1].text}</p></div>)
+        }
+    }
 
     constructor() {
         super();
         this.state = {
+            showGodCard: true,
             "id": 3,
             "player1id": 1,
             "player2id": 2,

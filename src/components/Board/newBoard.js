@@ -480,12 +480,12 @@ class Board extends React.Component {
             <div className={"board"}>
                 <div className="status">{status}</div>
                 {this.createTable(this.props.board, this.state.actions)}
-                <button className={"myButton"} onClick={() => {
+                <button className={"myButton"}  disabled={!this.checkcurrentplayer() || this.state.clicked} onClick={() => {
                     this.Figurine1();
                     console.log(this.state.actionsFigurine1)
                 }}>Figurine1
                 </button>
-                    <button className={"myButton"} onClick={() => {
+                    <button className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked} onClick={() => {
                         this.Figurine2();
                         console.log(this.state.actionsFigurine1)
                     }}>Figurine2

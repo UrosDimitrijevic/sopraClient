@@ -473,30 +473,30 @@ class Board extends React.Component {
     checkcurrentplayer() {
         return this.props.currentPlayer.toString() === localStorage.getItem("id");
     }
-
+    //  <button onClick={() => this.clickme3()}>Actions</button>
     render() {
         const status = this.props.status;
         return (
             <div className={"board"}>
                 <div className="status">{status}</div>
                 {this.createTable(this.props.board, this.state.actions)}
-                <button onClick={() => this.clickme3()}>Actions</button>
-                <button onClick={() => this.confirm()}
-                        disabled={!this.state.clicked}>Confirm
-                </button>
-                <button onClick={() => this.cancel()}
-                        disabled={!this.state.clicked}>Cancel
-                </button>
-                <button onClick={() => {
+                <button className={"myButton"} onClick={() => {
                     this.Figurine1();
                     console.log(this.state.actionsFigurine1)
                 }}>Figurine1
                 </button>
-                <button onClick={() => {
-                    this.Figurine2();
-                    console.log(this.state.actionsFigurine1)
-                }}>Figurine2
+                    <button className={"myButton"} onClick={() => {
+                        this.Figurine2();
+                        console.log(this.state.actionsFigurine1)
+                    }}>Figurine2
+                    </button>
+                <button className={"myButton"} onClick={() => this.confirm()}
+                        disabled={!this.state.clicked}>Confirm
                 </button>
+                <button  className={"myButton"}   onClick={() => this.cancel()}
+                        disabled={!this.state.clicked}>Cancel
+                </button>
+
                 {this.waiting()}
             </div>
         );
@@ -589,7 +589,7 @@ class Game extends React.Component {
         }
         else {if (Player.myUserID.toString() === localStorage.getItem("id")) {
             return (<div>
-                <button onClick={this.actionsFromBoard}> DefaultActions</button>
+                <button className={"myButton"} onClick={this.actionsFromBoard}> DefaultActions</button>
             </div>)
         }}
     }
@@ -710,9 +710,9 @@ class Game extends React.Component {
 
             )
         } else if (Player === this.state.startingPlayer) {
-            return (<img alt={"NoGod" + localStorage.getItem("id")} height={330} width={200} src={Default1}/>)
+            return (<div className={"defaultPicture"}><img alt={"NoGod" + localStorage.getItem("id")} height={330} width={200} src={Default1}/></div>)
         } else {
-            return (<img alt={"NoGod" + localStorage.getItem("id")} height={350} width={200} src={Default2}/>)
+            return (<div className={"defaultPicture"}><img alt={"NoGod" + localStorage.getItem("id")} height={330} width={200} src={Default2}/></div>)
         }
     }
 

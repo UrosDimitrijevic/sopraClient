@@ -3,7 +3,7 @@
   "player1id": 1,
   "player2id": 2,
   "status": "MOVING_STARTINGPLAYER",
-  "playWithGodCards": false,
+  "playWithGodCards": true,
   "board": {
     "spaces": [
       [
@@ -122,7 +122,10 @@
     "myUserID": 2,
     "startingplayer": false,
     "playerNumber": 2,
-    "assignedGod": null,
+    "assignedGod": {
+      "name": "Arthemis",
+      "godnumber": 4
+    },
     "figurine1": {
       "figurineNumber": 1,
       "position": [
@@ -138,11 +141,15 @@
       ]
     }
   },
+  "currentPlayer": 1,
   "startingPlayer": {
     "myUserID": 1,
     "startingplayer": true,
     "playerNumber": 1,
-    "assignedGod": null,
+    "assignedGod": {
+      "name": "Apollo",
+      "godnumber": 5
+    },
     "figurine1": {
       "figurineNumber": 1,
       "position": [

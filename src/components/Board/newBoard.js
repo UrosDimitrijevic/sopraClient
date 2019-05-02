@@ -23,6 +23,7 @@ import {Spinner} from "../../views/design/Spinner";
 import data from "../../GodCards/data";
 
 
+
 class Square extends React.Component {
     constructor(props) {
         super(props);
@@ -562,8 +563,8 @@ class Game extends React.Component {
         if (this.state.playWithGodCards) {
             if (Player.myUserID.toString() === localStorage.getItem("id")) {
                 return (<div>
-                    <button onClick={this.showMenu}>
-                        Actions
+                    <button className={"myButton"} onClick={this.showMenu}>
+                        Action Options
                     </button>
 
                     {
@@ -575,9 +576,9 @@ class Game extends React.Component {
                                         this.dropdownMenu = element;
                                     }}
                                 >
-                                    <button onClick={this.actionsFromBoard}> Default Actions</button>
+                                    <button className={"myButton"} onClick={this.actionsFromBoard}> Default Actions</button>
                                     <br/>
-                                    <button onClick={this.actionsFromBoard}> God Actions</button>
+                                    <button className={"myButton"} onClick={this.actionsFromBoard}> GodPower Actions</button>
 
                                 </div>
                             )
@@ -689,13 +690,18 @@ class Game extends React.Component {
     }
 
     clickMe() {
-        console.log(this.state.status);
-        console.log(this.state.board.spaces[0][0].level);
-        console.log(this.state.board.spaces[0][1].level);
-        this.setState(Test2);
-        this.setState({swag: "asdf"});
-        console.log(this.state.swag);
-        console.log(this.state.board.spaces[0][1].level);
+        this.setState({
+            id: Test2.id,
+            player1id: Test2.player1id,
+            player2id: Test2.player1id,
+            status: Test2.status,
+            playWithGodCards: Test2.playWithGodCards,
+            board: Test2.board,
+            nonStartingPlayer: Test2.nonStartingPlayer,
+            currentPlayer: Test2.currentPlayer,
+            startingPlayer: Test2.startingPlayer,
+        });
+        console.log(this.state.showGodCard);
         clearInterval(this.timer)
     }
 
@@ -706,8 +712,7 @@ class Game extends React.Component {
 
     GodPicture(Player) {
         if (Player.assignedGod) {
-            return (<img alt={Player.assignedGod.name} height={350} width={200}
-                         src={data.properties[Player.assignedGod.godnumber - 1].picture}/>
+            return (this.GodDescription(Player)
 
             )
         } else if (Player === this.state.startingPlayer) {
@@ -716,25 +721,24 @@ class Game extends React.Component {
             return (<div className={"defaultPicture"}><img alt={"NoGod" + localStorage.getItem("id")} height={330} width={200} src={Default2}/></div>)
         }
     }
-    switchCardState(){
-        this.setState({showGodCard: !this.state.showGodCard})
-    }
+
     GodDescription(Player){
         if(this.state.showGodCard){
-            return (<div onClick={this.switchCardState}><img  alt={Player.assignedGod.name} height={350} width={200}
+            return (<div onClick={()=>this.setState({showGodCard: !this.state.showGodCard})}><img  alt={Player.assignedGod.name} height={350} width={200}
                          src={data.properties[Player.assignedGod.godnumber - 1].picture}/></div>)
         }
         else{
-            return(<div onClick={this.switchCardState} className={"GodText"} >
-                <b>{data.properties[Player.assignedGod.assignedGod.godnumber-1].title}</b>
-                <p>{data.properties[Player.assignedGod.assignedGod.godnumber-1].text}</p></div>)
+            return(<button onClick={()=>this.setState({showGodCard: !this.state.showGodCard})} className={"GodText"} >
+                <b>{data.properties[Player.assignedGod.godnumber-1].title}</b>
+                <p>{data.properties[Player.assignedGod.godnumber-1].text}</p></button>)
         }
     }
 
     constructor() {
         super();
         this.state = {
-            showGodCard: true,
+            "showGodCard": true,
+            "showGodCard2": true,
             "id": 3,
             "player1id": 1,
             "player2id": 2,

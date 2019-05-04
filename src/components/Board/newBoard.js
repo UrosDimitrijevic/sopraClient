@@ -23,7 +23,6 @@ import {Spinner} from "../../views/design/Spinner";
 import data from "../../GodCards/data";
 
 
-
 class Square extends React.Component {
     constructor(props) {
         super(props);
@@ -36,13 +35,15 @@ class Square extends React.Component {
     }
 
 
-    redSquare(){
+    redSquare() {
         this.setState({bgColor: "squareRED"})
     }
-    defaulactionSquare(){
+
+    defaulactionSquare() {
         this.setState({actionBG: "squareorange"})
     }
-    defaultSquare(){
+
+    defaultSquare() {
         this.setState({bgColor: "square"})
     }
 
@@ -183,7 +184,7 @@ class Square extends React.Component {
     }
 
     onChangeLink() {
-        let refID = this.props.row*5+this.props.column;
+        let refID = this.props.row * 5 + this.props.column;
         this.redSquare();
         localStorage.setItem("refID", refID);
         localStorage.setItem("actionID", this.props.action.id);
@@ -266,7 +267,8 @@ class Board extends React.Component {
             actionsFigurine2: [],
         }
     }
-    actionsFromSquare = (number)=>{
+
+    actionsFromSquare = (number) => {
         this.refs[number].defaultSquare();
     };
 
@@ -323,7 +325,9 @@ class Board extends React.Component {
                     case 200:
                         this.setState({
                             getActions: res
-                        }, ()=>{  this.divideActions(this.state.getActions);});
+                        }, () => {
+                            this.divideActions(this.state.getActions);
+                        });
                         console.log("zwölf");
 
                         break;
@@ -354,7 +358,7 @@ class Board extends React.Component {
         this.getActions();
         //this.timer2 = setInterval(() => this.getActions(), 1000);
 
-       // this.divideActions(this.state.getActions);
+        // this.divideActions(this.state.getActions);
 
     }
 
@@ -368,7 +372,7 @@ class Board extends React.Component {
         localStorage.removeItem("actionID");
         console.log(this.state.homeLink);
 
-        this.actionsFromSquare("SquareID"+ number);
+        this.actionsFromSquare("SquareID" + number);
         this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null})
 
     }
@@ -454,11 +458,12 @@ class Board extends React.Component {
             clicked={this.state.clicked}
             Figure={this.checkFigurine(this.props.Player1, this.props.Player2, row, column)}
             count={count}
-            ref = {this.calculateRef(row, column)}
+            ref={this.calculateRef(row, column)}
         />;
     }
-    calculateRef(row, column){
-        return "SquareID" + (row*5+column).toString();
+
+    calculateRef(row, column) {
+        return "SquareID" + (row * 5 + column).toString();
     }
 
     waiting() {
@@ -474,6 +479,7 @@ class Board extends React.Component {
     checkcurrentplayer() {
         return this.props.currentPlayer.toString() === localStorage.getItem("id");
     }
+
     //  <button onClick={() => this.clickme3()}>Actions</button>
     render() {
         const status = this.props.status;
@@ -481,20 +487,22 @@ class Board extends React.Component {
             <div className={"board"}>
                 <div className="status">{status}</div>
                 {this.createTable(this.props.board, this.state.actions)}
-                <button className={"myButton"}  disabled={!this.checkcurrentplayer() || this.state.clicked} onClick={() => {
-                    this.Figurine1();
-                    console.log(this.state.actionsFigurine1)
-                }}>Figurine1
+                <button className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked}
+                        onClick={() => {
+                            this.Figurine1();
+                            console.log(this.state.actionsFigurine1)
+                        }}>Figurine1
                 </button>
-                    <button className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked} onClick={() => {
-                        this.Figurine2();
-                        console.log(this.state.actionsFigurine1)
-                    }}>Figurine2
-                    </button>
+                <button className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked}
+                        onClick={() => {
+                            this.Figurine2();
+                            console.log(this.state.actionsFigurine1)
+                        }}>Figurine2
+                </button>
                 <button className={"myButton"} onClick={() => this.confirm()}
                         disabled={!this.state.clicked}>Confirm
                 </button>
-                <button  className={"myButton"}   onClick={() => this.cancel()}
+                <button className={"myButton"} onClick={() => this.cancel()}
                         disabled={!this.state.clicked}>Cancel
                 </button>
 
@@ -555,7 +563,8 @@ class Game extends React.Component {
 
         }
     }
-    actionsFromBoard = ()=>{
+
+    actionsFromBoard = () => {
         this.refs.board.clickme3();
     };
 
@@ -578,7 +587,8 @@ class Game extends React.Component {
                                 >
                                     <button className={"myButton"} onClick={this.actionsFromBoard}> Default Actions</button>
                                     <br/>
-                                    <button className={"myButton"} onClick={this.actionsFromBoard}> GodPower Actions</button>
+                                    <button className={"myButton"} onClick={this.actionsFromBoard}> GodPower Actions
+                                    </button>
 
                                 </div>
                             )
@@ -588,12 +598,16 @@ class Game extends React.Component {
                     }
                 </div>)
             }
+        } else {
+            if (Player.myUserID.toString() === localStorage.getItem("id")) {
+                return (<div>
+                    <button className={"myButton"}
+                            disabled={localStorage.getItem("id") !== this.state.currentPlayer.toString()}
+                            onClick={this.actionsFromBoard}> DefaultActions
+                    </button>
+                </div>)
+            }
         }
-        else {if (Player.myUserID.toString() === localStorage.getItem("id")) {
-            return (<div>
-                <button className={"myButton"} onClick={this.actionsFromBoard}> DefaultActions</button>
-            </div>)
-        }}
     }
 
 //<img src={Apollo} alt = "Player1Pic" width = {100} height={175}/>
@@ -618,7 +632,7 @@ class Game extends React.Component {
                                Player1={this.state.startingPlayer}
                                Player2={this.state.nonStartingPlayer}
                                currentPlayer={this.state.currentPlayer}
-                                ref = "board"
+                               ref="board"
                         />
                     </div>
                     <div className="column">
@@ -716,21 +730,23 @@ class Game extends React.Component {
 
             )
         } else if (Player === this.state.startingPlayer) {
-            return (<div className={"defaultPicture"}><img alt={"NoGod" + localStorage.getItem("id")} height={330} width={200} src={Default1}/></div>)
+            return (<div className={"defaultPicture"}><img alt={"NoGod" + localStorage.getItem("id")} height={330}
+                                                           width={200} src={Default1}/></div>)
         } else {
-            return (<div className={"defaultPicture"}><img alt={"NoGod" + localStorage.getItem("id")} height={330} width={200} src={Default2}/></div>)
+            return (<div className={"defaultPicture"}><img alt={"NoGod" + localStorage.getItem("id")} height={330}
+                                                           width={200} src={Default2}/></div>)
         }
     }
 
-    GodDescription(Player){
-        if(this.state.showGodCard){
-            return (<div onClick={()=>this.setState({showGodCard: !this.state.showGodCard})}><img  alt={Player.assignedGod.name} height={350} width={200}
-                         src={data.properties[Player.assignedGod.godnumber - 1].picture}/></div>)
-        }
-        else{
-            return(<button onClick={()=>this.setState({showGodCard: !this.state.showGodCard})} className={"GodText"} >
-                <b>{data.properties[Player.assignedGod.godnumber-1].title}</b>
-                <p>{data.properties[Player.assignedGod.godnumber-1].text}</p></button>)
+    GodDescription(Player) {
+        if (this.state.showGodCard) {
+            return (<div onClick={() => this.setState({showGodCard: !this.state.showGodCard})}><img
+                alt={Player.assignedGod.name} height={350} width={200}
+                src={data.properties[Player.assignedGod.godnumber - 1].picture}/></div>)
+        } else {
+            return (<button onClick={() => this.setState({showGodCard: !this.state.showGodCard})} className={"GodText"}>
+                <b>{data.properties[Player.assignedGod.godnumber - 1].title}</b>
+                <p>{data.properties[Player.assignedGod.godnumber - 1].text}</p></button>)
         }
     }
 

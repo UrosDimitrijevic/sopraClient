@@ -87,7 +87,7 @@ class TwoGodCards extends React.Component {
         }
     }
 
-    choose2GodCards() {             // somewhat implemented
+    choose1from2Gods() {             // somewhat implemented
         fetch(`${getDomain()}/game/actions/`+ localStorage.getItem("actionID"), {
             method: "PUT",
             headers: {
@@ -96,25 +96,23 @@ class TwoGodCards extends React.Component {
 
         })
             .then(response => {
-                if(!(response.status === 201)) { //201
-                    console.log(`ERROR: Username already existing  ${this.state.username} with CONFLICT`);
-                    alert("Username taken");
-                    window.location.reload();
+                if((response.status === 201)) { //201
+
 
                 }
 
                 else {
 
                     localStorage.removeItem("actionID");
-                    //push this.props.history("link")
+
                 }
             })
 
             .catch(err => {
                 if (err.message.match(/Failed to fetch/)) {
-                    alert("The server  cannot be reached. Did you start it?");
+                    alert("The server  cannot be reached. Did you start it? TEst2");
                 } else {
-                    alert(`Something  went wrong during the registration: ${err.message}`);
+                    alert(` Test2 Something  went wrong during the registration: ${err.message}`);
                     window.location.reload();
                 }
             })
@@ -147,8 +145,24 @@ class TwoGodCards extends React.Component {
 
             });
         this.getActions();
+        this.getGameStatus();
+        this.timer = setInterval(() => this.getGameStatus(), 5000);
     }
+    firstCard(){
+        if(this.state.actions.length===2){
+            let actionsID = this.state.actions[0].id;
+            localStorage.setItem("actionID", actionsID);
+            console.log(localStorage.getItem("actionID"));
 
+        }
+    }
+    secondCard(){
+        if(this.state.actions.length===2){
+            let actionsID = this.state.actions[1].id;
+            localStorage.setItem("actionID", actionsID);
+            console.log(localStorage.getItem("actionID"));
+        }
+    }
 
     render() {
         const {property} = this.state;
@@ -167,20 +181,19 @@ class TwoGodCards extends React.Component {
                     <div className={"row2"} >
                     <div>
                         <div className={"column2"}> <button
-                            onClick={() => this.chooseGoD()
-                            }
+                            onClick={() => this.firstCard()}
+                            disabled={this.state.actions.length<2}
                             //disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null)}
                         >Choose</button></div>
                         <div  className={"column2"}><button
-                            onClick={() => this.unChooseGoD()}
-                            disabled={property.index !== this.state.GodCard1 && property.index !== this.state.GodCard2}
+                            onClick={() => this.secondCard()}
+                            disabled={this.state.actions.length<2}
                         >Unchoose</button></div>
 
                     </div></div><br/>
                     <div className={"row3"} ><Button size={100}
-                        disabled={this.state.GodCard1 === null || this.state.GodCard2 === null}
-                        onClick = { () => {
-                            this.getActionID();
+                        disabled={this.state.GodCard1 === null || this.state.GodCard2 === null || !localStorage.getItem("actionID")}
+                        onClick = { () => {this.choose1from2Gods();
                             console.log(this.state.GodCard1)
                         }}
 
@@ -209,7 +222,7 @@ class TwoGodCards extends React.Component {
             .then(res => {
                 switch (resStatus) {
                     case 200:
-                        if (res.length>1){
+                        if (res.length===2){
                         this.setState({
                             actions: res,
                             GodCard1: res[0].myGod.godnumber,
@@ -232,6 +245,58 @@ class TwoGodCards extends React.Component {
                 console.log(err);
                 alert("Something went wrong catching challenge Status: " + err);
             });
+    }
+    getGameStatus() {
+        let resStatus = 0;
+        fetch(`${getDomain()}/game/Board/`+localStorage.getItem("id"), {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then (res => {
+                resStatus = res.status;
+                if (resStatus === 404 || resStatus === 400 || resStatus !==200){console.log(res)}
+                else{
+                    return  res.json();}
+            })
+            .then (res => {
+                switch (resStatus){
+                    case 200:
+                        this.setState({status: res.status});
+                        if(res.status === "SettingFigurinesp1f1"){
+                            this.props.history.push("/newboard")
+                        }
+                        if(res.status === "CHOSING_GAME_MODE"){
+                            this.props.history.push("/test")
+                        }
+                        if(res.status === "CHOSING_GODCARDS"){
+                            this.props.history.push("/test")
+                        }
+                        if(res.status === "PICKING_GODCARDS"){
+                            this.props.history.push("/test2")
+                        }
+
+                        break;
+
+                    case 500:
+                        console.log('server error, try again');
+                        break;
+                    default:
+                        console.log("default case");
+                        break;
+
+                }
+            })
+
+
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong catching challenge Status: " + err);
+            });
+    }
+    componentWillUnmount() {
+        clearInterval(this.timer);
     }
 }
 

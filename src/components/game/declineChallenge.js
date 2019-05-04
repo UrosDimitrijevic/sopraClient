@@ -16,6 +16,7 @@ export function declineChallenge(){
             throw new Error( ErrorCode(response.status) );
         }
         else{localStorage.removeItem("gettingChallengedByID")}
+        console.log("woweeee")
 
     })
         .catch(err => {

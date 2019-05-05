@@ -1,17 +1,17 @@
 import React from "react";
-import "./ModalChallenge.css";
+import "./ModalWonLost.css";
 
 
-const modal = (props) => {
+const WonLostModal = (props) => {
     return (
         <div>
             <div className="modal-wrapper"
                  style={{
-                     transform: props.show ? 'translateY(0vh)' : 'translateY(-100vh)',
+                     transform: props.show ? 'translateY(0vh)' : 'translateY(100vh)',
                      opacity: props.show ? '1' : '0'
                  }}>
                 <div className="modal-header">
-                    <h3>CHALLENGE</h3>
+                    <h3>You lost/won!</h3>
                     <span className="close-modal-btn" onClick={props.close}>×</span>
                 </div>
                 <div className="modal-body">
@@ -19,7 +19,7 @@ const modal = (props) => {
                         {props.children}
                     </p>
                     <p>
-                        Do you accept or decline?
+                        {props.status}
                     </p>
                 </div>
                 <div className="modal-footer">
@@ -31,4 +31,4 @@ const modal = (props) => {
     )
 };
 
-export default modal;
+export default WonLostModal;

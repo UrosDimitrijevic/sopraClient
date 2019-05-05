@@ -205,7 +205,7 @@ class ChooseGodCard extends React.Component {
                     <button className={"myButton"}
                         onClick={() => this.chooseGoD()
                         }
-                        disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null)}
+                        disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null) || this.state.actions<2}
                     >Choose</button>
                         <button className={"myButton"}
                             onClick={() => this.unChooseGoD()}

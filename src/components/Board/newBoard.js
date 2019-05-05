@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withRouter} from "react-router-dom";
+import {Redirect, withRouter} from "react-router-dom";
 import * as ReactDOM from "react-dom";
 import {BaseContainer} from "../../helpers/layout";
 import Test1 from "./initGameStatus";
@@ -21,6 +21,8 @@ import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler";
 import Apollo from "../../GodCards/Apollo.PNG"
 import {Spinner} from "../../views/design/Spinner";
 import data from "../../GodCards/data";
+import Modal from "./WonLostModal";
+
 
 
 class Square extends React.Component {
@@ -543,6 +545,11 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+    closeModalHandler = () => {
+        this.setState({
+            isShowing: false
+        });
+    };
 
     showMenu(event) {
         event.preventDefault();
@@ -641,6 +648,7 @@ class Game extends React.Component {
                         {this.showActionsButton(this.state.nonStartingPlayer)}
                     </div>
                 </div>
+                {this.renderModal()}
 
             </BaseContainer>
         );
@@ -677,6 +685,11 @@ class Game extends React.Component {
                                 startingPlayer: res.startingPlayer,
                             }
                         );
+                        if(res.status === "STARTINGPLAYER_WON" || res.status === "NONSTARTINGPLAYER_WON"){
+                            this.setState({
+                                isShowing: true
+                            });
+                        }
                         break;
 
                     case 500:
@@ -720,8 +733,9 @@ class Game extends React.Component {
     }
 
     clickme2() {
+        clearInterval(this.timer);
         this.getGameStatus();
-        this.timer = setInterval(() => this.getGameStatus(), 100);
+        this.timer = setInterval(() => this.getGameStatus(), 1000);
     }
 
     GodPicture(Player) {
@@ -749,10 +763,41 @@ class Game extends React.Component {
                 <p>{data.properties[Player.assignedGod.godnumber - 1].text}</p></button>)
         }
     }
+    openModalHandler = () => {
+        this.setState({
+            isShowing: true
+        });
+    };
+    testDashboard(){
+        this.props.history.push("/game")
+    }
+    goBackToDashboard = () => {
+        localStorage.removeItem("boardID");
+        console.log("redirect");
+        this.testDashboard();
+    };
+
+    renderModal(){return(
+        <div >{ this.state.isShowing ? <div className="back-drop"></div> : null }
+
+
+
+            <Modal
+                className="modal"
+                show={this.state.isShowing}
+                close={this.closeModalHandler}
+                status={this.state.status}
+                accept={this.goBackToDashboard}
+            >
+                GameStatus:
+            </Modal>
+            <button className="open-modal-btn" onClick={this.openModalHandler}>Open Modal</button></div>)
+    }
 
     constructor() {
         super();
         this.state = {
+            isShowing: false,
             "showGodCard": true,
             "showGodCard2": true,
             "id": 3,

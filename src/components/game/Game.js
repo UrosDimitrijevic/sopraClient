@@ -72,7 +72,6 @@ class Game extends React.Component {
        this.setState({
            isShowing: true
        });
-
     };
     closeModalHandler = () => {
         this.setState({

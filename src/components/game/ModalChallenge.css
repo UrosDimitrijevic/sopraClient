@@ -97,4 +97,11 @@
     padding: 10px;
     font-weight: bold;
 }
+.link {
+    color: #FFF;
+}
+.link:hover {
+    color: #00F
+}
+
 /*    background-color: rgba(48, 49, 48, 0.42); #263238 header*/

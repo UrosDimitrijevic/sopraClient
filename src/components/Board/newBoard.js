@@ -628,7 +628,7 @@ class Game extends React.Component {
         if (this.state.playWithGodCards) {
             if (Player.myUserID.toString() === localStorage.getItem("id")) {
                 return (<div>
-                    <button className={"myButton"} onClick={this.showMenu}>
+                    <button className={"myButton"} disabled={!(this.state.currentPlayer.toString()=== localStorage.getItem("id"))} onClick={this.showMenu}>
                         Action Options
                     </button>
 

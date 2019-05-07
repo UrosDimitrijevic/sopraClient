@@ -10,12 +10,33 @@ import {declineChallenge} from "./declineChallenge";
 import "./ModalChallenge.css";
 import Modal from "./ModalClass";
 
+const Button1 = styled.button`
+  &:hover {
+    transform: translateY(-2px);
+  }
+  float: right;
+  padding: 6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+  width: ${props => props.width || null};
+  height: 30px;
+  border: none;
+  border-radius: 20px;
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
+  opacity: ${props => (props.disabled ? 0.4 : 1)};
+  background: rgb(16, 89, 255);
+  transition: all 0.3s ease;
+`;
 
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
 
 `;
+
 
 const Users = styled.ul`
   list-style: none;
@@ -38,7 +59,7 @@ const PlContainer = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid #ffffff26;
-  background: darkgrey;
+  background: cadetblue;
 `;
 
 /*const PlUserName = styled.div`
@@ -68,10 +89,11 @@ class Game extends React.Component {
             isShowing: false,
         };
     }
+
     openModalHandler = () => {
-       this.setState({
-           isShowing: true
-       });
+        this.setState({
+            isShowing: true
+        });
     };
     closeModalHandler = () => {
         this.setState({
@@ -207,7 +229,7 @@ class Game extends React.Component {
                     case 200:
                         this.setState({status: res.status});
                         console.log(this.state.status);
-                        if(res.status === "CHOSING_GAME_MODE"){
+                        if (res.status === "CHOSING_GAME_MODE") {
                             clearInterval(this.timer);
                             this.setState({
                                 isShowing: false
@@ -295,12 +317,12 @@ class Game extends React.Component {
         clearInterval(this.timer);
     }
 
-    declineWithModal = ()=>{
+    declineWithModal = () => {
         declineChallenge();
         this.closeModalHandler()
     };
-    acceptWithModal = ()=>{
-       this.accept();
+    acceptWithModal = () => {
+        this.accept();
         clearInterval(this.timer);
         this.timer = setInterval(() => this.getGameStatus(), 5000);
 
@@ -309,8 +331,7 @@ class Game extends React.Component {
 
     render() {
         return (
-            <div >{ this.state.isShowing ? <div className="back-drop"></div> : null }
-
+            <div>{this.state.isShowing ? <div className="back-drop1"></div> : null}
 
 
                 <Modal
@@ -323,26 +344,27 @@ class Game extends React.Component {
                 </Modal>
                 <button className="open-modal-btn1" onClick={this.openModalHandler}>Open Modal</button>
 
-            <Container>
+                <Container>
 
-                <h2>Happy Coding! </h2>
-                {!this.state.users ? (
-                    <Spinner/>
-                ) : (
-                    <div>
-                        <Users>
-                            {this.state.users.map(user => {
-                                return (
-                                    <PlayerContainer key={user.id}>
-                                        <PlContainer>
-                                            <a href="#" onClick={() => {
-                                                this.props.history.push('/playerPage');
-                                                localStorage.setItem("atID", user.id);
-                                            }}>
-                                                {user.username}
-                                            </a>
-                                            <button
-                                                onClick={() => {
+                    <h2>Happy Coding! </h2>
+                    {!this.state.users ? (
+                        <Spinner/>
+                    ) : (
+                        <div>
+                            <Users>
+                                {this.state.users.map(user => {
+                                    return (
+                                        <PlayerContainer key={user.id}>
+                                            <div className={"row"}>
+                                                <PlContainer>
+                                                    <a className={"link"} href="#" onClick={() => {
+                                                        this.props.history.push('/playerPage');
+                                                        localStorage.setItem("atID", user.id);
+                                                    }}>
+                                                        {user.username}
+                                                    </a>
+                                                    <PlId>Id: {user.id}</PlId>
+                                                    <Button1 onClick={() => {
                                                     localStorage.setItem("challengeID", user.id);
                                                     this.setState({challengingPUT: user.id});
                                                     this.challengeUser();
@@ -350,29 +372,27 @@ class Game extends React.Component {
                                                     console.log(localStorage.getItem("challengeID") + " local")
 
                                                 }}
-                                                disabled={user.id.toString() === localStorage.getItem("id")}>Challenge
-                                            </button>
-                                            <PlId>Id: {user.id}</PlId>
-                                        </PlContainer>
-                                    </PlayerContainer>
-                                );
-                            })}
-                        </Users>
-                        <Button
-                            width="10%"
-                            onClick={() => {
-                                this.logout();
-                            }}
-                        >
-                            Logout
-                        </Button>
+                                                                                       disabled={(user.id.toString() === localStorage.getItem("id")) || localStorage.getItem("challengeID") === user.id.toString()}>Challenge</Button1>
+                                                </PlContainer></div>
+                                        </PlayerContainer>
+                                    );
+                                })}
+                            </Users>
+                            <Button
+                                width="10%"
+                                onClick={() => {
+                                    this.logout();
+                                }}
+                            >
+                                Logout
+                            </Button>
 
-                    </div>
+                        </div>
 
-                )}
+                    )}
 
 
-            </Container> </div>
+                </Container></div>
 
 
         );

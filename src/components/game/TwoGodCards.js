@@ -268,7 +268,7 @@ class TwoGodCards extends React.Component {
                             this.props.history.push("/newboard")
                         }
                         if(res.status === "CHOSING_GAME_MODE"){
-                            this.props.history.push("/test")
+                            this.props.history.push("/gameMode")
                         }
                         if(res.status === "CHOSING_GODCARDS"){
                             this.props.history.push("/test")

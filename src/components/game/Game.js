@@ -212,7 +212,7 @@ class Game extends React.Component {
                             this.setState({
                                 isShowing: false
                             });
-                            this.props.history.push("/test");
+                            this.props.history.push("/gameMode");
                         }
                         break;
 
@@ -314,14 +314,14 @@ class Game extends React.Component {
 
 
                 <Modal
-                    className="modal"
+                    className="modal1"
                     show={this.state.isShowing}
                     close={this.closeModalHandler}
 
                     accept={this.acceptWithModal}>
                     User with ID: {this.state.gettingChallengedBy} challenged you!
                 </Modal>
-                <button className="open-modal-btn" onClick={this.openModalHandler}>Open Modal</button>
+                <button className="open-modal-btn1" onClick={this.openModalHandler}>Open Modal</button>
 
             <Container>
 

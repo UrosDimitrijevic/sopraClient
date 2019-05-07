@@ -7,7 +7,8 @@ import "../../GodCards/img_text.css";
 import data from "../../GodCards/data";
 import Card from '../../GodCards/Card';
 import {Button} from "../../views/design/Button";
-import GameBoardStatus, {getGameStatus} from "./getGameStatus"
+import Bob from "../../GodCards/Bob.jpg"
+import Zeus from "../../GodCards/Zeus.PNG";
 
 
 const FormContainer = styled.div`
@@ -19,7 +20,7 @@ const FormContainer = styled.div`
   justify-content: center;
 `;
 
-class ChooseGodCard extends React.Component {
+class ChooseGameMode extends React.Component {
 
     constructor() {
         super();
@@ -32,26 +33,10 @@ class ChooseGodCard extends React.Component {
             firstID: null,
             secondID: null,
             starting: false,
-            GodCard1: null,
-            GodCard2: null,
-            properties: data.properties,
-            property: data.properties[0]
+
         };
     }
 
-    nextProperty = () => {
-        const newIndex = this.state.property.index + 1;
-        this.setState({
-            property: data.properties[newIndex]
-        })
-    };
-
-    prevProperty = () => {
-        const newIndex = this.state.property.index - 1;
-        this.setState({
-            property: data.properties[newIndex]
-        })
-    };
 
     chooseMode(choice) {
         fetch(`${getDomain()}/game/actions/` + choice, {
@@ -77,84 +62,6 @@ class ChooseGodCard extends React.Component {
 
     }
 
-    chooseGoD = () => {
-        const godIndex = this.state.property.index;
-        if (this.state.GodCard1 === null) {
-            this.setState({
-                GodCard1: godIndex,
-            })
-        } else {
-            this.setState({
-                GodCard2: godIndex,
-            })
-        }
-    };
-    unChooseGoD = () => {
-        const godIndex = this.state.property.index;
-        if (this.state.GodCard1 === godIndex) {
-            this.setState({
-                GodCard1: null
-            })
-        } else if (this.state.GodCard2 === godIndex) {
-            this.setState({
-                GodCard2: null
-            })
-        }
-
-    };
-
-    getActionID() {
-        var actions = this.state.actions;
-        var number1 = this.state.GodCard1 + 1;
-        var number2 = this.state.GodCard2 + 1;
-
-        if (actions.length > 40) {
-            for (let i = 0; i < actions.length; i++) {
-                if ((actions[i].god1.godnumber === number1 || actions[i].god1.godnumber === number2) && (actions[i].god2.godnumber === number1 || actions[i].god2.godnumber === number2)) {
-                    localStorage.setItem("actionID", actions[i].id);
-                    console.log(localStorage.getItem("actionID"));
-
-                    break;
-                }
-            }
-        }
-        if (localStorage.getItem("actionID")) {
-            this.choose2GodCards();
-        }
-    }
-
-    choose2GodCards() {             // somewhat implemented
-        fetch(`${getDomain()}/game/actions/` + localStorage.getItem("actionID"), {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            }
-
-        })
-            .then(response => {
-                if ((response.status === 201)) { //201
-                    console.log(`ERROR: Username already existing  ${this.state.username} with CONFLICT`);
-
-
-                } else {
-
-                    localStorage.removeItem("actionID");
-                    //push this.props.history("link")
-                    clearInterval(this.timer);
-
-                }
-            })
-
-            .catch(err => {
-                if (err.message.match(/Failed to fetch/)) {
-                    alert("The server  cannot be reached. Did you start it?");
-                } else {
-                    alert(`Something  went wrong during the registration: ${err.message}`);
-                    window.location.reload();
-                }
-            })
-    }
-
 
     componentDidMount() {
         fetch(`${getDomain()}/game/Board/` + localStorage.getItem("id"), {
@@ -175,58 +82,17 @@ class ChooseGodCard extends React.Component {
     }
 
     render() {
-        const {property} = this.state;
+
         return (
 
             <BaseContainer>
                 <FormContainer>
-                    <p className={"status"}>{this.state.status}</p>
-                    <button disabled={this.state.actions.length !== 2}
-                            onClick={() => this.chooseMode(this.state.secondID)}>Default Mode
-                    </button>
-                    <button disabled={this.state.actions.length !== 2}
-                            onClick={() => this.chooseMode(this.state.firstID)}>GodMode
-                    </button>
-                    <Card property={property}/>
-                    <div>
-                        <button className={"myButton"}
-                                onClick={() => this.prevProperty()}
-                                disabled={property.index === 0}
-                        >Prev
-                        </button>
-                        <button className={"myButton"}
-                                onClick={() => this.nextProperty()}
-                                disabled={property.index === data.properties.length - 1}
-                        >Next
-                        </button>
+                    <p className={"status2"}>{this.state.status}<br/>Choose a Mode! <br/> Play as a Mortal or as a God?</p>
+
+                    <div className={"row2"}>
+                        <button  className={"columnMode"}><img  alt={"Bob"} src={Bob} height={450} width={250} onClick={() => this.chooseMode(this.state.secondID)} /></button>
+                        <button className={"columnMode"}><img alt={"Bob"} src={Zeus} height={450} width={250}  onClick={() => this.chooseMode(this.state.firstID)}/></button>
                     </div>
-                    <br/>
-
-                    <div>
-                        <button className={"myButton"}
-                                onClick={() => this.chooseGoD()
-                                }
-                                disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null) || this.state.actions < 2}
-                        >Choose
-                        </button>
-                        <button className={"myButton"}
-                                onClick={() => this.unChooseGoD()}
-                                disabled={property.index !== this.state.GodCard1 && property.index !== this.state.GodCard2}
-                        >Unchoose
-                        </button>
-
-                    </div>
-                    <Button
-                        disabled={this.state.GodCard1 === null || this.state.GodCard2 === null || this.state.actions.length < 1}
-                        onClick={() => {
-                            this.getActionID();
-                            console.log(this.state.actions);
-
-
-                        }}
-
-                    > Accept</Button>
-
                 </FormContainer>
             </BaseContainer>
         );
@@ -349,4 +215,4 @@ class ChooseGodCard extends React.Component {
  * You can get access to the history object's properties via the withRouter.
  * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
  */
-export default withRouter(ChooseGodCard);
+export default withRouter(ChooseGameMode);

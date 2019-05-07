@@ -778,12 +778,12 @@ class Game extends React.Component {
     };
 
     renderModal(){return(
-        <div >{ this.state.isShowing ? <div className="back-drop"></div> : null }
+        <div >{ this.state.isShowing ? <div className="back-drop2"></div> : null }
 
 
 
             <Modal
-                className="modal"
+                className="modal2"
                 show={this.state.isShowing}
                 close={this.closeModalHandler}
                 status={this.state.status}
@@ -791,7 +791,7 @@ class Game extends React.Component {
             >
                 GameStatus:
             </Modal>
-            <button className="open-modal-btn" onClick={this.openModalHandler}>Open Modal</button></div>)
+            <button className="open-modal-btn2" onClick={this.openModalHandler}>Open Modal</button></div>)
     }
 
     constructor() {

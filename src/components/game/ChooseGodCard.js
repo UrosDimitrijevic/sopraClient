@@ -113,7 +113,8 @@ class ChooseGodCard extends React.Component {
                 if ((actions[i].god1.godnumber === number1 || actions[i].god1.godnumber === number2) && (actions[i].god2.godnumber === number1 || actions[i].god2.godnumber === number2)) {
                     localStorage.setItem("actionID", actions[i].id);
                     console.log(localStorage.getItem("actionID"));
-
+                    localStorage.setItem("god1", number1);
+                    localStorage.setItem("god2", number2);
                     break;
                 }
             }
@@ -140,7 +141,7 @@ class ChooseGodCard extends React.Component {
 
                     localStorage.removeItem("actionID");
                     //push this.props.history("link")
-                    clearInterval(this.timer);
+
 
                 }
             })
@@ -173,6 +174,12 @@ class ChooseGodCard extends React.Component {
         this.getActions();
         this.timer = setInterval(() => this.getActions(), 5000);
     }
+    /*<button disabled={this.state.actions.length !== 2}
+                            onClick={() => this.chooseMode(this.state.secondID)}>Default Mode
+                    </button>
+                    <button disabled={this.state.actions.length !== 2}
+                            onClick={() => this.chooseMode(this.state.firstID)}>GodMode
+                    </button> */
 
     render() {
         const {property} = this.state;
@@ -181,12 +188,7 @@ class ChooseGodCard extends React.Component {
             <BaseContainer>
                 <FormContainer>
                     <p className={"status"}>{this.state.status}</p>
-                    <button disabled={this.state.actions.length !== 2}
-                            onClick={() => this.chooseMode(this.state.secondID)}>Default Mode
-                    </button>
-                    <button disabled={this.state.actions.length !== 2}
-                            onClick={() => this.chooseMode(this.state.firstID)}>GodMode
-                    </button>
+
                     <Card property={property}/>
                     <div>
                         <button className={"myButton"}

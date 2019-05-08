@@ -319,7 +319,7 @@ class Game extends React.Component {
                     close={this.closeModalHandler}
 
                     accept={this.acceptWithModal}>
-                    User with ID: {this.state.gettingChallengedBy} challenged you!
+                    User with ID: {this.state.gettingChallengedBy} challenged yodfu!
                 </Modal>
                 <button className="open-modal-btn" onClick={this.openModalHandler}>Open Modal</button>
 

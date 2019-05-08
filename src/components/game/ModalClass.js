@@ -5,7 +5,7 @@ import "./ModalChallenge.css";
 const modal = (props) => {
     return (
         <div>
-            <div className="modal-wrapper"
+            <div className="modal-wrapper1"
                  style={{
                      transform: props.show ? 'translateY(0vh)' : 'translateY(-100vh)',
                      opacity: props.show ? '1' : '0'

@@ -227,8 +227,16 @@ class TwoGodCards extends React.Component {
                             actions: res,
                             GodCard1: res[0].myGod.godnumber,
                             GodCard2: res[1].myGod.godnumber,
+                            property1:  data.properties[res[0].myGod.godnumber],
+                            property2: data.properties[res[1].myGod.godnumber],
                             property: data.properties[res[0].myGod.godnumber],
                         })}
+                        if(res.length===0){
+                            this.setState({
+                                property1: data.properties[parseInt(localStorage.getItem("god1"))],
+                                property2: data.properties[parseInt(localStorage.getItem("god2"))]
+                            })
+                        }
                         break;
 
                     case 500:
@@ -268,7 +276,7 @@ class TwoGodCards extends React.Component {
                             this.props.history.push("/newboard")
                         }
                         if(res.status === "CHOSING_GAME_MODE"){
-                            this.props.history.push("/test")
+                            this.props.history.push("/gameMode")
                         }
                         if(res.status === "CHOSING_GODCARDS"){
                             this.props.history.push("/test")

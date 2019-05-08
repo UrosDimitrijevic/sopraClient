@@ -11,6 +11,7 @@ import ChooseGodCard from "../../game/ChooseGodCard";
 import GameBoard from "../../Board/GameBoard";
 import NewBoard from "../../Board/newBoard";
 import TwoGodCards from "../../game/TwoGodCards";
+import ChooseGameMode from "../../game/ChooseGameMode";
 
 
 /**
@@ -67,6 +68,13 @@ class AppRouter extends React.Component {
                   </GameGuard>
                ) }
             />
+              <Route
+                  path="/gameMode"
+                  exact
+                  render={() => (
+                      <ChooseGameMode/>
+                  )}
+              />
             <Route
                 path="/test"
                 exact

@@ -24,7 +24,6 @@ import data from "../../GodCards/data";
 import Modal from "./WonLostModal";
 
 
-
 class Square extends React.Component {
     constructor(props) {
         super(props);
@@ -79,24 +78,24 @@ class Square extends React.Component {
         }
     }
 
-    fieldWithAction(level, dome, squareBG) {
+    fieldWithAction(level, dome, Figure, squareBG) {
         if (level === 0 && dome === false) {
             return (
                 <button className={squareBG}
-                        onClick={this.onChangeLink.bind(this)}>
+                        onClick={this.onChangeLink.bind(this)}>{this.displayFigure(Figure)}
                 </button>
             );
         } else if (level === 1) {
             return (
-                <button className={squareBG} onClick={this.onChangeLink.bind(this)}>{this.level1field(dome)}
+                <button className={squareBG} onClick={this.onChangeLink.bind(this)}>{this.level1field(dome, Figure)}
                 </button>);
         } else if (level === 2) {
             return (
-                <button className={squareBG} onClick={this.onChangeLink.bind(this)}>{this.level2field(dome)}
+                <button className={squareBG} onClick={this.onChangeLink.bind(this)}>{this.level2field(dome, Figure)}
                 </button>);
         } else if (level === 3) {
             return (
-                <button className={squareBG} onClick={this.onChangeLink.bind(this)}>{this.level3field(dome)}
+                <button className={squareBG} onClick={this.onChangeLink.bind(this)}>{this.level3field(dome, Figure)}
                 </button>);
         } else {
             return (
@@ -191,8 +190,8 @@ class Square extends React.Component {
         localStorage.setItem("refID", refID);
         localStorage.setItem("actionID", this.props.action.id);
         this.props.changeLink(this.state.homeLink);
-        console.log(localStorage.getItem("actionID"));
-        console.log(localStorage.getItem("refID"));
+        console.log("actionID: " + localStorage.getItem("actionID"));
+        console.log("squareID: " + localStorage.getItem("refID"));
 
     }
 
@@ -243,7 +242,7 @@ class Square extends React.Component {
             return (this.fieldNoAction(this.props.level, this.props.dome, this.props.Figure, this.state.bgColor)
             );
         } else if (this.props.action !== null) {
-            return (this.fieldWithAction(this.props.level, this.props.dome, this.state.actionBG)
+            return (this.fieldWithAction(this.props.level, this.props.dome, this.props.Figure, this.state.actionBG)
             );
         } else {
             return (
@@ -267,6 +266,10 @@ class Board extends React.Component {
             getActions: null,
             actionsFigurine1: [],
             actionsFigurine2: [],
+            playWithGodCards: false,
+            actionsGod1: [],
+            actionsGod2: [],
+            actionsGodBuild: [],
         }
     }
 
@@ -278,31 +281,70 @@ class Board extends React.Component {
         this.setState({actions: this.state.getActions})
     }
 
-    divideActions(actions) {
+    divideActions(actions, godPower) {
         var Figurine1 = [];
         var Figurine2 = [];
+        var GodFig1 = [];
+        var GodFig2 = [];
+        var GodBuild = [];
         var buildingActions = [];
-        if (actions) {
-            for (let i = 0; i < actions.length; i++) {
-                if (actions[i].figurineNumber === 1) {
-                    Figurine1.push(actions[i])
-                } else if (actions[i].figurineNumber === 2) {
-                    Figurine2.push(actions[i])
-                } else {
-                    buildingActions.push(actions[i])
+        if (this.props.playWithGodCards === false) {
+            if (actions) {
+                for (let i = 0; i < actions.length; i++) {
+                    if (actions[i].figurineNumber === 1) {
+                        Figurine1.push(actions[i])
+                    } else if (actions[i].figurineNumber === 2) {
+                        Figurine2.push(actions[i])
+                    } else {
+                        buildingActions.push(actions[i])
+                    }
                 }
-            }
 
+            }
+        } else {
+            if (actions) {
+                for (let i = 0; i < actions.length; i++) {
+                    if (actions[i].useGod === false) {
+                        if (actions[i].figurineNumber === 1) {
+                            Figurine1.push(actions[i])
+                        } else if (actions[i].figurineNumber === 2) {
+                            Figurine2.push(actions[i])
+                        } else {
+                            buildingActions.push(actions[i])
+                        }
+                    } else if (actions[i].useGod === true) {
+                        if (actions[i].figurineNumber === 1) {
+                            GodFig1.push(actions[i])
+                        } else if (actions[i].figurineNumber === 2) {
+                            GodFig2.push(actions[i])
+                        } else {
+                            GodBuild.push(actions[i])
+                        }
+
+                    } else if(actions[i].name === "Building"){
+                        buildingActions.push(actions[i]);
+                    }
+                }
+
+            }
         }
-        this.setState({actionsFigurine1: Figurine1, actionsFigurine2: Figurine2, actions: buildingActions})
+        this.setState({actionsFigurine1: Figurine1, actionsFigurine2: Figurine2, actions: buildingActions, actionsGod1: GodFig1, actionsGod2: GodFig2, actionsGodBuild: GodBuild})
     }
 
     Figurine1() {
-        this.setState({actions: this.state.actionsFigurine1})
+        if (this.props.useGodPower===false){
+        this.setState({actions: this.state.actionsFigurine1})}
+        else if(this.props.useGodPower===true){
+            this.setState({actions: this.state.actionsGod1})
+        }
     }
 
     Figurine2() {
-        this.setState({actions: this.state.actionsFigurine2})
+        if (this.props.useGodPower===false){
+            this.setState({actions: this.state.actionsFigurine2})}
+        else if(this.props.useGodPower===true){
+            this.setState({actions: this.state.actionsGod2})
+        }
     }
 
 
@@ -380,7 +422,9 @@ class Board extends React.Component {
     }
 
     cancel() {
+        var number = localStorage.getItem("refID");
         localStorage.removeItem("clicked");
+        this.actionsFromSquare("SquareID" + number);
         this.setState({clicked: false, actions: this.state.getActions});
 
     }
@@ -557,7 +601,7 @@ class Game extends React.Component {
         this.setState({showMenu: true}, () => {
             document.addEventListener('click', this.closeMenu);
         });
-        this.actionsFromBoard();
+        //this.actionsFromBoard();
     }
 
     closeMenu(event) {
@@ -571,7 +615,12 @@ class Game extends React.Component {
         }
     }
 
-    actionsFromBoard = () => {
+    actionsFromBoardDefault = () => {
+        this.setState({useGodPower: false});
+        this.refs.board.clickme3();
+    };
+    actionsFromBoardGod = () => {
+        this.setState({useGodPower: true});
         this.refs.board.clickme3();
     };
 
@@ -579,7 +628,7 @@ class Game extends React.Component {
         if (this.state.playWithGodCards) {
             if (Player.myUserID.toString() === localStorage.getItem("id")) {
                 return (<div>
-                    <button className={"myButton"} onClick={this.showMenu}>
+                    <button className={"myButton"} disabled={!(this.state.currentPlayer.toString()=== localStorage.getItem("id"))} onClick={this.showMenu}>
                         Action Options
                     </button>
 
@@ -592,9 +641,9 @@ class Game extends React.Component {
                                         this.dropdownMenu = element;
                                     }}
                                 >
-                                    <button className={"myButton"} onClick={this.actionsFromBoard}> Default Actions</button>
+                                    <button className={"myButton"} onClick={this.actionsFromBoardDefault}> Default Actions</button>
                                     <br/>
-                                    <button className={"myButton"} onClick={this.actionsFromBoard}> GodPower Actions
+                                    <button className={"myButton"} onClick={this.actionsFromBoardGod}> GodPower Actions
                                     </button>
 
                                 </div>
@@ -639,6 +688,8 @@ class Game extends React.Component {
                                Player1={this.state.startingPlayer}
                                Player2={this.state.nonStartingPlayer}
                                currentPlayer={this.state.currentPlayer}
+                               playWithGodCards={this.state.playWithGodCards}
+                               useGodPower={this.state.useGodPower}
                                ref="board"
                         />
                     </div>
@@ -685,7 +736,7 @@ class Game extends React.Component {
                                 startingPlayer: res.startingPlayer,
                             }
                         );
-                        if(res.status === "STARTINGPLAYER_WON" || res.status === "NONSTARTINGPLAYER_WON"){
+                        if (res.status === "STARTINGPLAYER_WON" || res.status === "NONSTARTINGPLAYER_WON") {
                             this.setState({
                                 isShowing: true
                             });
@@ -763,40 +814,45 @@ class Game extends React.Component {
                 <p>{data.properties[Player.assignedGod.godnumber - 1].text}</p></button>)
         }
     }
+
     openModalHandler = () => {
         this.setState({
             isShowing: true
         });
     };
-    testDashboard(){
+
+    testDashboard() {
         this.props.history.push("/game")
     }
+
     goBackToDashboard = () => {
         localStorage.removeItem("boardID");
         console.log("redirect");
         this.testDashboard();
     };
 
-    renderModal(){return(
-        <div >{ this.state.isShowing ? <div className="back-drop"></div> : null }
+    renderModal() {
+        return (
+            <div>{this.state.isShowing ? <div className="back-drop2"></div> : null}
 
 
-
-            <Modal
-                className="modal"
-                show={this.state.isShowing}
-                close={this.closeModalHandler}
-                status={this.state.status}
-                accept={this.goBackToDashboard}
-            >
-                GameStatus:
-            </Modal>
-            <button className="open-modal-btn" onClick={this.openModalHandler}>Open Modal</button></div>)
+                <Modal
+                    className="modal2"
+                    show={this.state.isShowing}
+                    close={this.closeModalHandler}
+                    status={this.state.status}
+                    accept={this.goBackToDashboard}
+                >
+                    GameStatus:
+                </Modal>
+                <button className="open-modal-btn2" onClick={this.openModalHandler}>Open Modal</button>
+            </div>)
     }
 
     constructor() {
         super();
         this.state = {
+            useGodPower: false,
             isShowing: false,
             "showGodCard": true,
             "showGodCard2": true,

@@ -19,8 +19,8 @@ ol, ul {
 }
 
 .status {
-    margin-bottom: 10px;
-    color: red;
+    margin-bottom: 12px;
+    color: white;
     text-align: center;
     margin-left: 20px;
 }
@@ -64,6 +64,7 @@ ol, ul {
 
 }
 .squareorange{
+    position: relative;
     background: orange;
     border: 2px solid white;
     float: left;

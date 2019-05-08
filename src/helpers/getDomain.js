@@ -1,7 +1,7 @@
 import { isProduction } from "./isProduction";
 
 /**
- * This helper function return the current domain of the API. If is production, the Production Heroku URL will returned.
+ * This helper function return the current domain of the API. Test Jira If is production, the Production Heroku URL will returned.
  * Otherwise, the link localhost:8080 will be returned (Spring server default port)
  * @returns {string}
  */

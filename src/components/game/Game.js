@@ -26,7 +26,7 @@ const Button1 = styled.button`
   border: none;
   border-radius: 20px;
   cursor: ${props => (props.disabled ? "default" : "pointer")};
-  opacity: ${props => (props.disabled ? 0.4 : 1)};
+  opacity: ${props => (props.disabled ? 0.1 : 1)};
   background: rgb(16, 89, 255);
   transition: all 0.3s ease;
 `;
@@ -100,7 +100,7 @@ class Game extends React.Component {
             isShowing: false
         });
         declineChallenge();
-        this.timer = setInterval(() => this.ChallengeStatus(), 10000);
+        this.timer = setInterval(() => this.ChallengeStatus(), 1000);
     };
 
     confirm123() {
@@ -143,6 +143,7 @@ class Game extends React.Component {
                 if (err.message.match(/Failed to fetch/)) {
                     alert("The server cannot be reached. Did you start it?");
                 }
+
             });
     }
 
@@ -219,7 +220,7 @@ class Game extends React.Component {
                 if (resStatus === 404 || resStatus === 400) {
                     console.log(res);
                     clearInterval(this.timer);
-                    this.timer = setInterval(() => this.getGameStatus(), 2000);
+                    this.timer = setInterval(() => this.getGameStatus(), 1000);
                 } else {
                     return res.json();
                 }
@@ -309,7 +310,7 @@ class Game extends React.Component {
         if (localStorage.getItem("id") !== null) {
             this.ChallengeStatus();
             console.log(this.state.gettingChallengedBy + " getting challenged by on mount");
-            this.timer = setInterval(() => this.ChallengeStatus(), 10000);
+            this.timer = setInterval(() => this.ChallengeStatus(), 1000);
         }
     }
 
@@ -324,7 +325,7 @@ class Game extends React.Component {
     acceptWithModal = () => {
         this.accept();
         clearInterval(this.timer);
-        this.timer = setInterval(() => this.getGameStatus(), 5000);
+        this.timer = setInterval(() => this.getGameStatus(), 1000);
 
         //this.props.history.push('/test');
     };

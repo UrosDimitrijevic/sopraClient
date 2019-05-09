@@ -19,6 +19,13 @@
     text-align: center;
     margin-left: 20px;
 }
+.spinner {
+    margin-bottom: 14px;
+    color: white;
+    text-align: center;
+    margin-right: 10px;
+
+}
 .home2 p {
     font-family: 'cabinRegular', arial, sans-serif, verdana;
     color: #000000;
@@ -79,10 +86,16 @@
 }
 .columnMode {
     float: left;
-    width: 50%;
+    margin-left: 15%;
     background-color: inherit;
     cursor: pointer;
     color: inherit;
+    border: none;
+    width: 28%;
+}
+.columnMode:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .row1:after {
@@ -156,7 +169,7 @@
     text-decoration:none;
     text-shadow:0px 1px 0px #1570cd;
 }
-.myButton:hover {
+.myButton:hover:enabled {
     background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #1e62d0), color-stop(1, #3d94f6));
     background:-moz-linear-gradient(top, #1e62d0 5%, #3d94f6 100%);
     background:-webkit-linear-gradient(top, #1e62d0 5%, #3d94f6 100%);
@@ -171,6 +184,7 @@
     top:1px;
 }
 .myButton:disabled{
-    opacity: 0.6;
+    opacity: 0.1;
+    cursor: default;
 }
 

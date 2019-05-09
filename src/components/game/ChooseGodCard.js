@@ -8,6 +8,7 @@ import data from "../../GodCards/data";
 import Card from '../../GodCards/Card';
 import {Button} from "../../views/design/Button";
 import GameBoardStatus, {getGameStatus} from "./getGameStatus"
+import {Spinner} from "../../views/design/Spinner";
 
 
 const FormContainer = styled.div`
@@ -18,6 +19,28 @@ const FormContainer = styled.div`
   min-height: 300px;
   justify-content: center;
 `;
+const Button2 = styled.button`
+  &:hover {
+    transform: translateY(-2px);
+  }
+  float: right;
+  padding: 6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+  width: ${props => props.width || null};
+  height: 30px;
+  border: none;
+  margin-top: 5px;
+  border-radius: 20px;
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
+  opacity: ${props => (props.disabled ? 0.4 : 1)};
+  background: rgb(16, 89, 255);
+  transition: all 0.3s ease;
+`;
+
 
 class ChooseGodCard extends React.Component {
 
@@ -180,6 +203,14 @@ class ChooseGodCard extends React.Component {
                     <button disabled={this.state.actions.length !== 2}
                             onClick={() => this.chooseMode(this.state.firstID)}>GodMode
                     </button> */
+    giveStatus(){
+        if(this.state.actions.length<1){
+            return <div className={"spinner"}><Spinner/></div>
+        }
+        else{
+            return <p className={"status2"}>{this.state.status}</p>
+        }
+    }
 
     render() {
         const {property} = this.state;
@@ -187,7 +218,7 @@ class ChooseGodCard extends React.Component {
 
             <BaseContainer>
                 <FormContainer>
-                    <p className={"status"}>{this.state.status}</p>
+                    {this.giveStatus()}
 
                     <Card property={property}/>
                     <div>
@@ -218,7 +249,7 @@ class ChooseGodCard extends React.Component {
                         </button>
 
                     </div>
-                    <Button
+                    <Button2
                         disabled={this.state.GodCard1 === null || this.state.GodCard2 === null || this.state.actions.length < 1}
                         onClick={() => {
                             this.getActionID();
@@ -227,7 +258,7 @@ class ChooseGodCard extends React.Component {
 
                         }}
 
-                    > Accept</Button>
+                    > Accept</Button2>
 
                 </FormContainer>
             </BaseContainer>

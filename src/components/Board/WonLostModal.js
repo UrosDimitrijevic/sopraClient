@@ -3,6 +3,9 @@ import "./ModalWonLost.css";
 
 
 const WonLostModal = (props) => {
+    var result = props.result;
+    var header = "modal-header2"+result;
+    var footer = "modal-footer2"+result;
     return (
         <div>
             <div className="modal-wrapper2"
@@ -10,9 +13,8 @@ const WonLostModal = (props) => {
                      transform: props.show ? 'translateY(0vh)' : 'translateY(100vh)',
                      opacity: props.show ? '1' : '0'
                  }}>
-                <div className="modal-header2">
-                    <h3>You lost/won!</h3>
-                    <span className="close-modal-btn2" onClick={props.close}>×</span>
+                <div className={header}>
+                    <h3>You {result} !</h3>
                 </div>
                 <div className="modal-body2">
                     <p>
@@ -22,9 +24,10 @@ const WonLostModal = (props) => {
                         {props.status}
                     </p>
                 </div>
-                <div className="modal-footer2">
-                    <button className="btn-cancel2" onClick={props.close}>Decline</button>
-                    <button className="btn-continue2" onClick={props.accept} >Accept</button>
+                <div className={footer}>
+
+                    <button className="btn-dashboard2" onClick={props.endGame}>Back To Dashboard</button>
+
                 </div>
             </div>
         </div>
@@ -32,3 +35,5 @@ const WonLostModal = (props) => {
 };
 
 export default WonLostModal;
+
+//<span className="close-modal-btn2" onClick={props.close}>×</span>                            <button className="btn-continue2" onClick={props.accept} >Accept</button>             <button className="btn-cancel2" onClick={props.close}>Decline</button>

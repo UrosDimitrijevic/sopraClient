@@ -9,6 +9,7 @@ import Card from '../../GodCards/Card';
 import {Button} from "../../views/design/Button";
 import Bob from "../../GodCards/Bob.jpg"
 import Zeus from "../../GodCards/Zeus.PNG";
+import {Spinner} from "../../views/design/Spinner";
 
 
 const FormContainer = styled.div`
@@ -80,6 +81,16 @@ class ChooseGameMode extends React.Component {
         this.getActions();
         this.timer = setInterval(() => this.getActions(), 5000);
     }
+    displayOptions(){
+        if (this.state.actions.length<1){
+            return <div className={"status2"}><Spinner/>
+                <div className={"status2"}>Waiting for Starting Player to choose mode</div>
+            </div>
+        }
+        else{
+            return <p className={"status2"}>{this.state.status}<br/>Choose a Mode! <br/> Play as a Mortal or as a God?</p>
+        }
+    }
 
     render() {
 
@@ -87,11 +98,11 @@ class ChooseGameMode extends React.Component {
 
             <BaseContainer>
                 <FormContainer>
-                    <p className={"status2"}>{this.state.status}<br/>Choose a Mode! <br/> Play as a Mortal or as a God?</p>
+                    {this.displayOptions()}
 
                     <div className={"row2"}>
-                        <button  className={"columnMode"}><img  alt={"Bob"} src={Bob} height={450} width={250} onClick={() => this.chooseMode(this.state.secondID)} /></button>
-                        <button className={"columnMode"}><img alt={"Bob"} src={Zeus} height={450} width={250}  onClick={() => this.chooseMode(this.state.firstID)}/></button>
+                        <button  className={"columnMode"} disabled={this.state.actions.length<1} onClick={() => this.chooseMode(this.state.secondID)}><img  alt={"Bob"} src={Bob} height={350} width={250}  /></button>
+                        <button className={"columnMode"}  disabled={this.state.actions.length<1}  onClick={() => this.chooseMode(this.state.firstID)}><img alt={"Bob"} src={Zeus} height={350} width={250}  /></button>
                     </div>
                 </FormContainer>
             </BaseContainer>

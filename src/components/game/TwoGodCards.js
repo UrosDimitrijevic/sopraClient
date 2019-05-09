@@ -32,10 +32,12 @@ class TwoGodCards extends React.Component {
             starting: false,
             GodCard1: 2,
             GodCard2: 1,
-            property1: data.properties[2],
-            property2: data.properties[3],
+            property1: data.properties[5],
+            property2: data.properties[6],
             properties: data.properties,
-            property: data.properties[2]
+            property: data.properties[2],
+            pick1: false,
+            pick2: false,
         };
     }
 
@@ -150,6 +152,7 @@ class TwoGodCards extends React.Component {
     }
     firstCard(){
         if(this.state.actions.length===2){
+            this.setState({pick1: true, pick2: false});
             let actionsID = this.state.actions[0].id;
             localStorage.setItem("actionID", actionsID);
             console.log(localStorage.getItem("actionID"));
@@ -158,6 +161,7 @@ class TwoGodCards extends React.Component {
     }
     secondCard(){
         if(this.state.actions.length===2){
+            this.setState({pick1: false, pick2: true});
             let actionsID = this.state.actions[1].id;
             localStorage.setItem("actionID", actionsID);
             console.log(localStorage.getItem("actionID"));
@@ -180,15 +184,15 @@ class TwoGodCards extends React.Component {
                     <br/>
                     <div className={"row2"} >
                     <div>
-                        <div className={"column2"}> <button
+                        <div className={"column2"}> <button className={"myButton"}
                             onClick={() => this.firstCard()}
-                            disabled={this.state.actions.length<2}
+                            disabled={this.state.actions.length<2 || this.state.pick1}
                             //disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null)}
                         >Choose</button></div>
-                        <div  className={"column2"}><button
+                        <div  className={"column2"}><button className={"myButton"}
                             onClick={() => this.secondCard()}
-                            disabled={this.state.actions.length<2}
-                        >Unchoose</button></div>
+                            disabled={this.state.actions.length<2 || this.state.pick2}
+                        >Choose</button></div>
 
                     </div></div><br/>
                     <div className={"row3"} ><Button size={100}
@@ -227,14 +231,14 @@ class TwoGodCards extends React.Component {
                             actions: res,
                             GodCard1: res[0].myGod.godnumber,
                             GodCard2: res[1].myGod.godnumber,
-                            property1:  data.properties[res[0].myGod.godnumber],
-                            property2: data.properties[res[1].myGod.godnumber],
+                            property1:  data.properties[res[0].myGod.godnumber-1],
+                            property2: data.properties[res[1].myGod.godnumber-1],
                             property: data.properties[res[0].myGod.godnumber],
                         })}
                         if(res.length===0){
                             this.setState({
-                                property1: data.properties[parseInt(localStorage.getItem("god1"))],
-                                property2: data.properties[parseInt(localStorage.getItem("god2"))]
+                                property1: data.properties[parseInt(localStorage.getItem("god1"))-1],
+                                property2: data.properties[parseInt(localStorage.getItem("god2"))-1]
                             })
                         }
                         break;

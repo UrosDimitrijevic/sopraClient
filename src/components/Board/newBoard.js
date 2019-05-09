@@ -263,7 +263,7 @@ class Board extends React.Component {
             actions: [],
             homeLink: "home",
             clicked: false,
-            getActions: null,
+            getActionss: null,
             actionsFigurine1: [],
             actionsFigurine2: [],
             playWithGodCards: false,
@@ -278,7 +278,7 @@ class Board extends React.Component {
     };
 
     containActions() {
-        this.setState({actions: this.state.getActions})
+        this.setState({actions: this.state.getActionss})
     }
 
     divideActions(actions, godPower) {
@@ -321,28 +321,39 @@ class Board extends React.Component {
                             GodBuild.push(actions[i])
                         }
 
-                    } else if(actions[i].name === "Building"){
+                    } else if (actions[i].name === "Building") {
+                        buildingActions.push(actions[i]);
+                    } else if (actions[i].name === "PlaceWorker") {
+                        buildingActions.push(actions[i]);
+                    } else if (actions[i].name === "movingAsArthemis") {
                         buildingActions.push(actions[i]);
                     }
                 }
 
             }
         }
-        this.setState({actionsFigurine1: Figurine1, actionsFigurine2: Figurine2, actions: buildingActions, actionsGod1: GodFig1, actionsGod2: GodFig2, actionsGodBuild: GodBuild})
+        this.setState({
+            actionsFigurine1: Figurine1,
+            actionsFigurine2: Figurine2,
+            actions: buildingActions,
+            actionsGod1: GodFig1,
+            actionsGod2: GodFig2,
+            actionsGodBuild: GodBuild
+        })
     }
 
     Figurine1() {
-        if (this.props.useGodPower===false){
-        this.setState({actions: this.state.actionsFigurine1})}
-        else if(this.props.useGodPower===true){
+        if (this.props.useGodPower === false) {
+            this.setState({actions: this.state.actionsFigurine1})
+        } else if (this.props.useGodPower === true) {
             this.setState({actions: this.state.actionsGod1})
         }
     }
 
     Figurine2() {
-        if (this.props.useGodPower===false){
-            this.setState({actions: this.state.actionsFigurine2})}
-        else if(this.props.useGodPower===true){
+        if (this.props.useGodPower === false) {
+            this.setState({actions: this.state.actionsFigurine2})
+        } else if (this.props.useGodPower === true) {
             this.setState({actions: this.state.actionsGod2})
         }
     }
@@ -368,11 +379,10 @@ class Board extends React.Component {
                 switch (resStatus) {
                     case 200:
                         this.setState({
-                            getActions: res
+                            getActionss: res
                         }, () => {
-                            this.divideActions(this.state.getActions);
+                            this.divideActions(this.state.getActionss);
                         });
-                        console.log("zwölf");
 
                         break;
 
@@ -397,6 +407,9 @@ class Board extends React.Component {
         clearInterval(this.timer2);
     }
 
+    endGameID() {
+        localStorage.setItem("actionID", this.state.getActionss[0].id)
+    }
 
     clickme3() {
         this.getActions();
@@ -605,8 +618,8 @@ class Game extends React.Component {
     }
 
     closeMenu(event) {
-
-        if (!this.dropdownMenu.contains(event.target)) {
+        // !
+        if (this.dropdownMenu.contains(event.target)) {
 
             this.setState({showMenu: false}, () => {
                 document.removeEventListener('click', this.closeMenu);
@@ -615,6 +628,11 @@ class Game extends React.Component {
         }
     }
 
+    endGameFromBoard = () => {
+        this.refs.board.endGameID();
+        this.refs.board.putAction();
+        this.props.history.push("/game");
+    };
     actionsFromBoardDefault = () => {
         this.setState({useGodPower: false});
         this.refs.board.clickme3();
@@ -628,7 +646,9 @@ class Game extends React.Component {
         if (this.state.playWithGodCards) {
             if (Player.myUserID.toString() === localStorage.getItem("id")) {
                 return (<div>
-                    <button className={"myButton"} disabled={!(this.state.currentPlayer.toString()=== localStorage.getItem("id"))} onClick={this.showMenu}>
+                    <button className={"myButton"}
+                            disabled={!(this.state.currentPlayer.toString() === localStorage.getItem("id"))}
+                            onClick={this.showMenu}>
                         Action Options
                     </button>
 
@@ -641,7 +661,8 @@ class Game extends React.Component {
                                         this.dropdownMenu = element;
                                     }}
                                 >
-                                    <button className={"myButton"} onClick={this.actionsFromBoardDefault}> Default Actions</button>
+                                    <button className={"myButton"} onClick={this.actionsFromBoardDefault}> Default Actions
+                                    </button>
                                     <br/>
                                     <button className={"myButton"} onClick={this.actionsFromBoardGod}> GodPower Actions
                                     </button>
@@ -659,7 +680,7 @@ class Game extends React.Component {
                 return (<div>
                     <button className={"myButton"}
                             disabled={localStorage.getItem("id") !== this.state.currentPlayer.toString()}
-                            onClick={this.actionsFromBoard}> DefaultActions
+                            onClick={this.actionsFromBoardDefault}> DefaultActions
                     </button>
                 </div>)
             }
@@ -736,10 +757,22 @@ class Game extends React.Component {
                                 startingPlayer: res.startingPlayer,
                             }
                         );
-                        if (res.status === "STARTINGPLAYER_WON" || res.status === "NONSTARTINGPLAYER_WON") {
+                        if (res.status === "STARTINGPLAYER_WON") {
                             this.setState({
                                 isShowing: true
                             });
+                            if (res.nonStartingPlayer.myUserID.toString() === localStorage.getItem("id")) {
+                                this.setState({result: "lost"})
+                            }
+                            return this.actionsFromBoardDefault;
+                        } else if (res.status === "NONSTARTINGPLAYER_WON") {
+                            this.setState({
+                                isShowing: true
+                            });
+                            if (res.startingPlayer.myUserID.toString() === localStorage.getItem("id")) {
+                                this.setState({result: "lost"})
+                            }
+                            this.actionsFromBoardDefault();
                         }
                         break;
 
@@ -763,8 +796,13 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
-        // this.getGameStatus();
+        clearInterval(this.timer);
+        this.getGameStatus();
+        this.timer = setInterval(() => this.getGameStatus(), 100);
+    }
 
+    componentWillUnmount() {
+        clearInterval(this.timer);
     }
 
     clickMe() {
@@ -842,6 +880,8 @@ class Game extends React.Component {
                     close={this.closeModalHandler}
                     status={this.state.status}
                     accept={this.goBackToDashboard}
+                    endGame={this.endGameFromBoard}
+                    result={this.state.result}
                 >
                     GameStatus:
                 </Modal>
@@ -852,6 +892,8 @@ class Game extends React.Component {
     constructor() {
         super();
         this.state = {
+            result: "won",
+            isStartingPlayer: false,
             useGodPower: false,
             isShowing: false,
             "showGodCard": true,

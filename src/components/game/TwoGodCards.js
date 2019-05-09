@@ -148,7 +148,7 @@ class TwoGodCards extends React.Component {
             });
         this.getActions();
         this.getGameStatus();
-        this.timer = setInterval(() => this.getGameStatus(), 5000);
+        this.timer = setInterval(() => this.getGameStatus(), 1000);
     }
     firstCard(){
         if(this.state.actions.length===2){

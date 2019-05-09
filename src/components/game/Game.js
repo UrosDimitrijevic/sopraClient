@@ -74,7 +74,7 @@ const PlId = styled.div`
   margin-right: 10px;
   font-weight: bold;
 `;
-
+const timeInterval = 100;
 
 class Game extends React.Component {
     constructor() {
@@ -100,7 +100,7 @@ class Game extends React.Component {
             isShowing: false
         });
         declineChallenge();
-        this.timer = setInterval(() => this.ChallengeStatus(), 1000);
+        this.timer = setInterval(() => this.ChallengeStatus(), timeInterval);
     };
 
     confirm123() {
@@ -220,7 +220,7 @@ class Game extends React.Component {
                 if (resStatus === 404 || resStatus === 400) {
                     console.log(res);
                     clearInterval(this.timer);
-                    this.timer = setInterval(() => this.getGameStatus(), 1000);
+                    this.timer = setInterval(() => this.getGameStatus(), timeInterval);
                 } else {
                     return res.json();
                 }
@@ -279,6 +279,7 @@ class Game extends React.Component {
             });
         this.props.history.push("/login");
         localStorage.clear();
+        this.timer =null;
         clearInterval(this.timer);
     }
 
@@ -310,7 +311,7 @@ class Game extends React.Component {
         if (localStorage.getItem("id") !== null) {
             this.ChallengeStatus();
             console.log(this.state.gettingChallengedBy + " getting challenged by on mount");
-            this.timer = setInterval(() => this.ChallengeStatus(), 1000);
+            this.timer = setInterval(() => this.ChallengeStatus(), timeInterval);
         }
     }
 
@@ -325,7 +326,7 @@ class Game extends React.Component {
     acceptWithModal = () => {
         this.accept();
         clearInterval(this.timer);
-        this.timer = setInterval(() => this.getGameStatus(), 1000);
+        this.timer = setInterval(() => this.getGameStatus(), timeInterval);
 
         //this.props.history.push('/test');
     };

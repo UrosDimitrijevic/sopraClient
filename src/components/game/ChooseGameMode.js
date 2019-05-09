@@ -52,7 +52,6 @@ class ChooseGameMode extends React.Component {
                     console.log(`ERROR: Username already existing  ${this.state.username} with CONFLICT`);
                     console.log(this.state.secondID);
                     console.log(this.state.firstID);
-                    window.location.reload();
 
                 } else {
 
@@ -79,7 +78,7 @@ class ChooseGameMode extends React.Component {
             });
 
         this.getActions();
-        this.timer = setInterval(() => this.getActions(), 5000);
+        this.timer = setInterval(() => this.getActions(), 1000);
     }
     displayOptions(){
         if (this.state.actions.length<1){

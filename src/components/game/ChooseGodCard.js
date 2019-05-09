@@ -40,7 +40,7 @@ const Button2 = styled.button`
   background: rgb(16, 89, 255);
   transition: all 0.3s ease;
 `;
-
+const timeInterval = 100;
 
 class ChooseGodCard extends React.Component {
 
@@ -195,7 +195,7 @@ class ChooseGodCard extends React.Component {
             });
 
         this.getActions();
-        this.timer = setInterval(() => this.getActions(), 5000);
+        this.timer = setInterval(() => this.getActions(), timeInterval);
     }
     /*<button disabled={this.state.actions.length !== 2}
                             onClick={() => this.chooseMode(this.state.secondID)}>Default Mode

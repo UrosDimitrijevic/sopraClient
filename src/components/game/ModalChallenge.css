@@ -96,6 +96,7 @@
     margin: 15px;
     padding: 10px;
     font-weight: bold;
+    opacity: 0;
 }
 .link {
     color: #FFF;

@@ -309,9 +309,10 @@ class Game extends React.Component {
             this.timer = setInterval(() => this.getGameStatus(), 10000);
         } */
         if (localStorage.getItem("id") !== null) {
-            this.ChallengeStatus();
+
+
             console.log(this.state.gettingChallengedBy + " getting challenged by on mount");
-            this.timer = setInterval(() => this.ChallengeStatus(), timeInterval);
+            this.timer = setInterval(() => this.ChallengeStatus(), 5000);
         }
     }
 
@@ -342,7 +343,7 @@ class Game extends React.Component {
                     close={this.closeModalHandler}
 
                     accept={this.acceptWithModal}>
-                    User with ID: {this.state.gettingChallengedBy} challenged yodfu!
+                    User with ID: {this.state.gettingChallengedBy} challenged you!
                 </Modal>
                 <button className="open-modal-btn1" onClick={this.openModalHandler}>Open Modal</button>
 

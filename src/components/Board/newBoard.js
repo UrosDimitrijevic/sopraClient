@@ -408,7 +408,8 @@ class Board extends React.Component {
     }
 
     endGameID() {
-        localStorage.setItem("actionID", this.state.getActionss[0].id)
+        localStorage.setItem("actionID", this.state.getActionss[0].id);
+        console.log(localStorage.getItem("actionID"));
     }
 
     clickme3() {
@@ -631,6 +632,8 @@ class Game extends React.Component {
     endGameFromBoard = () => {
         this.refs.board.endGameID();
         this.refs.board.putAction();
+        localStorage.removeItem("actionID");
+        localStorage.removeItem("refID");
         this.props.history.push("/game");
     };
     actionsFromBoardDefault = () => {
@@ -687,15 +690,17 @@ class Game extends React.Component {
         }
     }
 
-//<img src={Apollo} alt = "Player1Pic" width = {100} height={175}/>
+    // invisible buttons if presentation bugs
     render() {
         return (
             <BaseContainer>
                 <button
+                    style={{opacity: "0"}}
                     onClick={() => this.clickMe()}
                 >CustomGameStatus
                 </button>
                 <button
+                    style={{opacity: "0"}}
                     onClick={() => this.clickme2()}
                 >getGameStatus
                 </button>
@@ -764,7 +769,7 @@ class Game extends React.Component {
                             if (res.nonStartingPlayer.myUserID.toString() === localStorage.getItem("id")) {
                                 this.setState({result: "lost"})
                             }
-                            return this.actionsFromBoardDefault;
+                            this.actionsFromBoardDefault();
                         } else if (res.status === "NONSTARTINGPLAYER_WON") {
                             this.setState({
                                 isShowing: true
@@ -796,6 +801,10 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
+        localStorage.removeItem("god2");
+        localStorage.removeItem("gettingChallengedByID");
+        localStorage.removeItem("god1");
+        localStorage.removeItem("challengeID");
         clearInterval(this.timer);
         this.getGameStatus();
         this.timer = setInterval(() => this.getGameStatus(), 100);
@@ -885,10 +894,10 @@ class Game extends React.Component {
                 >
                     GameStatus:
                 </Modal>
-                <button className="open-modal-btn2" onClick={this.openModalHandler}>Open Modal</button>
+                <button style={{opacity: "0"}} className="open-modal-btn2" onClick={this.openModalHandler}>Open Modal</button>
             </div>)
     }
-
+    // invisible buttons if presentation bugs
     constructor() {
         super();
         this.state = {

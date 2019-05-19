@@ -270,7 +270,7 @@ class Board extends React.Component {
             actions: [],
             homeLink: "home",
             clicked: false,
-            storeActions: null,
+            storeActions: [],
             actionsFigurine1: [],
             actionsFigurine2: [],
             playWithGodCards: false,
@@ -364,14 +364,6 @@ class Board extends React.Component {
         }
 
     }
-
-    Figurine1FromSquare = () => {
-
-            this.setState({actions: this.state.actionsFigurine1})
-
-
-    };
-
     Figurine1() {
         if (this.props.useGodPower === false) {
             this.setState({actions: this.state.actionsFigurine1})
@@ -408,13 +400,26 @@ class Board extends React.Component {
             .then(res => {
                 switch (resStatus) {
                     case 200:
-                        this.setState({
-                            storeActions: res
-                        }, () => {
-                            this.divideActions(this.state.storeActions);
-                        });
-
+                        if (res.length<1){
+                            break;
+                        }
+                        else if(this.state.storeActions.length<1){
+                            this.setState({
+                                storeActions: res
+                            }, () => {
+                                this.divideActions(this.state.storeActions);
+                            });
+                            break;
+                        }
+                        else if(this.state.storeActions[0].id !== res[0].id){
+                            this.setState({
+                                storeActions: res
+                            }, () => {
+                                this.divideActions(this.state.storeActions);
+                            });
+                        }
                         break;
+
 
                     case 500:
                         console.log('server error, try again');
@@ -444,8 +449,8 @@ class Board extends React.Component {
 
     clickme3() {
         this.getActions();
-        //this.timer2 = setInterval(() => this.getActions(), 1000);
-
+        this.timer2 = setInterval(() => this.getActions(), 1000);
+        this.divideActions(this.state.storeActions)
         // this.divideActions(this.state.getActions);
 
     }
@@ -461,7 +466,7 @@ class Board extends React.Component {
         console.log(this.state.homeLink);
 
         this.actionsFromSquare("SquareID" + number);
-        this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null})
+        this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null, storeActions: []})
 
     }
 
@@ -565,8 +570,6 @@ class Board extends React.Component {
             ref={this.calculateRef(row, column)}
             useGodPower={this.props.useGodPower}
             clickFigure={this.clickFigure.bind(this)}
-            clickFigurine1={this.Figurine1FromSquare}
-            clickFigurine2={this.Figurine2}
             isStartingPlayer={this.isStartingPlayer()}
         />;
     }

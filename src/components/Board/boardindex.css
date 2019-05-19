@@ -79,6 +79,9 @@ ol, ul {
     width: 80px;
     cursor: pointer;
 }
+.squareorange:hover{
+    background-color: orangered;
+}
 .square2 {
     background: blue;
     border: 2px solid white;

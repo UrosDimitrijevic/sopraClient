@@ -37,7 +37,6 @@ const Container = styled(BaseContainer)`
 
 `;
 
-
 const Users = styled.ul`
   list-style: none;
   padding-left: 0;
@@ -61,14 +60,6 @@ const PlContainer = styled.div`
   border: 1px solid #ffffff26;
   background: cadetblue;
 `;
-
-/*const PlUserName = styled.div`
-  font-weight: lighter;
-  margin-left: 5px;
-`;
-*/
-
-
 const PlId = styled.div`
   margin-left: auto;
   margin-right: 10px;
@@ -103,27 +94,7 @@ class Game extends React.Component {
         this.timer = setInterval(() => this.ChallengeStatus(), timeInterval);
     };
 
-    confirm123() {
-        var confirm = window.confirm("UserID: " + localStorage.getItem("gettingChallengedByID") + " is challenging you");
-        if (confirm) {
-            console.log("confirm");
-            this.accept();
-            clearInterval(this.timer);
-            this.getGameStatus();
-            this.timer = setInterval(() => this.getGameStatus(), 10000);
-
-        } else {
-            declineChallenge();
-            console.log("decline");
-        }
-    }
-
     accept() {
-        let challengingPUT1 = this.state.challengingPUT;
-        var gettingChallengedBy1 = this.state.gettingChallengedBy;
-        console.log(challengingPUT1);
-        console.log(gettingChallengedBy1);
-
         fetch(`${getDomain()}/users/` + localStorage.getItem("id"), {
             method: "PUT",
             headers: {
@@ -163,7 +134,11 @@ class Game extends React.Component {
                     gettingChallengedBy: response.gettingChallengedBy
                 });
                 localStorage.setItem("gettingChallengedByID", response.gettingChallengedBy);
-
+                this.state.users.map(user => {
+                    if (user.id === response.gettingChallengedBy) {
+                        localStorage.setItem("opponentName", user.username);
+                    }
+                });
                 if (this.state.gettingChallengedBy !== null && localStorage.getItem("gettingChallengedByID") !== localStorage.getItem("challengeID") && (localStorage.getItem("gettingChallengedByID"))) {
 
                     this.openModalHandler();
@@ -177,7 +152,6 @@ class Game extends React.Component {
 
             });
     }
-
 
     challengeUser() {
         let challengingPUT1 = this.state.challengingPUT;
@@ -279,7 +253,7 @@ class Game extends React.Component {
             });
         this.props.history.push("/login");
         localStorage.clear();
-        this.timer =null;
+        this.timer = null;
         clearInterval(this.timer);
     }
 
@@ -292,26 +266,16 @@ class Game extends React.Component {
         })
             .then(response => response.json())
             .then(async users => {
-                // delays continuous execution of an async operation for 0.8 seconds.
-                // This is just a fake async call, so that the spinner can be displayed
-                // feel free to remove it :)
                 await new Promise(resolve => setTimeout(resolve, 800));
-
                 this.setState({users});
             })
             .catch(err => {
                 console.log(err);
                 alert("Something went wrong fetching the users: " + err);
             });
-
-        /*if (this.state.challenging === this.state.gettingChallengedBy && (this.state.gettingChallengedBy !== null) && (this.state.challenging) !== null) {
-            this.getGameStatus();
-            this.timer = setInterval(() => this.getGameStatus(), 10000);
-        } */
         if (localStorage.getItem("id") !== null) {
 
 
-            console.log(this.state.gettingChallengedBy + " getting challenged by on mount");
             this.timer = setInterval(() => this.ChallengeStatus(), 5000);
         }
     }
@@ -320,18 +284,13 @@ class Game extends React.Component {
         clearInterval(this.timer);
     }
 
-    declineWithModal = () => {
-        declineChallenge();
-        this.closeModalHandler()
-    };
     acceptWithModal = () => {
         this.accept();
         clearInterval(this.timer);
         this.timer = setInterval(() => this.getGameStatus(), timeInterval);
-
-        //this.props.history.push('/test');
     };
 
+    //   <button className="open-modal-btn1" onClick={this.openModalHandler}>Open Modal</button>
     render() {
         return (
             <div>{this.state.isShowing ? <div className="back-drop1"></div> : null}
@@ -343,9 +302,9 @@ class Game extends React.Component {
                     close={this.closeModalHandler}
 
                     accept={this.acceptWithModal}>
-                    User with ID: {this.state.gettingChallengedBy} challenged you!
+                    User: {localStorage.getItem("opponentName")} challenged you!
                 </Modal>
-                <button className="open-modal-btn1" onClick={this.openModalHandler}>Open Modal</button>
+
 
                 <Container>
 
@@ -366,16 +325,16 @@ class Game extends React.Component {
                                                     }}>
                                                         {user.username}
                                                     </a>
-                                                    <PlId>Id: {user.id}</PlId>
-                                                    <Button1 onClick={() => {
-                                                    localStorage.setItem("challengeID", user.id);
-                                                    this.setState({challengingPUT: user.id});
-                                                    this.challengeUser();
-                                                    console.log(this.state.challengingPUT + " state");
-                                                    console.log(localStorage.getItem("challengeID") + " local")
+                                                    <PlId>
+                                                        <Button1 onClick={() => {
+                                                            localStorage.setItem("challengeID", user.id);
+                                                            this.setState({challengingPUT: user.id});
+                                                            this.challengeUser();
 
-                                                }}
-                                                                                       disabled={(user.id.toString() === localStorage.getItem("id")) || localStorage.getItem("challengeID") === user.id.toString()}>Challenge</Button1>
+                                                        }}
+                                                                 disabled={(user.id.toString() === localStorage.getItem("id")) || localStorage.getItem("challengeID") === user.id.toString()}>Challenge
+                                                        </Button1>
+                                                    </PlId>
                                                 </PlContainer></div>
                                         </PlayerContainer>
                                     );
@@ -403,6 +362,4 @@ class Game extends React.Component {
 }
 
 export default withRouter(Game);
-/**
- <Player user ={user} />
- **/
+

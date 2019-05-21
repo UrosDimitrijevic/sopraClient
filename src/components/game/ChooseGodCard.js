@@ -313,7 +313,7 @@ class ChooseGodCard extends React.Component {
                         this.setState({status: res.status});
                         if (res.status === "SettingFigurinesp1f1") {
                             clearInterval(this.timer);
-                            this.props.history.push("/newboard")
+                            this.props.history.push("/Santorini")
                         }
                         if (res.status === "CHOSING_GAME_MODE") {
                             this.props.history.push("/gameMode")
@@ -340,7 +340,7 @@ class ChooseGodCard extends React.Component {
 
             .catch(err => {
                 console.log(err);
-                alert("Something went wrong catching challenge Status: " + err);
+                alert("Something went wrong ChooseGodCards: " + err);
             });
     }
 

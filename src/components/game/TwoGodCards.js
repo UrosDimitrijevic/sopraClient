@@ -39,7 +39,6 @@ class TwoGodCards extends React.Component {
         };
     }
 
-
     choose1from2Gods() {
         fetch(`${getDomain()}/game/`+localStorage.getItem("boardID")+`/actions/`, {
             method: "PUT",
@@ -47,19 +46,13 @@ class TwoGodCards extends React.Component {
                 "Content-Type": "application/json"
             },
             body: parseInt(localStorage.getItem("actionID"))
-
         })
             .then(response => {
                 if ((response.status === 201)) { //201
-
-
                 } else {
-
                     localStorage.removeItem("actionID");
-
                 }
             })
-
             .catch(err => {
                 if (err.message.match(/Failed to fetch/)) {
                     alert("The server  cannot be reached. Did you start it? TEst2");
@@ -148,7 +141,6 @@ class TwoGodCards extends React.Component {
                                                     }}
 
                     > Accept</Button></div>
-
                 </FormContainer>
             </BaseContainer>
         );
@@ -231,16 +223,16 @@ class TwoGodCards extends React.Component {
                     case 200:
                         this.setState({status: res.status});
                         if (res.status === "SettingFigurinesp1f1") {
-                            this.props.history.push("/newboard")
+                            this.props.history.push("/Santorini")
                         }
                         if (res.status === "CHOSING_GAME_MODE") {
                             this.props.history.push("/gameMode")
                         }
                         if (res.status === "CHOSING_GODCARDS") {
-                            //this.props.history.push("/test")
+                            this.props.history.push("/test")
                         }
                         if (res.status === "PICKING_GODCARDS") {
-                            this.props.history.push("/test2")
+                           // this.props.history.push("/test2")
                         }
 
                         break;
@@ -259,7 +251,7 @@ class TwoGodCards extends React.Component {
 
             .catch(err => {
                 console.log(err);
-                alert("Something went wrong catching challenge Status: " + err);
+                alert("Something went wrong twoGodCards: " + err);
             });
     }
 

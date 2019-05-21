@@ -543,13 +543,13 @@ class Board extends React.Component {
 
     clickFigure(Figure) {
         if (this.props.Player1.myUserID.toString() === localStorage.getItem("id")) {
-            if (Figure === "White1" || Figure === "Black1") {
+            if (Figure === "White1") {
                 if (this.props.useGodPower === false) {
                     this.setState({actions: this.state.actionsFigurine1})
                 } else if (this.props.useGodPower === true) {
                     this.setState({actions: this.state.actionsGod1})
                 }
-            } else if (Figure === "White2" || Figure === "Black2") {
+            } else if (Figure === "White2") {
                 if (this.props.useGodPower === false) {
                     this.setState({actions: this.state.actionsFigurine2})
                 } else if (this.props.useGodPower === true) {
@@ -666,7 +666,7 @@ class Board extends React.Component {
                 } else if (err.message.match(/not_found/)) {
                     alert("username already taken or id not-found");
                 } else {
-                    alert(`Something went wrong during the login: ${err.message}`);
+                    alert(`Something went wrong during playing: ${err.message}`);
                 }
             });
     }

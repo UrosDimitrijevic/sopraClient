@@ -6,8 +6,6 @@ import {withRouter} from "react-router-dom";
 import "../../GodCards/img_text.css";
 import data from "../../GodCards/data";
 import Card from '../../GodCards/Card';
-import {Button} from "../../views/design/Button";
-import GameBoardStatus, {getGameStatus} from "./getGameStatus"
 import {Spinner} from "../../views/design/Spinner";
 
 
@@ -40,7 +38,7 @@ const Button2 = styled.button`
   background: rgb(16, 89, 255);
   transition: all 0.3s ease;
 `;
-const timeInterval = 100;
+const timeInterval = 500;
 
 class ChooseGodCard extends React.Component {
 
@@ -49,7 +47,6 @@ class ChooseGodCard extends React.Component {
         this.state = {
             status: null,
             actions: [],
-            myUserId: 1,
             board: 123,
             index: 0,
             firstID: null,
@@ -75,30 +72,6 @@ class ChooseGodCard extends React.Component {
             property: data.properties[newIndex]
         })
     };
-
-    chooseMode(choice) {
-        fetch(`${getDomain()}/game/actions/` + choice, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            }
-
-        })
-            .then(response => {
-                if (!(response.status === 201)) { //201
-                    console.log(`ERROR: Username already existing  ${this.state.username} with CONFLICT`);
-                    console.log(this.state.secondID);
-                    console.log(this.state.firstID);
-                    window.location.reload();
-
-                } else {
-
-                    localStorage.removeItem("actionID");
-                    //push this.props.history("link")
-                }
-            })
-
-    }
 
     chooseGoD = () => {
         const godIndex = this.state.property.index;
@@ -148,11 +121,12 @@ class ChooseGodCard extends React.Component {
     }
 
     choose2GodCards() {             // somewhat implemented
-        fetch(`${getDomain()}/game/actions/` + localStorage.getItem("actionID"), {
+        fetch(`${getDomain()}/game/`+localStorage.getItem("boardID")+`/actions/`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: parseInt(localStorage.getItem("actionID"))
 
         })
             .then(response => {
@@ -208,7 +182,7 @@ class ChooseGodCard extends React.Component {
             return <div className={"spinner"}><Spinner/></div>
         }
         else{
-            return <p className={"status2"}>{this.state.status}</p>
+            return <p className={"status2"}>Choose two Gods!</p>
         }
     }
 
@@ -254,10 +228,7 @@ class ChooseGodCard extends React.Component {
                         onClick={() => {
                             this.getActionID();
                             console.log(this.state.actions);
-
-
                         }}
-
                     > Accept</Button2>
 
                 </FormContainer>
@@ -348,7 +319,7 @@ class ChooseGodCard extends React.Component {
                             this.props.history.push("/gameMode")
                         }
                         if (res.status === "CHOSING_GODCARDS") {
-                            this.props.history.push("/test")
+                            //this.props.history.push("/test")
                         }
                         if (res.status === "PICKING_GODCARDS") {
                             this.props.history.push("/test2")

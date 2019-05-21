@@ -1,14 +1,10 @@
-import React, {Component} from 'react';
+import React, {} from 'react';
 import {Redirect, withRouter} from "react-router-dom";
 import * as ReactDOM from "react-dom";
 import {BaseContainer} from "../../helpers/layout";
-import Test1 from "./initGameStatus";
 import Test2 from "./test2";
-import actionstest1 from "./actionstest1";
 import './boardindex.css';
 import {getDomain} from "../../helpers/getDomain";
-import White from "./WhiteFigure.png"
-import Black from "./BlackFigure.png"
 import Black1 from "./Black1.1.png"
 import Black2 from "./Black2.1.png"
 import White1 from "./White1.1.png"
@@ -17,8 +13,6 @@ import Default1 from "./Default1.PNG"
 import Default2 from "./Default2.PNG"
 import Worker1 from "./Worker1.png"
 import Worker2 from "./Worker2.png"
-import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler";
-import Apollo from "../../GodCards/Apollo.PNG"
 import {Spinner} from "../../views/design/Spinner";
 import data from "../../GodCards/data";
 import Modal from "./WonLostModal";
@@ -116,16 +110,20 @@ class Square extends React.Component {
     displayFigure(Figure) {
         if (Figure === "Black1") {
             return (
-                <img onClick={this.onClickFigurine.bind(this)}  style={{cursor:'pointer'}} alt={"Blacktest1"} className={"center"} src={Black1}/>);
+                <img onClick={this.onClickFigurine.bind(this)} style={{cursor: 'pointer'}} alt={"Blacktest1"}
+                     className={"center"} src={Black1}/>);
         } else if (Figure === "Black2") {
             return (
-                <img onClick={this.onClickFigurine.bind(this)}  style={{cursor:'pointer'}} alt={"Blacktest2"} className={"center"} src={Black2}/>);
+                <img onClick={this.onClickFigurine.bind(this)} style={{cursor: 'pointer'}} alt={"Blacktest2"}
+                     className={"center"} src={Black2}/>);
         } else if (Figure === "White1") {
             return (
-                <img onClick={this.onClickFigurine.bind(this)}  style={{cursor:'pointer'}} alt={"WhiteTest1"} className={"center"} src={White1}/>);
+                <img onClick={this.onClickFigurine.bind(this)} style={{cursor: 'pointer'}} alt={"WhiteTest1"}
+                     className={"center"} src={White1}/>);
         } else if (Figure === "White2") {
             return (
-                <img onClick={this.onClickFigurine.bind(this)}  style={{cursor:'pointer'}} alt={"WhiteTest2"} className={"center"} src={White2}/>);
+                <img onClick={this.onClickFigurine.bind(this)} style={{cursor: 'pointer'}} alt={"WhiteTest2"}
+                     className={"center"} src={White2}/>);
         } else {
             return null;
         }
@@ -187,9 +185,6 @@ class Square extends React.Component {
         );
     }
 
-    confirmsquareaction() {
-        this.props.confirm();
-    }
 
     onChangeLink() {
         let refID = this.props.row * 5 + this.props.column;
@@ -202,12 +197,6 @@ class Square extends React.Component {
 
     }
 
-    toggle() {
-        this.setState({clickedsquare: !this.state.clickedsquare});
-        localStorage.setItem("clicked", this.props.row);
-        console.log(this.state.clickedsquare);
-
-    }
 
     clickAction() {
         localStorage.setItem("actionID", this.props.action);
@@ -273,6 +262,7 @@ class Board extends React.Component {
             storeActions: [],
             actionsFigurine1: [],
             actionsFigurine2: [],
+            buildingActions: [],
             playWithGodCards: false,
             actionsGod1: [],
             actionsGod2: [],
@@ -295,12 +285,12 @@ class Board extends React.Component {
     divideActions(actions, godPower) {
         var Figurine1 = [];
         var Figurine2 = [];
+        var buildingActions = [];
         var GodFig1 = [];
         var GodFig2 = [];
         var GodBuild = [];
-        var buildingActions = [];
         if (this.props.playWithGodCards === false) {
-            if (actions) {
+            if (actions.length > 0) {
                 for (let i = 0; i < actions.length; i++) {
                     if (actions[i].figurineNumber === 1) {
                         Figurine1.push(actions[i])
@@ -309,11 +299,14 @@ class Board extends React.Component {
                     } else {
                         buildingActions.push(actions[i])
                     }
+                    if(actions[i].name==="PlaceWorker"){
+                        buildingActions.push(actions[i])
+                    }
                 }
 
             }
         } else {
-            if (actions) {
+            if (actions.length > 0) {
                 for (let i = 0; i < actions.length; i++) {
                     if (actions[i].useGod === false) {
                         if (actions[i].figurineNumber === 1) {
@@ -343,19 +336,21 @@ class Board extends React.Component {
 
             }
         }
-        if (this.props.useGodPower) {
+        if (this.props.useGodPower && GodBuild.length > 0) {
             this.setState({
                 actionsFigurine1: Figurine1,
                 actionsFigurine2: Figurine2,
+                buildingActions: buildingActions,
                 actions: GodBuild,
                 actionsGod1: GodFig1,
                 actionsGod2: GodFig2,
-                actionsGodBuild: GodBuild
+                actionsGodBuild: GodBuild,
             })
         } else {
             this.setState({
                 actionsFigurine1: Figurine1,
                 actionsFigurine2: Figurine2,
+                buildingActions: buildingActions,
                 actions: buildingActions,
                 actionsGod1: GodFig1,
                 actionsGod2: GodFig2,
@@ -364,6 +359,7 @@ class Board extends React.Component {
         }
 
     }
+
     Figurine1() {
         if (this.props.useGodPower === false) {
             this.setState({actions: this.state.actionsFigurine1})
@@ -400,18 +396,16 @@ class Board extends React.Component {
             .then(res => {
                 switch (resStatus) {
                     case 200:
-                        if (res.length<1){
+                        if (res.length < 1) {
                             break;
-                        }
-                        else if(this.state.storeActions.length<1){
+                        } else if (this.state.storeActions.length < 1) {
                             this.setState({
                                 storeActions: res
                             }, () => {
                                 this.divideActions(this.state.storeActions);
                             });
                             break;
-                        }
-                        else if(this.state.storeActions[0].id !== res[0].id){
+                        } else if (this.state.storeActions[0].id !== res[0].id) {
                             this.setState({
                                 storeActions: res
                             }, () => {
@@ -447,12 +441,18 @@ class Board extends React.Component {
         console.log(localStorage.getItem("actionID"));
     }
 
-    clickme3() {
-        this.getActions();
+    clickme3(useGodBuild) {
         this.timer2 = setInterval(() => this.getActions(), 1000);
-        this.divideActions(this.state.storeActions)
-        // this.divideActions(this.state.getActions);
-
+        this.divideActions(this.state.storeActions);
+        if (useGodBuild) {
+            this.setState({
+                actions: this.state.actionsGodBuild
+            })
+        } else {
+            this.setState({
+                actions: this.state.buildingActions
+            })
+        }
     }
 
 
@@ -540,22 +540,40 @@ class Board extends React.Component {
             clicked: true,
         });
     }
-    clickFigure(Figure){
-        if(Figure==="White1" || Figure==="Black1"){
-            if (this.props.useGodPower === false) {
-                this.setState({actions: this.state.actionsFigurine1})
-            } else if (this.props.useGodPower === true) {
-                this.setState({actions: this.state.actionsGod1})
+
+    clickFigure(Figure) {
+        if (this.props.Player1.myUserID.toString() === localStorage.getItem("id")) {
+            if (Figure === "White1" || Figure === "Black1") {
+                if (this.props.useGodPower === false) {
+                    this.setState({actions: this.state.actionsFigurine1})
+                } else if (this.props.useGodPower === true) {
+                    this.setState({actions: this.state.actionsGod1})
+                }
+            } else if (Figure === "White2" || Figure === "Black2") {
+                if (this.props.useGodPower === false) {
+                    this.setState({actions: this.state.actionsFigurine2})
+                } else if (this.props.useGodPower === true) {
+                    this.setState({actions: this.state.actionsGod2})
+                }
             }
         }
-        else if(Figure==="White2" || Figure==="Black2"){
-            if (this.props.useGodPower === false) {
-                this.setState({actions: this.state.actionsFigurine2})
-            } else if (this.props.useGodPower === true) {
-                this.setState({actions: this.state.actionsGod2})
+        else{
+            if (Figure === "Black1") {
+                if (this.props.useGodPower === false) {
+                    this.setState({actions: this.state.actionsFigurine1})
+                } else if (this.props.useGodPower === true) {
+                    this.setState({actions: this.state.actionsGod1})
+                }
+            } else if (Figure === "Black2") {
+                if (this.props.useGodPower === false) {
+                    this.setState({actions: this.state.actionsFigurine2})
+                } else if (this.props.useGodPower === true) {
+                    this.setState({actions: this.state.actionsGod2})
+                }
             }
         }
     }
+
     renderSquare(row, column, level, dome, actions, figurine, count) {
         return <Square
             action={this.checkAction(actions, row, column)}
@@ -573,7 +591,8 @@ class Board extends React.Component {
             isStartingPlayer={this.isStartingPlayer()}
         />;
     }
-    isStartingPlayer(){
+
+    isStartingPlayer() {
         return this.props.Player1.myUserID.toString() === localStorage.getItem("id");
     }
 
@@ -627,11 +646,12 @@ class Board extends React.Component {
     }
 
     putAction() {
-        fetch(`${getDomain()}/game/actions/` + localStorage.getItem("actionID"), {
+        fetch(`${getDomain()}/game/`+localStorage.getItem("boardID")+`/actions/` , {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
+            body: parseInt(localStorage.getItem("actionID"))
 
         }).then(response => {
             console.log(response);
@@ -651,8 +671,6 @@ class Board extends React.Component {
             });
     }
 
-    /*  <button onClick={() => this.divideActions(this.state.actions)}>DivideActions</button>
-              <button onClick={() => this.containAcitons()}>ContainActions</button>*/
 
 
 }
@@ -693,11 +711,11 @@ class Game extends React.Component {
     };
     actionsFromBoardDefault = () => {
         this.setState({useGodPower: false});
-        this.refs.board.clickme3();
+        this.refs.board.clickme3(false);
     };
     actionsFromBoardGod = () => {
         this.setState({useGodPower: true});
-        this.refs.board.clickme3();
+        this.refs.board.clickme3(true);
     };
 
     showActionsButton(Player) {
@@ -745,6 +763,14 @@ class Game extends React.Component {
         }
     }
 
+    displayName(Player) {
+        if (localStorage.getItem("id") === Player.toString()) {
+            return localStorage.getItem("username");
+        } else {
+            return localStorage.getItem("opponentName")
+        }
+    }
+
     // invisible buttons if presentation bugs
     render() {
         return (
@@ -760,7 +786,7 @@ class Game extends React.Component {
                 >getGameStatus
                 </button>
                 <div className="row">
-                    <div className={"column"}> StartingPlayer
+                    <div className={"column"}> {this.displayName(this.state.startingPlayer.myUserID)}
                         {this.GodPicture(this.state.startingPlayer)}
                         {this.showActionsButton(this.state.startingPlayer)}</div>
                     <div className="columnboard">
@@ -775,7 +801,7 @@ class Game extends React.Component {
                         />
                     </div>
                     <div className="column">
-                        NonStartingPlayer
+                        {this.displayName(this.state.nonStartingPlayer.myUserID)}
                         {this.GodPicture(this.state.nonStartingPlayer)}
                         {this.showActionsButton(this.state.nonStartingPlayer)}
                     </div>
@@ -856,10 +882,6 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
-        localStorage.removeItem("god2");
-        localStorage.removeItem("gettingChallengedByID");
-        localStorage.removeItem("god1");
-        localStorage.removeItem("challengeID");
         clearInterval(this.timer);
         this.getGameStatus();
         this.timer = setInterval(() => this.getGameStatus(), 100);
@@ -924,7 +946,11 @@ class Game extends React.Component {
     };
 
     testDashboard() {
-        this.props.history.push("/game")
+        localStorage.removeItem("god2");
+        localStorage.removeItem("gettingChallengedByID");
+        localStorage.removeItem("god1");
+        localStorage.removeItem("challengeID");
+        this.props.history.push("/game");
     }
 
     goBackToDashboard = () => {

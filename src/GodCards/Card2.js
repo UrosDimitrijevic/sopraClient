@@ -6,7 +6,7 @@ function CardTable(property1, property2){
     return(
         <div className={"row1"}>
             <div className={"column1"}> <img src={property1.picture}
-                                             alt={`s`}
+                                             alt={`f`}
                                              width={250} // should be in ratio 1:1.75
                                              height={437.5}/>
             </div>

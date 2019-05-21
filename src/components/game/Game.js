@@ -206,6 +206,7 @@ class Game extends React.Component {
                         console.log(this.state.status);
                         if (res.status === "CHOSING_GAME_MODE") {
                             clearInterval(this.timer);
+                            localStorage.setItem("boardID", res.id);
                             this.setState({
                                 isShowing: false
                             });
@@ -332,7 +333,8 @@ class Game extends React.Component {
                                                             this.challengeUser();
 
                                                         }}
-                                                                 disabled={(user.id.toString() === localStorage.getItem("id")) || localStorage.getItem("challengeID") === user.id.toString()}>Challenge
+                                                                 disabled={(user.id.toString() === localStorage.getItem("id")) ||
+                                                                 localStorage.getItem("challengeID") === user.id.toString()}>Challenge
                                                         </Button1>
                                                     </PlId>
                                                 </PlContainer></div>

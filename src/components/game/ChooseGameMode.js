@@ -4,9 +4,6 @@ import {BaseContainer} from "../../helpers/layout";
 import {getDomain} from "../../helpers/getDomain";
 import {withRouter} from "react-router-dom";
 import "../../GodCards/img_text.css";
-import data from "../../GodCards/data";
-import Card from '../../GodCards/Card';
-import {Button} from "../../views/design/Button";
 import Bob from "../../GodCards/Bob.jpg"
 import Zeus from "../../GodCards/Zeus.PNG";
 import {Spinner} from "../../views/design/Spinner";
@@ -28,23 +25,22 @@ class ChooseGameMode extends React.Component {
         this.state = {
             status: null,
             actions: [],
-            myUserId: 1,
             board: 123,
             index: 0,
             firstID: null,
             secondID: null,
             starting: false,
-
         };
     }
 
 
     chooseMode(choice) {
-        fetch(`${getDomain()}/game/actions/` + choice, {
+        fetch(`${getDomain()}/game/`+localStorage.getItem("boardID")+`/actions/`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: choice
 
         })
             .then(response => {
@@ -56,7 +52,7 @@ class ChooseGameMode extends React.Component {
                 } else {
 
                     localStorage.removeItem("actionID");
-                    //push this.props.history("link")
+
                 }
             })
 
@@ -80,14 +76,14 @@ class ChooseGameMode extends React.Component {
         this.getActions();
         this.timer = setInterval(() => this.getActions(), 1000);
     }
-    displayOptions(){
-        if (this.state.actions.length<1){
+
+    displayOptions() {
+        if (this.state.actions.length < 1) {
             return <div className={"status2"}><Spinner/>
                 <div className={"status2"}>Waiting for Starting Player to choose mode</div>
             </div>
-        }
-        else{
-            return <p className={"status2"}>{this.state.status}<br/>Choose a Mode! <br/> Play as a Mortal or as a God?</p>
+        } else {
+            return <p className={"status2"}>Choose a Mode! <br/> Play as a Mortal or as a God?</p>
         }
     }
 
@@ -100,8 +96,14 @@ class ChooseGameMode extends React.Component {
                     {this.displayOptions()}
 
                     <div className={"row2"}>
-                        <button  className={"columnMode"} disabled={this.state.actions.length<1} onClick={() => this.chooseMode(this.state.secondID)}><img  alt={"Bob"} src={Bob} height={350} width={250}  /></button>
-                        <button className={"columnMode"}  disabled={this.state.actions.length<1}  onClick={() => this.chooseMode(this.state.firstID)}><img alt={"Bob"} src={Zeus} height={350} width={250}  /></button>
+                        <button className={"columnMode"} disabled={this.state.actions.length < 1}
+                                onClick={() => this.chooseMode(this.state.secondID)}><img alt={"Bob"} src={Bob}
+                                                                                          height={350} width={250}/>
+                        </button>
+                        <button className={"columnMode"} disabled={this.state.actions.length < 1}
+                                onClick={() => this.chooseMode(this.state.firstID)}><img alt={"Bob"} src={Zeus}
+                                                                                         height={350} width={250}/>
+                        </button>
                     </div>
                 </FormContainer>
             </BaseContainer>
@@ -188,7 +190,7 @@ class ChooseGameMode extends React.Component {
                             this.props.history.push("/newboard")
                         }
                         if (res.status === "CHOSING_GAME_MODE") {
-                            this.props.history.push("/gameMode")
+                            //this.props.history.push("/gameMode")
                         }
                         if (res.status === "CHOSING_GODCARDS") {
                             this.props.history.push("/test")
@@ -221,8 +223,4 @@ class ChooseGameMode extends React.Component {
     }
 }
 
-/**
- * You can get access to the history object's properties via the withRouter.
- * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
- */
 export default withRouter(ChooseGameMode);

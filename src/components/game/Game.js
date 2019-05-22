@@ -78,6 +78,9 @@ class Game extends React.Component {
             gettingChallengedBy: null,
             status: null,
             isShowing: false,
+            offlineUsers: null,
+            inGameUsers: null,
+            onlineUsers: null,
         };
     }
 
@@ -204,7 +207,7 @@ class Game extends React.Component {
                     case 200:
                         this.setState({status: res.status});
                         console.log(this.state.status);
-                        if (res.status === "CHOSING_GAME_MODE") {
+                        if (res.status === "CHOSING_GAME_MODE" || res.status) {
                             clearInterval(this.timer);
                             localStorage.setItem("boardID", res.id);
                             this.setState({
@@ -268,7 +271,10 @@ class Game extends React.Component {
             .then(response => response.json())
             .then(async users => {
                 await new Promise(resolve => setTimeout(resolve, 800));
-                this.setState({users});
+                const offlineUsers = users.filter(user => user.status === "OFFLINE");
+                const inGameUsers = users.filter(user => user.status === "INGAME");
+                const onlineUsers = users.filter(user => user.status === "ONLINE");
+                this.setState({users: users, offlineUsers: offlineUsers, inGameUsers: inGameUsers, onlineUsers: onlineUsers});
             })
             .catch(err => {
                 console.log(err);
@@ -290,6 +296,7 @@ class Game extends React.Component {
         clearInterval(this.timer);
         this.timer = setInterval(() => this.getGameStatus(), timeInterval);
     };
+
 
     //   <button className="open-modal-btn1" onClick={this.openModalHandler}>Open Modal</button>
     render() {
@@ -314,33 +321,71 @@ class Game extends React.Component {
                         <Spinner/>
                     ) : (
                         <div>
-                            <Users>
-                                {this.state.users.map(user => {
-                                    return (
-                                        <PlayerContainer key={user.id}>
-                                            <div className={"row"}>
-                                                <PlContainer>
-                                                    <a className={"link"} href="#" onClick={() => {
-                                                        this.props.history.push('/playerPage');
-                                                        localStorage.setItem("atID", user.id);
-                                                    }}>
-                                                        {user.username}
-                                                    </a>
-                                                    <PlId>
-                                                        <Button1 onClick={() => {
-                                                            localStorage.setItem("challengeID", user.id);
-                                                            this.setState({challengingPUT: user.id});
-                                                            this.challengeUser();
+                            <Users><p>Online</p>
+                                {this.state.onlineUsers.map(user => {
 
-                                                        }}
-                                                                 disabled={(user.id.toString() === localStorage.getItem("id")) ||
-                                                                 localStorage.getItem("challengeID") === user.id.toString()}>Challenge
-                                                        </Button1>
-                                                    </PlId>
-                                                </PlContainer></div>
-                                        </PlayerContainer>
-                                    );
-                                })}
+                                        return (
+                                            <PlayerContainer key={user.id}>
+                                                <div className={"row"}>
+                                                    <PlContainer>
+                                                        <a className={"link"} href="/playerPage" onClick={() => {
+                                                            localStorage.setItem("atID", user.id);
+                                                        }}>
+                                                            {user.username}
+                                                        </a>
+                                                        <PlId>
+                                                            <Button1 onClick={() => {
+                                                                localStorage.setItem("challengeID", user.id);
+                                                                this.setState({challengingPUT: user.id});
+                                                                this.challengeUser();
+
+                                                            }}
+                                                                     disabled={(user.id.toString() === localStorage.getItem("id")) ||
+                                                                     localStorage.getItem("challengeID") === user.id.toString()}>Challenge
+                                                            </Button1>
+                                                        </PlId>
+                                                    </PlContainer></div>
+                                            </PlayerContainer>
+                                        );
+                                })}<p>In Game</p>{
+                                    this.state.inGameUsers.map(user => {
+                                            return (
+                                                <PlayerContainer key={user.id}>
+                                                    <div className={"row"}>
+                                                        <PlContainer>
+                                                            <a className={"link"} href="/playerpage" onClick={() => {
+                                                                localStorage.setItem("atID", user.id);
+                                                            }}>
+                                                                {user.username}
+                                                            </a>
+                                                            <PlId>
+                                                                <Button1
+                                                                    disabled={true}>Challenge
+                                                                </Button1>
+                                                            </PlId>
+                                                        </PlContainer></div>
+                                                </PlayerContainer>
+                                            );
+                                    })}<p>Offline</p>{
+                                    this.state.offlineUsers.map(user => {
+                                            return (
+                                                <PlayerContainer key={user.id}>
+                                                    <div className={"row"}>
+                                                        <PlContainer>
+                                                            <a className={"link"} href="/playerPage" onClick={() => {
+                                                                localStorage.setItem("atID", user.id);
+                                                            }}>
+                                                                {user.username}
+                                                            </a>
+                                                            <PlId>
+                                                                <Button1
+                                                                    disabled={true}>Challenge
+                                                                </Button1>
+                                                            </PlId>
+                                                        </PlContainer></div>
+                                                </PlayerContainer>
+                                            );
+                                    })}
                             </Users>
                             <Button
                                 width="10%"

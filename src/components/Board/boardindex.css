@@ -175,7 +175,11 @@ ol, ul {
 
     transform: translate(-50%, -50%);
 }
-
+.star{
+    position: relative;
+    left: 5px;
+    top: 5px
+}
 
 .column {
     float: left;

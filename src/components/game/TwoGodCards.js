@@ -175,7 +175,7 @@ class TwoGodCards extends React.Component {
                                 property: data.properties[res[0].myGod.godnumber],
                             });
                         }
-                        else if (res.length === 0) {
+                        else if (res.length === 0 && this.state.status === "PICKING_GODCARDS") {
                             var number1 = localStorage.getItem("god1");
                             var number2 = localStorage.getItem("god2");
 

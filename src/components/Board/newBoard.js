@@ -16,6 +16,7 @@ import Worker2 from "./Worker2.png"
 import {Spinner} from "../../views/design/Spinner";
 import data from "../../GodCards/data";
 import Modal from "./WonLostModal";
+import Star from "./star.png";
 
 
 class Square extends React.Component {
@@ -308,7 +309,7 @@ class Board extends React.Component {
         } else {
             if (actions.length > 0) {
                 for (let i = 0; i < actions.length; i++) {
-                    if (actions[i].useGod === false) {
+                    if (!actions[i].useGod) {
                         if (actions[i].figurineNumber === 1) {
                             Figurine1.push(actions[i])
                         } else if (actions[i].figurineNumber === 2) {
@@ -488,7 +489,7 @@ class Board extends React.Component {
                 BoardRow.push(this.renderSquare(i, j, board.spaces[i][j].level, board.spaces[i][j].dome, actions, figurine, count));
                 count++;
             }
-            table.push(<div className="board-row">{BoardRow}</div>)
+            table.push(<div key ={i} className="board-row">{BoardRow}</div>)
         }
         return table
     };
@@ -576,6 +577,7 @@ class Board extends React.Component {
 
     renderSquare(row, column, level, dome, actions, figurine, count) {
         return <Square
+            key={this.calculateKey(row, column)}
             action={this.checkAction(actions, row, column)}
             row={row} column={column}
             level={level}
@@ -595,7 +597,9 @@ class Board extends React.Component {
     isStartingPlayer() {
         return this.props.Player1.myUserID.toString() === localStorage.getItem("id");
     }
-
+    calculateKey(row, column){
+        return (row * 5 + column)
+    }
     calculateRef(row, column) {
         return "SquareID" + (row * 5 + column).toString();
     }
@@ -717,6 +721,12 @@ class Game extends React.Component {
         this.setState({useGodPower: true});
         this.refs.board.clickme3(true);
     };
+    showStar(Godpower){
+        if(Godpower){
+            return (<img className={"star"}  height={20} alt={"star"}
+                         width={20} src={Star}/>);
+        }else return null;
+    };
 
     showActionsButton(Player) {
         if (this.state.playWithGodCards) {
@@ -726,8 +736,7 @@ class Game extends React.Component {
                             disabled={!(this.state.currentPlayer.toString() === localStorage.getItem("id"))}
                             onClick={this.showMenu}>
                         Action Options
-                    </button>
-
+                    </button>{this.showStar(this.state.useGodPower)}
                     {
                         this.state.showMenu
                             ? (
@@ -790,7 +799,8 @@ class Game extends React.Component {
                         {this.GodPicture(this.state.startingPlayer)}
                         {this.showActionsButton(this.state.startingPlayer)}</div>
                     <div className="columnboard">
-                        <Board status={this.state.status}
+                        <Board key={this.state.id}
+                               status={this.state.status}
                                board={this.state.board}
                                Player1={this.state.startingPlayer}
                                Player2={this.state.nonStartingPlayer}
@@ -1161,10 +1171,10 @@ class Game extends React.Component {
 
 // ========================================
 
-ReactDOM.render(
+/*ReactDOM.render(
     <Game/>,
     document.getElementById('root')
-);
+); */
 
 export default withRouter(Game)
 

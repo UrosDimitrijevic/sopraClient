@@ -280,9 +280,8 @@ class Game extends React.Component {
                 console.log(err);
                 alert("Something went wrong fetching the users: " + err);
             });
+        clearInterval(this.timer);
         if (localStorage.getItem("id") !== null) {
-
-
             this.timer = setInterval(() => this.ChallengeStatus(), 5000);
         }
     }

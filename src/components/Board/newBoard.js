@@ -679,7 +679,7 @@ class Board extends React.Component {
 
 }
 
-class Game extends React.Component {
+class GameBoard extends React.Component {
     closeModalHandler = () => {
         this.setState({
             isShowing: false
@@ -1176,7 +1176,7 @@ class Game extends React.Component {
     document.getElementById('root')
 ); */
 
-export default withRouter(Game)
+export default withRouter(GameBoard)
 
 /*
 <button

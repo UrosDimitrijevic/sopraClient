@@ -207,7 +207,7 @@ class Game extends React.Component {
                     case 200:
                         this.setState({status: res.status});
                         console.log(this.state.status);
-                        if (res.status === "CHOSING_GAME_MODE" || res.status) {
+                        if (res.status === "CHOSING_GAME_MODE") {
                             clearInterval(this.timer);
                             localStorage.setItem("boardID", res.id);
                             this.setState({

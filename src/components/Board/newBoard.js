@@ -316,6 +316,8 @@ class Board extends React.Component {
                             Figurine2.push(actions[i])
                         } else {
                             buildingActions.push(actions[i])
+                        }if(actions[i].name==="PlaceWorker"){
+                            buildingActions.push(actions[i])
                         }
                     } else if (actions[i].useGod === true) {
                         if (actions[i].figurineNumber === 1) {
@@ -329,8 +331,6 @@ class Board extends React.Component {
                     } else if (actions[i].name === "Building") {
                         buildingActions.push(actions[i]);
                     } else if (actions[i].name === "PlaceWorker") {
-                        buildingActions.push(actions[i]);
-                    } else if (actions[i].name === "movingAsArthemis") {
                         buildingActions.push(actions[i]);
                     }
                 }
@@ -428,7 +428,7 @@ class Board extends React.Component {
             })
             .catch(err => {
                 console.log(err);
-                alert("Something went wrong catching challenge Status: " + err);
+                alert("Something went wrong catching actions: " + err);
                 clearInterval(this.timer2);
             });
     }
@@ -886,7 +886,7 @@ class GameBoard extends React.Component {
 
             .catch(err => {
                 console.log(err);
-                alert("Something went wrong catching challenge Status: " + err);
+                alert("Something went wrong catching game Status: " + err);
                 clearInterval(this.timer);
             });
     }
@@ -985,7 +985,7 @@ class GameBoard extends React.Component {
                 >
                     GameStatus:
                 </Modal>
-                <button style={{opacity: "1"}} className="open-modal-btn2" onClick={this.openModalHandler}>Open Modal
+                <button style={{opacity: "1"}} className="myButton" onClick={this.openModalHandler}>Open Modal
                 </button>
             </div>)
     }

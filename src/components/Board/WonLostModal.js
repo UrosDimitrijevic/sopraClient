@@ -21,7 +21,7 @@ const WonLostModal = (props) => {
                         {props.children}
                     </p>
                     <p>
-                        {props.status}
+                        {props.message}
                     </p>
                 </div>
                 <div className={footer}>

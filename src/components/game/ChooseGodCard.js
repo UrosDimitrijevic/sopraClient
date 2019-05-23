@@ -10,7 +10,6 @@ import {Spinner} from "../../views/design/Spinner";
 
 
 const FormContainer = styled.div`
-  margin-top: 2em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -210,13 +209,13 @@ class ChooseGodCard extends React.Component {
                     <br/>
 
                     <div>
-                        <button className={"myButton"}
+                        <button className={"myButton2"}
                                 onClick={() => this.chooseGoD()
                                 }
                                 disabled={property.index === this.state.GodCard1 || property.index === this.state.GodCard2 || (this.state.GodCard1 !== null && this.state.GodCard2 !== null) || this.state.actions < 2}
                         >Choose
                         </button>
-                        <button className={"myButton"}
+                        <button className={"myButton2"}
                                 onClick={() => this.unChooseGoD()}
                                 disabled={property.index !== this.state.GodCard1 && property.index !== this.state.GodCard2}
                         >Unchoose

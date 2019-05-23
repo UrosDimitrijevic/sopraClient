@@ -199,40 +199,6 @@ class Square extends React.Component {
     }
 
 
-    clickAction() {
-        localStorage.setItem("actionID", this.props.action);
-        console.log(localStorage.getItem("actionID"))
-    }
-
-
-    /*<div className="square3">
-    <img alt={"qwerwe"} width={50} height={50} src = {Black}/></div>
-     let boxClass = ["square"];
-        if (this.state.clickedsquare) {
-            boxClass.push('green');
-        }
-        if (this.props.column === 2 && this.props.row === 0) {
-            return (
-                <button className={boxClass.join(' ')} onClick={this.toggle.bind(this)}>gh</button>)
-        }
-
-        else if (this.props.action.name === "PlaceWorker") {
-            return (
-                <button className="squareorange"
-                        onClick={() => {
-                            localStorage.setItem("actionID", this.props.action.id);
-                            console.log(localStorage.getItem("actionID"));
-
-                        }}
-
-                >
-                </button>
-            );
-        }
-
-    */
-
-
     render() {
 
         if (this.props.action === null) {
@@ -406,7 +372,8 @@ class Board extends React.Component {
             .then(res => {
                 resStatus = res.status;
                 if (resStatus === 404 || resStatus === 400) {
-                    console.log(res)
+                    console.log(res);
+                    clearInterval(this.timer);
                 } else {
                     return res.json();
                 }
@@ -455,6 +422,7 @@ class Board extends React.Component {
     }
 
     endGameID() {
+        console.log(this.state.storeActions);
         localStorage.setItem("actionID", this.state.storeActions[0].id);
         console.log(localStorage.getItem("actionID"));
     }
@@ -645,13 +613,13 @@ class Board extends React.Component {
             <div className={"board"}>
                 <div className="status">{status}</div>
                 {this.createTable(this.props.board, this.state.actions)}
-                <button className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked}
+                <button  style={{opacity: "0"}} className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked}
                         onClick={() => {
                             this.Figurine1();
                             console.log(this.state.actionsFigurine1)
                         }}>Figurine1
                 </button>
-                <button className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked}
+                <button  style={{opacity: "0"}} className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked}
                         onClick={() => {
                             this.Figurine2();
                             console.log(this.state.actionsFigurine1)
@@ -728,6 +696,12 @@ class GameBoard extends React.Component {
     endGameFromBoard = () => {
         this.refs.board.endGameID();
         this.refs.board.putAction();
+        localStorage.removeItem("god2");
+        localStorage.removeItem("gettingChallengedByID");
+        localStorage.removeItem("god1");
+        localStorage.removeItem("challengeID");
+        localStorage.removeItem("boardID");
+        localStorage.removeItem("opponentName");
         localStorage.removeItem("actionID");
         localStorage.removeItem("refID");
         this.props.history.push("/game");
@@ -805,11 +779,6 @@ class GameBoard extends React.Component {
             <BaseContainer>
                 <button
                     style={{opacity: "0"}}
-                    onClick={() => this.clickMe()}
-                >CustomGameStatus
-                </button>
-                <button
-                    style={{opacity: "0"}}
                     onClick={() => this.clickme2()}
                 >getGameStatus
                 </button>
@@ -817,11 +786,6 @@ class GameBoard extends React.Component {
                     <div className={"column"}> {this.displayName(this.state.startingPlayer.myUserID)}
                         {this.GodPicture(this.state.startingPlayer)}
                         {this.showActionsButton(this.state.startingPlayer)}
-                        <button className={"myButton"}
-                            //disabled={!(this.state.currentPlayer.toString() === localStorage.getItem("id"))}
-                                onClick={this.surrender}>
-                            Surrender
-                        </button>
                     </div>
                     <div className="columnboard">
                         <Board key={this.state.id}
@@ -882,18 +846,20 @@ class GameBoard extends React.Component {
                             this.setState({
                                 isShowing: true
                             });
+                            this.refs.board.getActions();
                             if (res.nonStartingPlayer.myUserID.toString() === localStorage.getItem("id")) {
-                                this.setState({result: "lost"})
+                                this.setState({result: "lost"});
+
                             }
-                            this.actionsFromBoardDefault();
                         } else if (res.status === "NONSTARTINGPLAYER_WON") {
                             this.setState({
                                 isShowing: true
                             });
+                            this.refs.board.getActions();
                             if (res.startingPlayer.myUserID.toString() === localStorage.getItem("id")) {
                                 this.setState({result: "lost"})
                             }
-                            this.actionsFromBoardDefault();
+
                         }
                         break;
 
@@ -919,8 +885,6 @@ class GameBoard extends React.Component {
     surrender = () => {
         var surrenderID = localStorage.getItem("id");
         localStorage.setItem("actionID", surrenderID);
-
-        console.log("HASLD FJA");
 
         this.refs.board.putAction();
 
@@ -1006,6 +970,13 @@ class GameBoard extends React.Component {
         console.log("redirect");
         this.testDashboard();
     };
+    message(){
+        if(this.state.restult === "won"){
+            return "Woweee you won"
+        }else{
+            return "ooh no, "+ localStorage.getItem("opponentNmae")+ " decimated you!"
+        }
+    }
 
     renderModal() {
         return (
@@ -1017,13 +988,14 @@ class GameBoard extends React.Component {
                     show={this.state.isShowing}
                     close={this.closeModalHandler}
                     status={this.state.status}
+                    message={this.message}
                     accept={this.goBackToDashboard}
                     endGame={this.endGameFromBoard}
                     result={this.state.result}
                 >
                     GameStatus:
                 </Modal>
-                <button style={{opacity: "1"}} className="myButton" onClick={this.openModalHandler}>Open Modal
+                <button style={{opacity: "1"}} className="myButton" onClick={this.surrender}>Surrender Modal
                 </button>
             </div>)
     }
@@ -1215,22 +1187,3 @@ class GameBoard extends React.Component {
 
 export default withRouter(GameBoard)
 
-/*
-<button
-className={"square2"}> Worker 1 <img alt={"qwerwe"} width={50} height={30} src={Black}
-onClick={() => {
-    this.setState({chosenfigurine: 1});
-    console.log(this.state.chosenfigurine)
-}}
-/>
-</button>
-<button className={"square2"}> Worker 2 <img alt={"qwerwe"} width={50} height={30} src={Black}
-onClick={() => {
-    this.setState({chosenfigurine: 2});
-    console.log(this.state.chosenfigurine)
-}}
-/></button>
-<button className={"square2"}> Worker 1 <img alt={"qwerwe"} width={50} height={30} src={White}/>
-</button>
-<button className={"square2"}> Worker 2 <img alt={"qwerwe"} width={50} height={30} src={White}/>
-</button>*/

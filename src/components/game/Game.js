@@ -207,13 +207,14 @@ class Game extends React.Component {
                     case 200:
                         this.setState({status: res.status});
                         console.log(this.state.status);
-                        if (res.status === "CHOSING_GAME_MODE") {
+                        if (res.status === "CHOSING_GAME_MODE" || res.status === "CHOSING_GODCARDS") {
                             clearInterval(this.timer);
                             localStorage.setItem("boardID", res.id);
                             this.setState({
                                 isShowing: false
                             });
                             this.props.history.push("/gameMode");
+                            clearInterval(this.timer);
                         }
                         break;
 
@@ -242,7 +243,7 @@ class Game extends React.Component {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username: localStorage.getItem("username"),
+                status: "OFFLINE",
 
             })
         })

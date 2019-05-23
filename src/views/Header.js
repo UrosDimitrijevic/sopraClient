@@ -32,8 +32,7 @@ const Title = styled.h1`
 const Header = props => {
   return (
     <Container height={props.height}>
-      <Title>SoPra FS19 rocks with React!</Title>
-      <ReactLogo width={60} height={60} />
+      <Title>SoPra FS19 - Group 06</Title>
     </Container>
   );
 };

@@ -315,7 +315,7 @@ class Game extends React.Component {
 
                 <Container>
 
-                    <h2>Happy Coding! </h2>
+                    <h2>Santorini players </h2>
                     {!this.state.users ? (
                         <Spinner/>
                     ) : (

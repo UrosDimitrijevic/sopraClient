@@ -258,6 +258,7 @@ class Board extends React.Component {
         var GodFig1 = [];
         var GodFig2 = [];
         var GodBuild = [];
+        try{
         if(typeof actions === "undefined"){console.log("niceAsync")}
         else if (this.props.playWithGodCards === false) {
             if (actions.length > 0) {
@@ -310,7 +311,8 @@ class Board extends React.Component {
                 }
 
             }
-        }
+        }}
+        finally{
         if (this.props.useGodPower && GodBuild.length > 0) {
             this.setState({
                 actionsFigurine1: Figurine1,
@@ -331,7 +333,7 @@ class Board extends React.Component {
                 actionsGod2: GodFig2,
                 actionsGodBuild: GodBuild
             })
-        }
+        }}
 
     }
 

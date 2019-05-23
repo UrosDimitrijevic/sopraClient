@@ -11,8 +11,8 @@ import White1 from "./White1.1.png"
 import White2 from "./White2.1.png"
 import Default1 from "./Default1.PNG"
 import Default2 from "./Default2.PNG"
-import Worker1 from "./Worker1.png"
-import Worker2 from "./Worker2.png"
+import Worker1 from "./pawnblack.png"
+import Worker2 from "./pawnyellow.png"
 import {Spinner} from "../../views/design/Spinner";
 import data from "../../GodCards/data";
 import Modal from "./WonLostModal";
@@ -112,19 +112,19 @@ class Square extends React.Component {
         if (Figure === "Black1") {
             return (
                 <img onClick={this.onClickFigurine.bind(this)} style={{cursor: 'pointer'}} alt={"Blacktest1"}
-                     className={"center"} src={Black1}/>);
+                     className={"center"} src={Worker1}/>);
         } else if (Figure === "Black2") {
             return (
                 <img onClick={this.onClickFigurine.bind(this)} style={{cursor: 'pointer'}} alt={"Blacktest2"}
-                     className={"center"} src={Black2}/>);
+                     className={"center"} src={Worker1}/>);
         } else if (Figure === "White1") {
             return (
                 <img onClick={this.onClickFigurine.bind(this)} style={{cursor: 'pointer'}} alt={"WhiteTest1"}
-                     className={"center"} src={White1}/>);
+                     className={"center"} src={Worker2}/>);
         } else if (Figure === "White2") {
             return (
                 <img onClick={this.onClickFigurine.bind(this)} style={{cursor: 'pointer'}} alt={"WhiteTest2"}
-                     className={"center"} src={White2}/>);
+                     className={"center"} src={Worker2}/>);
         } else {
             return null;
         }

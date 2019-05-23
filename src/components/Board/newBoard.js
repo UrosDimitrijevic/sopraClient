@@ -319,20 +319,37 @@ class Board extends React.Component {
                         }
                     } else if (actions[i].useGod === true) {
                         if (actions[i].figurineNumber === 1) {
+                            /*if(actions[i].name === "BuildingAsDemeter"){
+                                GodBuild.push(actions[i]);
+                                buildingActions.push(actions[i]);
+                                Figurine1.push(actions[i])
+                            }*/
                             GodFig1.push(actions[i])
                         } else if (actions[i].figurineNumber === 2) {
+                            /*if(actions[i].name === "BuildingAsDemeter"){
+                                GodBuild.push(actions[i]);
+                                buildingActions.push(actions[i]);
+                                Figurine2.push(actions[i])
+                            }*/
                             GodFig2.push(actions[i])
                         } else {
-                            GodBuild.push(actions[i])
+                            if(actions[i].name === "BuildingAsDemeter"){
+                                //GodBuild.push(actions[i]);
+                                buildingActions.push(actions[i]);
+                                //Figurine1.push(actions[i])
+                                //Figurine2.push(actions[i])
+                            } else {
+                                GodBuild.push(actions[i]);
+                            }
                         }
 
                     } else if (actions[i].name === "Building") {
                         buildingActions.push(actions[i]);
                     } else if (actions[i].name === "PlaceWorker") {
                         buildingActions.push(actions[i]);
-                    } else if (actions[i].name === "movingAsArthemis") {
+                    } /*else if (actions[i].name === "movingAsArthemis") {
                         buildingActions.push(actions[i]);
-                    }
+                    }*/
                 }
 
             }
@@ -467,7 +484,7 @@ class Board extends React.Component {
         console.log(this.state.homeLink);
 
         this.actionsFromSquare("SquareID" + number);
-        this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null, storeActions: []})
+        this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null, storeActions: [], actionsGod1: null, actionsGod2: null, actionsGodBuild: []})
 
     }
 
@@ -476,7 +493,10 @@ class Board extends React.Component {
         localStorage.removeItem("clicked");
         this.actionsFromSquare("SquareID" + number);
         this.setState({clicked: false, actions: this.state.getActions});
+
     }
+
+
 
 
     createTable = (board, actions, figurine) => {
@@ -676,7 +696,6 @@ class Board extends React.Component {
     }
 
 
-
 }
 
 class GameBoard extends React.Component {
@@ -797,7 +816,13 @@ class GameBoard extends React.Component {
                 <div className="row">
                     <div className={"column"}> {this.displayName(this.state.startingPlayer.myUserID)}
                         {this.GodPicture(this.state.startingPlayer)}
-                        {this.showActionsButton(this.state.startingPlayer)}</div>
+                        {this.showActionsButton(this.state.startingPlayer)}
+                        <button className={"myButton"}
+                            //disabled={!(this.state.currentPlayer.toString() === localStorage.getItem("id"))}
+                                onClick={this.surrender}>
+                            Surrender
+                        </button>
+                    </div>
                     <div className="columnboard">
                         <Board key={this.state.id}
                                status={this.state.status}
@@ -890,6 +915,19 @@ class GameBoard extends React.Component {
                 clearInterval(this.timer);
             });
     }
+
+    surrender = () => {
+        var surrenderID = localStorage.getItem("id");
+        localStorage.setItem("actionID", surrenderID);
+
+        console.log("HASLD FJA");
+
+        this.refs.board.putAction();
+
+        localStorage.removeItem("actionID");
+        localStorage.removeItem("refID");
+        //this.props.history.push("/game");
+    };
 
     componentDidMount() {
         clearInterval(this.timer);
@@ -985,11 +1023,9 @@ class GameBoard extends React.Component {
                 >
                     GameStatus:
                 </Modal>
-                <button style={{opacity: "1"}} className="open-modal-btn2" onClick={this.openModalHandler}>Open Modal
-                </button>
+                <button style={{opacity: "0"}} className="open-modal-btn2" onClick={this.openModalHandler}>Open Modal</button>
             </div>)
     }
-
     // invisible buttons if presentation bugs
     constructor() {
         super();

@@ -20,9 +20,6 @@ const WonLostModal = (props) => {
                     <p>
                         {props.children}
                     </p>
-                    <p>
-                        {props.message}
-                    </p>
                 </div>
                 <div className={footer}>
 

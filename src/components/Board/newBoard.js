@@ -596,12 +596,9 @@ class Board extends React.Component {
         return this.props.currentPlayer.toString() === localStorage.getItem("id");
     }
 
-    //  <button onClick={() => this.clickme3()}>Actions</button>
     render() {
-        const status = this.props.status;
         return (
             <div className={"board"}>
-                <div className="status">{status}</div>
                 {this.createTable(this.props.board, this.state.actions)}
                 <button  style={{opacity: "0"}} className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked}
                         onClick={() => {
@@ -961,10 +958,10 @@ class GameBoard extends React.Component {
         this.testDashboard();
     };
     message(){
-        if(this.state.restult === "won"){
-            return "Woweee you won"
+        if(this.state.result === "won"){
+            return <p>Woweee you won</p>
         }else{
-            return "ooh no, "+ localStorage.getItem("opponentNmae")+ " decimated you!"
+            return <p>Ooh no,  {localStorage.getItem("opponentName")} decimated you!</p>
         }
     }
 
@@ -978,18 +975,16 @@ class GameBoard extends React.Component {
                     show={this.state.isShowing}
                     close={this.closeModalHandler}
                     status={this.state.status}
-                    message={this.message}
                     accept={this.goBackToDashboard}
                     endGame={this.endGameFromBoard}
                     result={this.state.result}
                 >
-                    GameStatus:
+                    GameStatus: {this.message()}
                 </Modal>
                 <button style={{opacity: "1"}} className="myButton" onClick={this.surrender}>Surrender Modal
                 </button>
             </div>)
     }
-    // invisible buttons if presentation bugs
     constructor() {
         super();
         this.state = {

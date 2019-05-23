@@ -1,8 +1,6 @@
 import React, {} from 'react';
-import {Redirect, withRouter} from "react-router-dom";
-import * as ReactDOM from "react-dom";
+import {withRouter} from "react-router-dom";
 import {BaseContainer} from "../../helpers/layout";
-import Test2 from "./test2";
 import './boardindex.css';
 import {getDomain} from "../../helpers/getDomain";
 import Black1 from "./Black1.1.png"
@@ -179,7 +177,7 @@ class Square extends React.Component {
         }
     }
 
-    domeBuild(dome) {
+    domeBuild() {
         return (
             <div className="dome">
             </div>
@@ -240,14 +238,6 @@ class Board extends React.Component {
     actionsFromSquare = (number) => {
         this.refs[number].defaultSquare();
     };
-
-    containActions() {
-        this.setState({actions: this.state.storeActions})
-    }
-
-    BuildGod() {
-        this.setState({actions: this.state.actionsGodBuild});
-    }
 
     divideActions(storedActions) {
         const actions = storedActions;
@@ -363,7 +353,7 @@ class Board extends React.Component {
                 resStatus = res.status;
                 if (resStatus === 404 || resStatus === 400) {
                     console.log(res);
-                    clearInterval(this.timer);
+                    clearInterval(this.timer2);
                 } else {
                     return res.json();
                 }
@@ -413,9 +403,7 @@ class Board extends React.Component {
     }
 
     endGameID() {
-        console.log(this.state.storeActions);
         localStorage.setItem("actionID", this.state.storeActions[0].id);
-        console.log(localStorage.getItem("actionID"));
     }
 
     clickme3(useGodBuild) {
@@ -436,13 +424,9 @@ class Board extends React.Component {
 
     confirm() {
         var number = localStorage.getItem("refID");
-
         this.putAction();
-        console.log(localStorage.getItem("clicked"));
         localStorage.removeItem("clicked");
         localStorage.removeItem("actionID");
-        console.log(this.state.homeLink);
-
         this.actionsFromSquare("SquareID" + number);
         this.setState({
             clicked: false,
@@ -615,14 +599,12 @@ class Board extends React.Component {
                         disabled={!this.checkcurrentplayer() || this.state.clicked}
                         onClick={() => {
                             this.Figurine1();
-                            console.log(this.state.actionsFigurine1)
                         }}>Figurine1
                 </button>
                 <button style={{opacity: "0"}} className={"myButton"}
                         disabled={!this.checkcurrentplayer() || this.state.clicked}
                         onClick={() => {
                             this.Figurine2();
-                            console.log(this.state.actionsFigurine1)
                         }}>Figurine2
                 </button>
                 <button className={"myButton"} onClick={() => this.confirm()}
@@ -679,12 +661,10 @@ class GameBoard extends React.Component {
         this.setState({showMenu: true}, () => {
             document.addEventListener('click', this.closeMenu);
         });
-        //this.actionsFromBoard();
     }
 
     closeMenu(event) {
-        // !
-        if (this.dropdownMenu.contains(event.target)) {
+        if (!this.dropdownMenu.contains(event.target) ||this.dropdownMenu.contains(event.target)) {
 
             this.setState({showMenu: false}, () => {
                 document.removeEventListener('click', this.closeMenu);
@@ -907,21 +887,6 @@ class GameBoard extends React.Component {
         clearInterval(this.timer);
     }
 
-    clickMe() {
-        this.setState({
-            id: Test2.id,
-            player1id: Test2.player1id,
-            player2id: Test2.player1id,
-            status: Test2.status,
-            playWithGodCards: Test2.playWithGodCards,
-            board: Test2.board,
-            nonStartingPlayer: Test2.nonStartingPlayer,
-            currentPlayer: Test2.currentPlayer,
-            startingPlayer: Test2.startingPlayer,
-        });
-        console.log(this.state.showGodCard);
-        clearInterval(this.timer)
-    }
 
     clickme2() {
         clearInterval(this.timer);
@@ -971,7 +936,6 @@ class GameBoard extends React.Component {
 
     goBackToDashboard = () => {
         localStorage.removeItem("boardID");
-        console.log("redirect");
         this.testDashboard();
     };
 

@@ -249,7 +249,8 @@ class Board extends React.Component {
         this.setState({actions: this.state.actionsGodBuild});
     }
 
-    divideActions(actions, godPower) {
+    divideActions(actionss, godPower) {
+        const actions = acitonss;
         var Figurine1 = [];
         var Figurine2 = [];
         var buildingActions = [];
@@ -287,25 +288,12 @@ class Board extends React.Component {
                         }
                     } else if (actions[i].useGod === true) {
                         if (actions[i].figurineNumber === 1) {
-                            /*if(actions[i].name === "BuildingAsDemeter"){
-                                GodBuild.push(actions[i]);
-                                buildingActions.push(actions[i]);
-                                Figurine1.push(actions[i])
-                            }*/
                             GodFig1.push(actions[i])
                         } else if (actions[i].figurineNumber === 2) {
-                            /*if(actions[i].name === "BuildingAsDemeter"){
-                                GodBuild.push(actions[i]);
-                                buildingActions.push(actions[i]);
-                                Figurine2.push(actions[i])
-                            }*/
                             GodFig2.push(actions[i])
                         } else {
                             if(actions[i].name === "BuildingAsDemeter"){
-                                //GodBuild.push(actions[i]);
                                 buildingActions.push(actions[i]);
-                                //Figurine1.push(actions[i])
-                                //Figurine2.push(actions[i])
                             } else {
                                 GodBuild.push(actions[i]);
                             }

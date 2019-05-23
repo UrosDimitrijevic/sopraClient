@@ -19,6 +19,7 @@ import Modal from "./WonLostModal";
 import Star from "./star.png";
 
 
+
 class Square extends React.Component {
     constructor(props) {
         super(props);
@@ -249,7 +250,7 @@ class Board extends React.Component {
         this.setState({actions: this.state.actionsGodBuild});
     }
 
-    divideActions(storedActions, godPower) {
+    divideActions(storedActions) {
         const actions = storedActions;
         var Figurine1 = [];
         var Figurine2 = [];
@@ -257,7 +258,7 @@ class Board extends React.Component {
         var GodFig1 = [];
         var GodFig2 = [];
         var GodBuild = [];
-        if(typeof actions === "undefined"){console.log("wow")}
+        if(typeof actions === "undefined"){console.log("niceAsync")}
         else if (this.props.playWithGodCards === false) {
             if (actions.length > 0) {
                 for (let i = 0; i < actions.length; i++) {
@@ -386,6 +387,7 @@ class Board extends React.Component {
                             }, () => {
                                 this.divideActions(this.state.storeActions);
                             });
+                            break;
                         }
                         break;
 
@@ -450,7 +452,7 @@ class Board extends React.Component {
         var number = localStorage.getItem("refID");
         localStorage.removeItem("clicked");
         this.actionsFromSquare("SquareID" + number);
-        this.setState({clicked: false, actions: this.state.getActions});
+        this.setState({clicked: false});
 
     }
 
@@ -957,6 +959,7 @@ class GameBoard extends React.Component {
         console.log("redirect");
         this.testDashboard();
     };
+
     message(){
         if(this.state.result === "won"){
             return <p>Woweee you won</p>

@@ -42,6 +42,7 @@
     background: royalblue;
     height: 45px;
     padding: 5px;
+    text-align: center;
 }
 
 .close-modal-btn2 {
@@ -71,16 +72,14 @@
     float: right;
 }
 .btn-dashboard2{
-
-    border: none;
-    color: white;
+    position: center;
+    border-radius: 9px;
+    color: black;
     cursor: pointer;
-    font-weight: bold;
     outline: none;
     padding: 1.2%;
-    position: fixed;
     left: 37%;
-    background-color: slategrey;
+    background-color: white;
 }
 .btn-continue2 {
     background-color: #1b5e20;

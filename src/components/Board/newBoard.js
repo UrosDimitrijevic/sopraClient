@@ -373,7 +373,7 @@ class Board extends React.Component {
                     case 200:
                         if (res.length < 1) {
                             break;
-                        } else if (this.state.storeActions.length < 1) {
+                        } else if (this.state.storeActions.length < 1 && res.length>0) {
                             this.setState({
                                 storeActions: res
                             }, () => {
@@ -977,9 +977,9 @@ class GameBoard extends React.Component {
 
     message() {
         if (this.state.result === "won") {
-            return <p>Woweee you won</p>
+            return <p>Woweee you won!</p>
         } else {
-            return <p>Ooh no, {localStorage.getItem("opponentName")} decimated you!</p>
+            return <p>Ooh no, {localStorage.getItem("opponentName")} outsmarted you!</p>
         }
     }
 

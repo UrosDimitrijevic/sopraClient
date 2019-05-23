@@ -57,6 +57,7 @@ const Header = props => {
   return (
     <Container height={props.height}>
       <Title>SoPra FS19 - Group 06</Title>
+
         <ManualButton onClick={()=>{window.open('/GameManual')}}>
             Game Manual
         </ManualButton>

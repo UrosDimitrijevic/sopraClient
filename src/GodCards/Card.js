@@ -5,20 +5,18 @@ import "./img_text.css";
 const Card = ({property}) => {
     const {index, picture, text, title, } = property;
     return (
-        <div id={`card-${index}`} className="center">
-            <div className="home2">
-                <div className="home2_first">
+        <div id={`card-${index}`} className="myRow">
+            <div className="myColumnImg">
                     <img src={picture}
                          alt={`s`}
                          width={250} // should be in ratio 1:1.75
                          height={437.5}/>
 
-                </div>
+
             </div>
-            <div className="home2">
+            <div className="myColumnText">
 
                 <b>{title}</b><p>{text}</p>
-
         </div>
 
 

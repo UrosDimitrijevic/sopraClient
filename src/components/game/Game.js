@@ -1,13 +1,35 @@
 import React from "react";
 import styled from "styled-components";
-import { BaseContainer } from "../../helpers/layout";
-import { getDomain } from "../../helpers/getDomain";
-import { Spinner } from "../../views/design/Spinner";
-import { Button } from "../../views/design/Button";
-import { withRouter } from "react-router-dom";
+import {BaseContainer} from "../../helpers/layout";
+import {getDomain} from "../../helpers/getDomain";
+import {Spinner} from "../../views/design/Spinner";
+import {Button} from "../../views/design/Button";
+import {withRouter} from "react-router-dom";
 import {ErrorCode} from "../shared/ErrorHandler/ErrorHandler";
 import {declineChallenge} from "./declineChallenge";
+import "./ModalChallenge.css";
+import Modal from "./ModalClass";
 
+const Button1 = styled.button`
+  &:hover {
+    transform: translateY(-2px);
+  }
+  float: right;
+  padding: 6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+  width: ${props => props.width || null};
+  height: 30px;
+  border: none;
+  border-radius: 20px;
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
+  opacity: ${props => (props.disabled ? 0.1 : 1)};
+  background: rgb(16, 89, 255);
+  transition: all 0.3s ease;
+`;
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -28,8 +50,6 @@ const PlayerContainer = styled.li`
 `;
 
 
-
-
 const PlContainer = styled.div`
   margin: 6px 0;
   width: 280px;
@@ -38,264 +58,354 @@ const PlContainer = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid #ffffff26;
-  background: darkgrey;
+  background: cadetblue;
 `;
-
-/*const PlUserName = styled.div`
-  font-weight: lighter;
-  margin-left: 5px;
-`;
-*/
-
-
 const PlId = styled.div`
   margin-left: auto;
   margin-right: 10px;
   font-weight: bold;
 `;
-
+const timeInterval = 100;
 
 class Game extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      users: null,
-      user: null,
-      challenging: null,
-      challengingPUT: null,
-      gettingChallengedBy: null,
-      status: null,
+    constructor() {
+        super();
+        this.state = {
+            users: null,
+            user: null,
+            challenging: null,
+            challengingPUT: null,
+            gettingChallengedBy: null,
+            status: null,
+            isShowing: false,
+            offlineUsers: null,
+            inGameUsers: null,
+            onlineUsers: null,
+        };
+    }
+
+    openModalHandler = () => {
+        this.setState({
+            isShowing: true
+        });
     };
-  }
-  confirm123 (){
-    var confirm = window.confirm("User is challenging you");
-    if (confirm) {
-      console.log("confirm");
-      this.challengeUser();
-      clearInterval(this.timer);
-      this.getGameStatus();
-      this.timer = setInterval(()=>this.getGameStatus(), 10000);
-
-    } else {
-      declineChallenge();
-      console.log("decline");
-    }}
-
-
-ChallengeStatus() {
-    fetch(`${getDomain()}/users/`+ localStorage.getItem("id"), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-        .then(response => response.json())
-
-        .then( response => {
-          this.setState({
-            user : response,
-            challenging : response.challenging,
-            gettingChallengedBy : response.gettingChallengedBy
-          });
-          if (this.state.gettingChallengedBy !== null){
-
-            this.confirm123();
-          }
-
-          if(this.state.challenging === this.state.gettingChallengedBy && (this.state.gettingChallengedBy !== null) && (this.state.challenging !== null)){
-            this.getGameStatus();
-            this.timer = setInterval(()=>this.getGameStatus(), 10000);
-          }
-
-        });}
-
-
-
-  challengeUser(){
-    let challengingPUT1 = this.state.challengingPUT;
-    var gettingChallengedBy1 = this.state.gettingChallengedBy;
-    console.log(challengingPUT1);
-    console.log(gettingChallengedBy1);
-
-    fetch(`${getDomain()}/users/`+localStorage.getItem("id"), {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        challenging: localStorage.getItem("challengeID"),
-        gettingChallengedBy: gettingChallengedBy1,
-      })
-    }).then(response => {
-      if( response.status < 200 || response.status >= 300 ) {
-        throw new Error( ErrorCode(response.status) );
-      }
-
-    })
-        .catch(err => {
-          if (err.message.match(/Failed to fetch/)) {
-            alert("The server cannot be reached. Did you start it?");
-          }
+    closeModalHandler = () => {
+        this.setState({
+            isShowing: false
         });
-  }
+        declineChallenge();
+        this.timer = setInterval(() => this.ChallengeStatus(), timeInterval);
+    };
 
-  getGameStatus() {
-    let resStatus = 0;
-    fetch(`${getDomain()}/game/Board/`+localStorage.getItem("id"), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-        .then (res => {
-          resStatus = res.status;
-          if (resStatus === 404 || resStatus === 400){console.log(res)}
-          else{
-          return  res.json();}
+    accept() {
+        fetch(`${getDomain()}/users/` + localStorage.getItem("id"), {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                challenging: localStorage.getItem("gettingChallengedByID")
+
+            })
+        }).then(response => {
+            if (response.status < 200 || response.status >= 300) {
+                throw new Error(ErrorCode(response.status));
+            }
+
         })
-        .then (res => {
-          switch (resStatus){
-            case 200:
-              this.setState({status : res.status});
-              console.log(this.state.status);
-              break;
+            .catch(err => {
+                if (err.message.match(/Failed to fetch/)) {
+                    alert("The server cannot be reached. Did you start it?");
+                }
 
-            case 500:
-              console.log('server error, try again');
-              break;
-            default:
-              console.log("default case");
-                  break;
+            });
+    }
 
-          }
+
+    ChallengeStatus() {
+        fetch(`${getDomain()}/users/` + localStorage.getItem("id"), {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
         })
+            .then(response => response.json())
 
+            .then(response => {
+                this.setState({
+                    challenging: response.challenging,
+                    gettingChallengedBy: response.gettingChallengedBy
+                });
+                localStorage.setItem("gettingChallengedByID", response.gettingChallengedBy);
+                this.state.users.map(user => {
+                    if (user.id === response.gettingChallengedBy) {
+                        localStorage.setItem("opponentName", user.username);
+                    }
+                });
+                if (this.state.gettingChallengedBy !== null && localStorage.getItem("gettingChallengedByID") !== localStorage.getItem("challengeID") && (localStorage.getItem("gettingChallengedByID"))) {
 
-        .catch(err => {
-          console.log(err);
-          alert("Something went wrong catching challenge Status: " + err);
-        });
-  }
+                    this.openModalHandler();
+                    clearInterval(this.timer);
+                }
 
-  logout() {
-    localStorage.removeItem("token");
-    fetch(`${getDomain()}/users/`+localStorage.getItem("id"), {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: localStorage.getItem("username"),
+                if (localStorage.getItem("gettingChallengedByID") === localStorage.getItem("challengeID")) {
+                    this.getGameStatus();
 
-      })
-    })
-        .then(response => {
-          if( response.status < 200 || response.status >=300 ) {
-            throw new Error( ErrorCode(response.status) );
-          }
+                }
+
+            });
+    }
+
+    challengeUser() {
+        let challengingPUT1 = this.state.challengingPUT;
+        var gettingChallengedBy1 = this.state.gettingChallengedBy;
+        console.log(challengingPUT1);
+        console.log(gettingChallengedBy1);
+
+        fetch(`${getDomain()}/users/` + localStorage.getItem("id"), {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                challenging: localStorage.getItem("challengeID"),
+                gettingChallengedBy: gettingChallengedBy1,
+            })
+        }).then(response => {
+            if (response.status < 200 || response.status >= 300) {
+                throw new Error(ErrorCode(response.status));
+            }
+
         })
-        .catch(err => {
-          console.log(err);
-          alert("Something went wrong loggin out: " + err);
-        });
-    localStorage.removeItem( "id");
-    this.props.history.push("/login");
-    localStorage.removeItem("username");
-    localStorage.clear();
-    clearInterval(this.timer);
-  }
+            .catch(err => {
+                if (err.message.match(/Failed to fetch/)) {
+                    alert("The server cannot be reached. Did you start it?");
+                }
+            });
+    }
 
-  componentDidMount() {
-    fetch(`${getDomain()}/users`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
+    getGameStatus() {
+        let resStatus = 0;
+        fetch(`${getDomain()}/game/Board/` + localStorage.getItem("id"), {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => {
+                resStatus = res.status;
+                if (resStatus === 404 || resStatus === 400) {
+                    console.log(res);
+                    clearInterval(this.timer);
+                    this.timer = setInterval(() => this.getGameStatus(), timeInterval);
+                } else {
+                    return res.json();
+                }
+            })
+            .then(res => {
+                switch (resStatus) {
+                    case 200:
+                        this.setState({status: res.status});
+                        console.log(this.state.status);
+                        if (res.status === "CHOSING_GAME_MODE") {
+                            clearInterval(this.timer);
+                            localStorage.setItem("boardID", res.id);
+                            this.setState({
+                                isShowing: false
+                            });
+                            this.props.history.push("/gameMode");
+                        }
+                        break;
+
+                    case 500:
+                        console.log('server error, try again');
+                        break;
+                    default:
+                        console.log("default case");
+                        break;
+
+                }
+            })
+
+
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong catching challenge Status: " + err);
+            });
+    }
+
+    logout() {
+        localStorage.removeItem("token");
+        fetch(`${getDomain()}/users/` + localStorage.getItem("id"), {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: localStorage.getItem("username"),
+
+            })
+        })
+            .then(response => {
+                if (response.status < 200 || response.status >= 300) {
+                    throw new Error(ErrorCode(response.status));
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong loggin out: " + err);
+            });
+        this.props.history.push("/login");
+        localStorage.clear();
+        this.timer = null;
+        clearInterval(this.timer);
+    }
+
+    componentDidMount() {
+        fetch(`${getDomain()}/users`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(async users => {
+                await new Promise(resolve => setTimeout(resolve, 800));
+                const offlineUsers = users.filter(user => user.status === "OFFLINE");
+                const inGameUsers = users.filter(user => user.status === "INGAME");
+                const onlineUsers = users.filter(user => user.status === "ONLINE");
+                this.setState({users: users, offlineUsers: offlineUsers, inGameUsers: inGameUsers, onlineUsers: onlineUsers});
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong fetching the users: " + err);
+            });
+        clearInterval(this.timer);
+        if (localStorage.getItem("id") !== null) {
+            this.timer = setInterval(() => this.ChallengeStatus(), 5000);
         }
-      })
-          .then(response => response.json())
-          .then(async users => {
-        // delays continuous execution of an async operation for 0.8 seconds.
-        // This is just a fake async call, so that the spinner can be displayed
-        // feel free to remove it :)
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        this.setState({ users });
-      })
-      .catch(err => {
-        console.log(err);
-        alert("Something went wrong fetching the users: " + err);
-      });
-
-    if(this.state.challenging === this.state.gettingChallengedBy && (this.state.gettingChallengedBy !== null) && (this.state.challenging) !== null){
-      this.getGameStatus();
-      this.timer = setInterval(()=>this.getGameStatus(), 10000);
     }
-    else if (localStorage.getItem("id") !== null){
-      this.ChallengeStatus();
-      console.log(this.state.gettingChallengedBy + " getting challenged by on mount");
-      this.timer = setInterval(()=> this.ChallengeStatus(), 10000);
+
+    componentWillUnmount() {
+        clearInterval(this.timer);
     }
-  }
-  componentWillUnmount() {
-    this.timer = null;
-  }
 
-  render() {
-    return (
-      <Container>
-        <h2>Happy Coding! </h2>
-        <p>Get all users from secure end point:</p>
-        {!this.state.users ? (
-          <Spinner />
-        ) : (
-          <div>
-            <Users>
-              {this.state.users.map(user => {
-                return (
-                  <PlayerContainer key={user.id}>
-                      <PlContainer>
-                          <a href="#" onClick={()=>{
-                            this.props.history.push('/playerPage' );
-                            localStorage.setItem("atID", user.id);} } >
-                            {user.username}
-                          </a>
-                        <button
-                            onClick={()=> {
-                              localStorage.setItem("challengeID", user.id);
-                                this.setState({challengingPUT : user.id});
-                                this.challengeUser();
-                                console.log(this.state.challengingPUT+ " state");
-                                console.log(localStorage.getItem("challengeID")+" local")
+    acceptWithModal = () => {
+        this.accept();
+        clearInterval(this.timer);
+        this.timer = setInterval(() => this.getGameStatus(), timeInterval);
+    };
 
-                            }}
-                            disabled={user.id.toString(  )=== localStorage.getItem("id")}>Challenge</button>
-                          <PlId>Id: {user.id}</PlId>
-                      </PlContainer>
-                  </PlayerContainer>
-                );
-              })}
-            </Users>
 
-            <button
-                onClick={declineChallenge}
-            >Decline </button>
-            <Button
-              width="100%"
-              onClick={() => {
-                this.logout();
-              }}
-            >
-              Logout
-            </Button>
-          </div>
-        )}
-      </Container>
+    //   <button className="open-modal-btn1" onClick={this.openModalHandler}>Open Modal</button>
+    render() {
+        return (
+            <div>{this.state.isShowing ? <div className="back-drop1"></div> : null}
 
-    );
-  }
+
+                <Modal
+                    className="modal1"
+                    show={this.state.isShowing}
+                    close={this.closeModalHandler}
+
+                    accept={this.acceptWithModal}>
+                    User: {localStorage.getItem("opponentName")} challenged you!
+                </Modal>
+
+
+                <Container>
+
+                    <h2>Santorini players </h2>
+                    {!this.state.users ? (
+                        <Spinner/>
+                    ) : (
+                        <div>
+                            <Users><p>Online</p>
+                                {this.state.onlineUsers.map(user => {
+
+                                        return (
+                                            <PlayerContainer key={user.id}>
+                                                <div className={"row"}>
+                                                    <PlContainer>
+                                                        <a className={"link"} href="/playerPage" onClick={() => {
+                                                            localStorage.setItem("atID", user.id);
+                                                        }}>
+                                                            {user.username}
+                                                        </a>
+                                                        <PlId>
+                                                            <Button1 onClick={() => {
+                                                                localStorage.setItem("challengeID", user.id);
+                                                                this.setState({challengingPUT: user.id});
+                                                                this.challengeUser();
+
+                                                            }}
+                                                                     disabled={(user.id.toString() === localStorage.getItem("id")) ||
+                                                                     localStorage.getItem("challengeID") === user.id.toString()}>Challenge
+                                                            </Button1>
+                                                        </PlId>
+                                                    </PlContainer></div>
+                                            </PlayerContainer>
+                                        );
+                                })}<p>In Game</p>{
+                                    this.state.inGameUsers.map(user => {
+                                            return (
+                                                <PlayerContainer key={user.id}>
+                                                    <div className={"row"}>
+                                                        <PlContainer>
+                                                            <a className={"link"} href="/playerpage" onClick={() => {
+                                                                localStorage.setItem("atID", user.id);
+                                                            }}>
+                                                                {user.username}
+                                                            </a>
+                                                            <PlId>
+                                                                <Button1
+                                                                    disabled={true}>Challenge
+                                                                </Button1>
+                                                            </PlId>
+                                                        </PlContainer></div>
+                                                </PlayerContainer>
+                                            );
+                                    })}<p>Offline</p>{
+                                    this.state.offlineUsers.map(user => {
+                                            return (
+                                                <PlayerContainer key={user.id}>
+                                                    <div className={"row"}>
+                                                        <PlContainer>
+                                                            <a className={"link"} href="/playerPage" onClick={() => {
+                                                                localStorage.setItem("atID", user.id);
+                                                            }}>
+                                                                {user.username}
+                                                            </a>
+                                                            <PlId>
+                                                                <Button1
+                                                                    disabled={true}>Challenge
+                                                                </Button1>
+                                                            </PlId>
+                                                        </PlContainer></div>
+                                                </PlayerContainer>
+                                            );
+                                    })}
+                            </Users>
+                            <Button
+                                width="10%"
+                                onClick={() => {
+                                    this.logout();
+                                }}
+                            >
+                                Logout
+                            </Button>
+
+                        </div>
+
+                    )}
+
+
+                </Container></div>
+
+
+        );
+    }
 }
 
 export default withRouter(Game);
-/**
-<Player user ={user} />
- **/
+

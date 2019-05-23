@@ -73,7 +73,7 @@ const data = {
             "text": "Your Turn: If your Worker does not move up, it may build both before and after moving. ",
             "title": "Titan Benefactor of Mankind "
         }
-        ]
+    ]
 };
 
 export default data;

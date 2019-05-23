@@ -153,6 +153,7 @@ class Registration extends React.Component {
             <Label>Password</Label>
             <InputField
               placeholder="Enter password here.."
+              type={"password"}
               onChange={e => {
                 this.handleInputChange("password", e.target.value);
               }}

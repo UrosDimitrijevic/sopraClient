@@ -10,15 +10,28 @@ export function   getGameStatus() {
     })
         .then (res => {
             resStatus = res.status;
-            if (resStatus === 404 || resStatus === 400){console.log(res)}
+            if (resStatus === 404 || resStatus === 400 || resStatus !==200){console.log(res)}
             else{
                 return  res.json();}
         })
         .then (res => {
             switch (resStatus){
                 case 200:
-                    this.setState({status : res.status});
-                    console.log(this.state.status);
+
+                    if(res.status === "SettingFigurinesp1f1"){
+                        clearInterval(this.timer);
+                        this.props.history.push("/newboard")
+                    }
+                    if(res.status === "CHOSING_GAME_MODE"){
+                        this.props.history.push("/test")
+                    }
+                    if(res.status === "CHOSING_GODCARDS"){
+                        this.props.history.push("/test")
+                    }
+                    if(res.status === "PICKING_GODCARDS"){
+                        this.props.history.push("/test2")
+                    }
+
                     break;
 
                 case 500:

@@ -8,9 +8,12 @@ import Registration from "../../registration/Registration"
 import PlayerPage from  "../../PlayerPage/PlayerPage"
 import PlayerPageEdit from "../../PlayerPage/PlayerPageEdit"
 import ChooseGodCard from "../../game/ChooseGodCard";
-import GameBoard from "../../Board/GameBoard";
 import NewBoard from "../../Board/newBoard";
+
 import GameManual from "../../../GodCards/GameManual";
+
+import TwoGodCards from "../../game/TwoGodCards";
+import ChooseGameMode from "../../game/ChooseGameMode";
 
 
 /**
@@ -67,6 +70,13 @@ class AppRouter extends React.Component {
                   </GameGuard>
                ) }
             />
+              <Route
+                  path="/gameMode"
+                  exact
+                  render={() => (
+                      <ChooseGameMode/>
+                  )}
+              />
             <Route
                 path="/test"
                 exact
@@ -75,14 +85,14 @@ class AppRouter extends React.Component {
                   )}
             />
               <Route
-                  path="/board"
+                  path="/test2"
                   exact
                   render={() => (
-                      <GameBoard/>
+                      <TwoGodCards/>
                   )}
               />
               <Route
-                  path="/newboard"
+                  path="/Santorini"
                   exact
                   render={() => (
                       <NewBoard/>

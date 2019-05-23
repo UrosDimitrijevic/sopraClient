@@ -19,7 +19,6 @@ import Modal from "./WonLostModal";
 import Star from "./star.png";
 
 
-
 class Square extends React.Component {
     constructor(props) {
         super(props);
@@ -258,82 +257,80 @@ class Board extends React.Component {
         var GodFig1 = [];
         var GodFig2 = [];
         var GodBuild = [];
-        try{
-        if(typeof actions === "undefined"){console.log("niceAsync")}
-        else if (this.props.playWithGodCards === false) {
-            if (actions.length > 0) {
-                for (let i = 0; i < actions.length; i++) {
-                    if (actions[i].figurineNumber === 1) {
-                        Figurine1.push(actions[i])
-                    } else if (actions[i].figurineNumber === 2) {
-                        Figurine2.push(actions[i])
-                    } else {
-                        buildingActions.push(actions[i])
-                    }
-                    if(actions[i].name==="PlaceWorker"){
-                        buildingActions.push(actions[i])
-                    }
-                }
-
-            }
-        } else {
-            if (actions.length > 0) {
-                for (let i = 0; i < actions.length; i++) {
-
-                    if (!actions[i].useGod) {
+        try {
+            if (typeof actions === "undefined") {
+                console.log("niceAsync")
+            } else if (this.props.playWithGodCards === false) {
+                if (actions.length > 0) {
+                    for (let i = 0; i < actions.length; i++) {
                         if (actions[i].figurineNumber === 1) {
                             Figurine1.push(actions[i])
                         } else if (actions[i].figurineNumber === 2) {
                             Figurine2.push(actions[i])
                         } else {
                             buildingActions.push(actions[i])
-                        }if(actions[i].name==="PlaceWorker"){
+                        }
+                        if (actions[i].name === "PlaceWorker") {
                             buildingActions.push(actions[i])
                         }
-                    } else if (actions[i].useGod === true) {
-                        if (actions[i].figurineNumber === 1) {
-                            GodFig1.push(actions[i])
-                        } else if (actions[i].figurineNumber === 2) {
-                            GodFig2.push(actions[i])
-                        } else {
-                            if(actions[i].name === "BuildingAsDemeter"){
-                                buildingActions.push(actions[i]);
+                    }
+
+                }
+            } else {
+                if (actions.length > 0) {
+                    for (let i = 0; i < actions.length; i++) {
+
+                        if (!actions[i].useGod) {
+                            if (actions[i].figurineNumber === 1) {
+                                Figurine1.push(actions[i])
+                            } else if (actions[i].figurineNumber === 2) {
+                                Figurine2.push(actions[i])
+                            } else {
+                                buildingActions.push(actions[i])
+                            }
+                            if (actions[i].name === "PlaceWorker") {
+                                buildingActions.push(actions[i])
+                            }
+                        } else if (actions[i].useGod === true) {
+                            if (actions[i].figurineNumber === 1) {
+                                GodFig1.push(actions[i])
+                            } else if (actions[i].figurineNumber === 2) {
+                                GodFig2.push(actions[i])
                             } else {
                                 GodBuild.push(actions[i]);
                             }
+                        } else if (actions[i].name === "Building") {
+                            buildingActions.push(actions[i]);
+                        } else if (actions[i].name === "PlaceWorker") {
+                            buildingActions.push(actions[i]);
                         }
-
-                    } else if (actions[i].name === "Building") {
-                        buildingActions.push(actions[i]);
-                    } else if (actions[i].name === "PlaceWorker") {
-                        buildingActions.push(actions[i]);
                     }
-                }
 
+                }
             }
-        }}
-        finally{
-        if (this.props.useGodPower && GodBuild.length > 0) {
-            this.setState({
-                actionsFigurine1: Figurine1,
-                actionsFigurine2: Figurine2,
-                buildingActions: buildingActions,
-                actions: GodBuild,
-                actionsGod1: GodFig1,
-                actionsGod2: GodFig2,
-                actionsGodBuild: GodBuild,
-            })
-        } else {
-            this.setState({
-                actionsFigurine1: Figurine1,
-                actionsFigurine2: Figurine2,
-                buildingActions: buildingActions,
-                actions: buildingActions,
-                actionsGod1: GodFig1,
-                actionsGod2: GodFig2,
-                actionsGodBuild: GodBuild
-            })
-        }}
+        } finally {
+            if (this.props.useGodPower && GodBuild.length > 0) {
+                this.setState({
+                    actionsFigurine1: Figurine1,
+                    actionsFigurine2: Figurine2,
+                    buildingActions: buildingActions,
+                    actions: GodBuild,
+                    actionsGod1: GodFig1,
+                    actionsGod2: GodFig2,
+                    actionsGodBuild: GodBuild,
+                })
+            } else {
+                this.setState({
+                    actionsFigurine1: Figurine1,
+                    actionsFigurine2: Figurine2,
+                    buildingActions: buildingActions,
+                    actions: buildingActions,
+                    actionsGod1: GodFig1,
+                    actionsGod2: GodFig2,
+                    actionsGodBuild: GodBuild
+                })
+            }
+        }
 
     }
 
@@ -422,6 +419,7 @@ class Board extends React.Component {
     }
 
     clickme3(useGodBuild) {
+        this.getActions();
         this.timer2 = setInterval(() => this.getActions(), 1000);
         this.divideActions(this.state.storeActions);
         if (useGodBuild) {
@@ -446,7 +444,17 @@ class Board extends React.Component {
         console.log(this.state.homeLink);
 
         this.actionsFromSquare("SquareID" + number);
-        this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null, storeActions: [], actionsGod1: null, actionsGod2: null, actionsGodBuild: [], buildingActions: []})
+        this.setState({
+            clicked: false,
+            actions: [],
+            actionsFigurine1: null,
+            actionsFigurine2: null,
+            storeActions: [],
+            actionsGod1: null,
+            actionsGod2: null,
+            actionsGodBuild: [],
+            buildingActions: []
+        })
 
     }
 
@@ -459,8 +467,6 @@ class Board extends React.Component {
     }
 
 
-
-
     createTable = (board, actions, figurine) => {
         let table = [];
         let count = 0;
@@ -471,7 +477,7 @@ class Board extends React.Component {
                 BoardRow.push(this.renderSquare(i, j, board.spaces[i][j].level, board.spaces[i][j].dome, actions, figurine, count));
                 count++;
             }
-            table.push(<div key ={i} className="board-row">{BoardRow}</div>)
+            table.push(<div key={i} className="board-row">{BoardRow}</div>)
         }
         return table
     };
@@ -539,8 +545,7 @@ class Board extends React.Component {
                     this.setState({actions: this.state.actionsGod2})
                 }
             }
-        }
-        else{
+        } else {
             if (Figure === "Black1") {
                 if (this.props.useGodPower === false) {
                     this.setState({actions: this.state.actionsFigurine1})
@@ -579,9 +584,11 @@ class Board extends React.Component {
     isStartingPlayer() {
         return this.props.Player1.myUserID.toString() === localStorage.getItem("id");
     }
-    calculateKey(row, column){
+
+    calculateKey(row, column) {
         return (row * 5 + column)
     }
+
     calculateRef(row, column) {
         return "SquareID" + (row * 5 + column).toString();
     }
@@ -604,13 +611,15 @@ class Board extends React.Component {
         return (
             <div className={"board"}>
                 {this.createTable(this.props.board, this.state.actions)}
-                <button  style={{opacity: "0"}} className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked}
+                <button style={{opacity: "0"}} className={"myButton"}
+                        disabled={!this.checkcurrentplayer() || this.state.clicked}
                         onClick={() => {
                             this.Figurine1();
                             console.log(this.state.actionsFigurine1)
                         }}>Figurine1
                 </button>
-                <button  style={{opacity: "0"}} className={"myButton"} disabled={!this.checkcurrentplayer() || this.state.clicked}
+                <button style={{opacity: "0"}} className={"myButton"}
+                        disabled={!this.checkcurrentplayer() || this.state.clicked}
                         onClick={() => {
                             this.Figurine2();
                             console.log(this.state.actionsFigurine1)
@@ -629,7 +638,7 @@ class Board extends React.Component {
     }
 
     putAction() {
-        fetch(`${getDomain()}/game/`+localStorage.getItem("boardID")+`/actions/` , {
+        fetch(`${getDomain()}/game/` + localStorage.getItem("boardID") + `/actions/`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -705,11 +714,12 @@ class GameBoard extends React.Component {
         this.setState({useGodPower: true});
         this.refs.board.clickme3(true);
     };
-    showStar(Godpower){
-        if(Godpower){
-            return (<img className={"star"}  height={20} alt={"star"}
+
+    showStar(Godpower) {
+        if (Godpower) {
+            return (<img className={"star"} height={20} alt={"star"}
                          width={20} src={Star}/>);
-        }else return null;
+        } else return null;
     };
 
     showActionsButton(Player) {
@@ -720,7 +730,8 @@ class GameBoard extends React.Component {
                             disabled={!(this.state.currentPlayer.toString() === localStorage.getItem("id"))}
                             onClick={this.showMenu}>
                         Action Options
-                    </button>{this.showStar(this.state.useGodPower)}
+                    </button>
+                    {this.showStar(this.state.useGodPower)}
                     {
                         this.state.showMenu
                             ? (
@@ -797,6 +808,8 @@ class GameBoard extends React.Component {
                     </div>
                 </div>
                 {this.renderModal()}
+                <button style={{opacity: "1"}} className="myButton" onClick={this.surrender}>Surrender
+                </button>
 
             </BaseContainer>
         );
@@ -962,11 +975,11 @@ class GameBoard extends React.Component {
         this.testDashboard();
     };
 
-    message(){
-        if(this.state.result === "won"){
+    message() {
+        if (this.state.result === "won") {
             return <p>Woweee you won</p>
-        }else{
-            return <p>Ooh no,  {localStorage.getItem("opponentName")} decimated you!</p>
+        } else {
+            return <p>Ooh no, {localStorage.getItem("opponentName")} decimated you!</p>
         }
     }
 
@@ -986,10 +999,9 @@ class GameBoard extends React.Component {
                 >
                     GameStatus: {this.message()}
                 </Modal>
-                <button style={{opacity: "1"}} className="myButton" onClick={this.surrender}>Surrender Modal
-                </button>
             </div>)
     }
+
     constructor() {
         super();
         this.state = {

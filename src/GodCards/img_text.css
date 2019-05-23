@@ -62,6 +62,8 @@
 }
 
 .column1 {
+    position: relative;
+    left: 5%;
     float: left;
     width: 20%;
     height: 437.5px;
@@ -71,6 +73,8 @@
 
 }
 .column3 {
+    position: relative;
+    left: 5%;
     float: left;
     width: 20%;
     height: 437.5px;
@@ -98,8 +102,8 @@
     cursor: not-allowed;
 }
 
-.row1:after {
-    margin-right: 10px;
+.row1 {
+    left: 10%;
     content: "";
     display: table;
     clear: both;

@@ -107,7 +107,7 @@ class TwoGodCards extends React.Component {
                 <FormContainer>
 
 
-                    <div>{Cardtable(this.state.property1, this.state.property2)}
+                    <div className={"row1"}>{Cardtable(this.state.property1, this.state.property2)}
 
 
                     </div>

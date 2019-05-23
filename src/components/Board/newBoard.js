@@ -249,8 +249,8 @@ class Board extends React.Component {
         this.setState({actions: this.state.actionsGodBuild});
     }
 
-    divideActions(actionss, godPower) {
-        const actions = acitonss;
+    divideActions(storedActions, godPower) {
+        const actions = storedActions;
         var Figurine1 = [];
         var Figurine2 = [];
         var buildingActions = [];

@@ -21,6 +21,30 @@ const Title = styled.h1`
   color: white;
   text-align: center;
 `;
+const ManualButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+    
+  &:hover {
+    transform: translateY(-2px);
+  }
+  padding: 6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+  width: ${props => props.width || null};
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
+  opacity: ${props => (props.disabled ? 0.4 : 1)};
+  background: rgb(16, 89, 255);
+  transition: all 0.3s ease;
+`;
+
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
  * Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.
@@ -32,8 +56,10 @@ const Title = styled.h1`
 const Header = props => {
   return (
     <Container height={props.height}>
-      <Title>SoPra FS19 rocks with React!</Title>
-      <ReactLogo width={60} height={60} />
+      <Title>SoPra FS19 - Group 06</Title>
+        <ManualButton onClick={()=>{window.open('/GameManual')}}>
+            Game Manual
+        </ManualButton>
     </Container>
   );
 };

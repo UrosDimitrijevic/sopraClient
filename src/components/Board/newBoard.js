@@ -257,7 +257,8 @@ class Board extends React.Component {
         var GodFig1 = [];
         var GodFig2 = [];
         var GodBuild = [];
-        if (this.props.playWithGodCards === false) {
+        if(typeof actions === "undefined"){console.log("wow")}
+        else if (this.props.playWithGodCards === false) {
             if (actions.length > 0) {
                 for (let i = 0; i < actions.length; i++) {
                     if (actions[i].figurineNumber === 1) {
@@ -276,6 +277,7 @@ class Board extends React.Component {
         } else {
             if (actions.length > 0) {
                 for (let i = 0; i < actions.length; i++) {
+
                     if (!actions[i].useGod) {
                         if (actions[i].figurineNumber === 1) {
                             Figurine1.push(actions[i])
@@ -440,7 +442,7 @@ class Board extends React.Component {
         console.log(this.state.homeLink);
 
         this.actionsFromSquare("SquareID" + number);
-        this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null, storeActions: [], actionsGod1: null, actionsGod2: null, actionsGodBuild: []})
+        this.setState({clicked: false, actions: [], actionsFigurine1: null, actionsFigurine2: null, storeActions: [], actionsGod1: null, actionsGod2: null, actionsGodBuild: [], buildingActions: []})
 
     }
 
@@ -586,7 +588,7 @@ class Board extends React.Component {
                 <div className={"status"}>Waiting</div>
             </div>
         } else {
-            return (<div className={"status"}>Your Turn!</div>)
+            return (<div className={"turnStatus"}>Your Turn!</div>)
         }
     }
 

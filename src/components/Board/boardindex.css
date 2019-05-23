@@ -24,6 +24,12 @@ ol, ul {
     text-align: center;
     margin-left: 20px;
 }
+.turnStatus{
+    margin-top: 5px;
+    color: white;
+    text-align: center;
+    margin-left: 20px;
+}
 
 .square {
     position: relative;

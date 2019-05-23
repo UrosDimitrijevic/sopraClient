@@ -262,6 +262,7 @@ class Game extends React.Component {
         clearInterval(this.timer);
     }
 
+    //
     componentDidMount() {
         fetch(`${getDomain()}/users`, {
             method: "GET",
